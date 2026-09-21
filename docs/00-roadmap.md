@@ -27,6 +27,7 @@ Next.js (App Router) · TypeScript (strict) · next-intl · Vercel + custom doma
 | 7 | Repository Standards | `07-repo-standards.md` | draft |
 | 8 | Sprint Plans | `08-sprint-plans.md` | draft |
 | 9 | CI/CD Plan | `09-cicd.md` | draft |
+| 10 | Developer Task Breakdown | `10-task-breakdown.md` | S1 detailed; S2–S3 enumerated |
 
 Deliberately excluded: Gantt chart (replaced by document 5 + sprint plans).
 
