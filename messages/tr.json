@@ -1,4 +1,17 @@
 {
   "_meta": { "reviewed": false },
-  "locale": { "name": "Turkish", "nativeName": "Türkçe" }
+  "locale": { "name": "Turkish", "nativeName": "Türkçe" },
+  "spike": {
+    "nav": { "home": "Ana sayfa", "about": "Hakkımda", "projects": "Projeler", "contact": "İletişim" },
+    "title": "Zeyad Alnahdi",
+    "role": "Backend ve Masaüstü Uygulama Geliştirici",
+    "intro": "C# ve SQL Server ile backend sistemleri ve masaüstü uygulamaları geliştiriyorum; katmanlı ve net bir mimari kullanıyorum.",
+    "colLeftTitle": "Birinci sütun",
+    "colRightTitle": "İkinci sütun",
+    "colBody": "Bu satır, tek bir fiziksel özellik kullanmadan Arapçada yönünü değiştirmelidir.",
+    "cardTitle": "Kenarlıklı kart",
+    "cardBody": "Kenarlık ve iç boşluk satır başı kenarında durur, böylece okuma yönünü izler.",
+    "contactLabel": "Bana ulaşın",
+    "stackLabel": "Kullandığım teknoloji"
+  }
 }
