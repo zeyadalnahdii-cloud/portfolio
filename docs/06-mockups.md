@@ -109,7 +109,6 @@ h2   Selected work
      ┌────────────────────┐  ┌────────────────────┐
      │ h3 AI Autonomous   │  │ h3 Restaurant      │
      │    Workspace       │  │    Management      │
-     │ [In development]   │  │                    │
      │ description        │  │ description        │
      │ tags               │  │ tags               │
      │ → Details          │  │ → Details          │
@@ -124,13 +123,13 @@ h2   Selected work
 ```
 h1   Projects
 
-h2   AI Autonomous Workspace          [In development · Sprint 3 of 7]
+h2   AI Autonomous Workspace
      Problem      — one sentence
      Architecture — ASP.NET Core, 4 layers; FastAPI AI service; Qdrant; Ollama
-     Result       — 35-page PDF indexed end to end in 32.6s, answers with citations
-     Limitation   — assistant surface not yet built
+     Scale        — 598 files · 85 test files · 74 merged PRs
+     Result       — 35-page PDF indexed end to end in 32.6s, cited answers
      Stack tags
-     [ View repository ]                               ← blocked on D3
+     [ View repository ]   [ Live demo ]               ← D3 · demo if deployed
 
 h2   Restaurant Management
      Problem      — one sentence
@@ -145,9 +144,9 @@ Each project is an `h2` with a consistent internal shape. Consistency matters mo
 than decoration here: a recruiter scans for stack and scale, and finds both in the
 same position on every card.
 
-The **Limitation** line is not a weakness in the design — it is the credibility
-device. A portfolio that names what is unfinished is read as trustworthy about what
-is finished.
+Where a project has a caveat worth stating, it goes in this same fixed position
+rather than being omitted. Naming a limitation plainly is a credibility device: a
+portfolio that is precise about scope is read as trustworthy about results.
 
 ### 2.4 About
 

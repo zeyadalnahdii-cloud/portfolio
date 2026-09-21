@@ -98,17 +98,27 @@ based on `main` alone significantly understated the project.
 
 ### 7.1 `ai-autonomous-workspace` — lead project
 
-**State:** Sprints 0–2 complete, Sprint 3 (hardening) in progress. 598 files:
-189 C#, 80 Python, 41 TS/TSX. 45 backend test files, 40 AI-service test files.
+**State:** Sprints 0–9 complete of a planned 0–10. Sprint 10 (Release Preparation)
+is the only one outstanding — the product is built; it has not been deployed.
+598 files: 189 C#, 80 Python, 41 TS/TSX. 45 backend test files, 40 AI-service test
+files. 74 merged pull requests through 2026-09-12.
+
+> Assessed from commit history and `docs/sprint-plans.md`, not the repository README —
+> the README is stale (last updated 2026-09-06, states Sprint 3) and understates the
+> project by seven sprints. **Fixing it is a prerequisite for linking to the repo from
+> the portfolio:** it is the first thing a visitor arriving from the Projects page
+> reads, and it currently describes a fraction of the work.
 
 | Aspect | Evidence |
 |---|---|
 | Architecture | ASP.NET Core 10 in four layers — `Domain` / `Application` / `Infrastructure` / `Api`. Clean Architecture applied properly, not decoratively. |
-| Polyglot system | ASP.NET Core + FastAPI (Python) + Next.js frontend, PostgreSQL 16 and Qdrant in Docker, Ollama for local inference. |
+| Polyglot system | ASP.NET Core + FastAPI (Python) + Next.js frontend, PostgreSQL 16 and Qdrant in Docker, Ollama for local inference. Full Docker Compose stack. |
 | Working RAG | Full pipeline: PDF extraction → OCR → chunking → `bge-m3` embeddings → Qdrant → hybrid retrieval → `qwen2.5:7b` → cited answers. 19 discrete services in the AI layer. |
-| Arabic NLP | Dedicated `arabic_query_expansion`, `text_quality_service`, `language_service` — non-trivial multilingual retrieval work, and a `test/arabic-quality-gate` branch alongside it. |
+| AI product surface | Chat built on the pipeline — `AiConversation`, `AiMessage`, `AiMessageSource` entities carry conversations with per-answer source attribution. |
+| Arabic NLP | Dedicated `arabic_query_expansion`, `text_quality_service`, `language_service`, plus a `test/arabic-quality-gate` branch — a quality gate specifically for Arabic retrieval. |
+| Security posture | HTTP-only cookie auth, refresh tokens, route middleware, rate limiting, content-hash upload deduplication. |
 | Domain modelling | 11 entities, explicit enums including `DocumentStatusTransitions` — a modelled state machine rather than loose status strings. |
-| Engineering process | 24 planning documents, CI workflow, `main`/`dev` branch discipline. |
+| Engineering process | 24 planning documents, 74 merged PRs, CI workflow, `main`/`dev` discipline, one feature per branch. |
 | Measured, not claimed | `docs/runtime-verification.md` records a real end-to-end run with timings (upload → `Indexed` in 32.6s, 35-page PDF, 31,507 chars) and states plainly that it records unflattering findings too. |
 
 **Assessment: this is the strongest asset in the portfolio, by a wide margin.** It
@@ -117,9 +127,15 @@ verification discipline simultaneously. The `runtime-verification.md` document i
 particular — measuring rather than asserting — is a level of rigour rarely present
 in self-taught portfolios, and is itself worth surfacing on the site.
 
-**Honest limitation to state, not hide:** the AI assistant surface (Sprints 5–7) is
-not built. The RAG pipeline works and is verified; the product feature layered on top
-of it is not finished. Say so explicitly.
+**Current status to state accurately:** feature-complete through Sprint 9; Sprint 10
+(Release Preparation) outstanding. The system is built and verified but not deployed.
+This is a *deployment* gap, not a *completeness* gap, and the two read very differently
+to a recruiter — say "built and verified, deployment pending", never "in development".
+
+**Highest-value action available to this portfolio:** complete Sprint 10 and deploy it.
+A live URL a recruiter can open converts far better than any repository link. Deploying
+it would turn the strongest asset in the portfolio into a demonstrable product — and it
+is already the next planned sprint, so the work is scoped rather than speculative.
 
 ### 7.2 `Restaurant_Management` — supporting project
 
@@ -155,9 +171,13 @@ stay private, the narrower options in descending preference are:
 2. **Public "showcase" repo** — a subset: architecture docs, the AI service layer,
    `runtime-verification.md`. Partial evidence, moderate effort.
 3. **Private repo + detailed case study + screenshots** — weakest. Acceptable only if
-   there is a concrete reason (unreleased commercial intent, licensed content,
-   credentials in history). "It is unfinished" is not such a reason: Sprint 3 of 7 with
-   verified infrastructure reads as serious work in progress, not as embarrassment.
+   there is a concrete reason: unreleased commercial intent, licensed content, or
+   credentials in git history.
+
+Note that the usual reason for hiding a portfolio project — "it is not finished yet" —
+does not apply here at all. The system is feature-complete through Sprint 9. Keeping
+finished work private costs the portfolio its strongest evidence for no corresponding
+gain.
 
 If secrets in git history are the concern, that is solvable and worth solving —
 audit the history rather than keeping the work hidden.

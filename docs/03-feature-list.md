@@ -49,16 +49,20 @@ feature list is how it ends up postponed to a version that never ships.
 
 | ID | Feature | Notes |
 |---|---|---|
-| F-20 | AI Autonomous Workspace card | Lead project. Problem · stack · one named architecture decision · measured result · **explicit "in development" status** |
+| F-20 | AI Autonomous Workspace card | Lead project. Problem · stack · one named architecture decision · measured result · deployment status |
 | F-21 | Restaurant Management card | Problem · stack · three-tier architecture · 37 stored procedures · Arabic RTL UI |
 | F-22 | Repository links | **Blocked on D2/D3.** A link to a private repo resolves to 404 and is worse than no link |
 | F-23 | Per-project tech tags | Text, indexable |
 
-**Content rule for F-20:** state the measured result (35-page PDF indexed end-to-end
-in 32.6s on a self-hosted stack), and state the limitation in the same breath (the
-assistant surface is Sprint 3 of 7). Claiming a finished AI product invites scrutiny
-the project cannot yet survive; claiming verified infrastructure is both true and
-more impressive than most portfolio entries.
+**Content rule for F-20:** lead with the measured result (35-page PDF indexed
+end-to-end in 32.6s on a self-hosted stack, answers returned with source attribution).
+The system is feature-complete through Sprint 9; Sprint 10 is release preparation, so
+the accurate phrasing is "built and verified, deployment pending" — not "in development",
+which understates it badly.
+
+If the project is deployed before this site launches, F-20 gains a **live demo link**,
+which outweighs every other element on the Projects page. Treat that as the preferred
+outcome (see `01` §7.1).
 
 ### 1.4 About
 

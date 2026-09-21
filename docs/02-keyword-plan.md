@@ -152,7 +152,8 @@ naming, link to repo.
 
 - **AI Autonomous Workspace** leads. Name the measured result, not the ambition:
   a 35-page PDF indexed end to end in 32.6s, cited answers from a self-hosted stack.
-  State plainly that the assistant surface is unfinished — Sprint 3 of 7.
+  Feature-complete through Sprint 9; deployment (Sprint 10) pending. A live demo link,
+  if deployed, belongs here and outranks everything else on the page.
 - **Restaurant Management** second: three tiers, 37 stored procedures, Arabic RTL.
 
 Blocked on D2/D3. A card linking to a private repo is worse than no card — the claim
