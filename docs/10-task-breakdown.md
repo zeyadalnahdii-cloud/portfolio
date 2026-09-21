@@ -123,6 +123,9 @@ trailing period jumping to the wrong end of the line.
 **Done when:** the output lists **12 routes** marked static (`○`), none marked dynamic
 (`ƒ`).
 
+> Note: Next.js 16 marks routes generated via `generateStaticParams` with `●` (SSG)
+> rather than `○` (Static). Both are prerendered at build time.
+
 **Watch out:** reading `headers()`, `cookies()` or `searchParams` anywhere in a route
 silently opts it into dynamic rendering. The build still succeeds — it just stops
 being static, and the performance budget stops being reachable.
