@@ -1,0 +1,11 @@
+.next/
+out/
+build/
+node_modules/
+package-lock.json
+next-env.d.ts
+
+# Planning documents are prose deliverables with hand-aligned tables.
+# Reformatting them produces large diffs unrelated to the code change.
+docs/
+Word/
