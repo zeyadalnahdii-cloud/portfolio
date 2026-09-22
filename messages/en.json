@@ -1,17 +1,4 @@
 {
   "_meta": { "reviewed": false },
-  "locale": { "name": "English", "nativeName": "English" },
-  "spike": {
-    "nav": { "home": "Home", "about": "About", "projects": "Projects", "contact": "Contact" },
-    "title": "Zeyad Alnahdi",
-    "role": "Backend & Desktop Application Developer",
-    "intro": "I build backend systems and desktop applications in C# and SQL Server, with a clear layered architecture.",
-    "colLeftTitle": "First column",
-    "colRightTitle": "Second column",
-    "colBody": "This row must reverse its order in Arabic without a single physical property.",
-    "cardTitle": "Card with a leading border",
-    "cardBody": "The border and padding sit on the inline-start edge, so they follow the reading direction.",
-    "contactLabel": "Reach me at",
-    "stackLabel": "The stack I use is"
-  }
+  "locale": { "name": "English", "nativeName": "English" }
 }
