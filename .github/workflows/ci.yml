@@ -1,0 +1,91 @@
+name: CI
+
+# docs/09-cicd.md §2.1, §2.2.
+#
+# Vercel deploys on its own. This pipeline exists for a different reason: to
+# stop quality eroding after launch. Everything it checks is easy to satisfy
+# once and easy to break later, and none of it fails loudly on its own.
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+
+# A new push to the same PR cancels the previous run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # commitlint needs the PR's commits, not just the tip.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      # Warnings fail too. A warning nobody fixes trains everyone to ignore the
+      # output, and then a real error hides in it (docs/07-repo-standards.md §4).
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Commit messages
+        if: github.event_name == 'pull_request'
+        run: >-
+          npx --no -- commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
+
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # T-112 replaces this with a validated origin; the build fails
+          # without the variable by design.
+          NEXT_PUBLIC_SITE_URL: https://example.com
+
+      # A dropped locale does not fail `next build`. It succeeds, pages vanish,
+      # and nothing reports it. This is the check that notices.
+      - name: Assert every route prerendered
+        run: npm run assert:routes
