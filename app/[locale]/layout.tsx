@@ -5,6 +5,9 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { LOCALES, LOCALE_DIRECTION, isLocale } from '@/lib/i18n/config'
 import { buildSchema, serialiseSchema } from '@/lib/seo/schema'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { SkipLink } from '@/components/layout/SkipLink'
 
 import '../globals.css'
 
@@ -48,7 +51,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           // The payload is escaped in serialiseSchema.
           dangerouslySetInnerHTML={{ __html: serialiseSchema(buildSchema(locale)) }}
         />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <SkipLink />
+          <SiteHeader locale={locale} />
+          {children}
+          <SiteFooter />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

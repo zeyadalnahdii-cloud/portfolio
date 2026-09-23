@@ -11,12 +11,20 @@
     "about": "Hakkımda",
     "projects": "Projeler",
     "contact": "İletişim",
-    "skipToContent": "İçeriğe geç"
+    "skipToContent": "İçeriğe geç",
+    "menu": "Menü",
+    "closeMenu": "Menüyü kapat",
+    "primary": "Ana"
   },
   "meta": {
     "home": {
       "title": "Zeyad Alnahdi — Backend ve Masaüstü Geliştirici",
       "description": "C#, .NET ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Türkiye'de yaşıyor, freelance ve uzaktan çalışmaya açık."
     }
+  },
+  "footer": {
+    "email": "E-posta",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
   }
 }

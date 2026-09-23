@@ -1,26 +1,80 @@
 @import 'tailwindcss';
 
+/*
+ * Design tokens from docs/06-mockups.md §1.1.
+ *
+ * Both themes must independently satisfy SRS A-03 (4.5:1 for body text, 3:1
+ * for large text). Dark-mode contrast is the usual regression, so re-check
+ * both after changing any value here.
+ *
+ * The manual override in T-122 will set data-theme on the root; the media
+ * query below is written so an explicit light choice wins over the system
+ * preference.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --surface: #f6f8fa;
+  --border-subtle: #d8dee4;
+  --fg: #1f2328;
+  --fg-muted: #59636e;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border-subtle: #30363d;
+    --fg: #e6edf3;
+    --fg-muted: #9198a1;
+    --accent: #4493f8;
+    --accent-hover: #6cb6ff;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border-subtle: #30363d;
+  --fg: #e6edf3;
+  --fg-muted: #9198a1;
+  --accent: #4493f8;
+  --accent-hover: #6cb6ff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-subtle: var(--border-subtle);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  /* Arabic script needs more leading than Latin at the same size
+     (docs/06-mockups.md §1.2). */
+  line-height: 1.6;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root[lang='ar'] body {
+  line-height: 1.8;
+}
+
+/* SRS A-10: nothing moves for anyone who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
