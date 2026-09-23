@@ -12,5 +12,11 @@
     "projects": "Projects",
     "contact": "Contact",
     "skipToContent": "Skip to content"
+  },
+  "meta": {
+    "home": {
+      "title": "Zeyad Alnahdi — Backend & Desktop Developer",
+      "description": "Backend and desktop application developer working in C#, .NET and SQL Server. Based in Turkey, available for freelance and remote work."
+    }
   }
 }

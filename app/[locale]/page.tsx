@@ -1,13 +1,33 @@
-import { setRequestLocale } from 'next-intl/server'
+import type { Metadata } from 'next'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { isLocale } from '@/lib/i18n/config'
+import { buildMetadata } from '@/lib/seo/metadata'
+
+export async function generateMetadata({ params }: PageProps<'/[locale]'>): Promise<Metadata> {
+  const { locale } = await params
+
+  if (!isLocale(locale)) {
+    return {}
+  }
+
+  setRequestLocale(locale)
+  const t = await getTranslations('meta.home')
+
+  // Everything else — canonical, hreflang, Open Graph, Twitter, robots — is
+  // composed by buildMetadata. Routes pass copy and nothing more; a route that
+  // writes its own canonical or alternates is how the set drifts.
+  return buildMetadata({
+    locale,
+    pathname: '',
+    title: t('title'),
+    description: t('description'),
+  })
+}
 
 /**
- * Placeholder. The spike content that proved RTL mirroring was removed in
- * T-106; the real Home page is built in T-210 against docs/06-mockups.md §2.2.
- *
- * The route itself is foundation, not spike: removing it would take /en, /tr
- * and /ar offline and leave T-111 with no route to assert against.
+ * Placeholder. The real Home page is built in T-210 against
+ * docs/06-mockups.md §2.2.
  */
 export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   const { locale } = await params
