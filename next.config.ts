@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 
 import { DEFAULT_LOCALE } from './lib/i18n/config'
 import { IS_PRODUCTION_DEPLOY } from './lib/seo/environment'
+import { ROUTES } from './lib/seo/routes'
 // Imported for its side effect: the module validates NEXT_PUBLIC_SITE_URL at
 // load and throws if it is missing or malformed. next.config is evaluated
 // before anything is compiled, so a bad origin fails the build immediately
@@ -38,16 +39,37 @@ const nextConfig: NextConfig = {
     ])
   },
   redirects() {
+    // The redirect map in docs/05-ia-url-map.md §8.
+    //
+    // `permanent: true` emits 308 throughout. That is the whole point of the
+    // map: a 302 or 307 tells search engines the old URL is still the
+    // canonical one, so the locale-less form would keep its ranking and the
+    // real URL would never accumulate any.
+    //
+    // Handled here rather than in middleware so the site stays fully static
+    // and the status code is exact. Locale is never negotiated from
+    // Accept-Language or IP (SRS I-04).
+    //
+    // Derived from ROUTES, the same list the sitemap and the navigation read,
+    // so a locale-less redirect appears the moment its page does — and never
+    // before. `/about` → `/en/about` while /en/about is a 404 would turn one
+    // dead end into a redirect chain ending in the same dead end.
+    const localeless = ROUTES.map((route) => ({
+      source: route === '' ? '/' : route,
+      destination: `/${DEFAULT_LOCALE}${route}`,
+      permanent: true,
+    }))
+
     return Promise.resolve([
+      ...localeless,
       {
-        // SRS I-03. `permanent: true` emits 308, not 307: a temporary redirect
-        // would tell search engines `/` is still the canonical URL.
-        //
-        // Handled here rather than in middleware so the site stays fully static
-        // (no edge function) and the status code is exact. Locale is never
-        // negotiated from Accept-Language or IP — see SRS I-04.
-        source: '/',
-        destination: `/${DEFAULT_LOCALE}`,
+        // www to apex (SRS X-07). Written against a host pattern rather than a
+        // literal domain, so it is correct before D1 is resolved and stays
+        // correct if the domain changes. HTTP to HTTPS is not expressible here
+        // and is configured at the platform in T-311.
+        source: '/:path*',
+        has: [{ type: 'host' as const, value: 'www\\.(?<host>.*)' }],
+        destination: 'https://:host/:path*',
         permanent: true,
       },
     ])
