@@ -1,4 +1,16 @@
 {
-  "_meta": { "reviewed": false },
-  "locale": { "name": "Arabic", "nativeName": "العربية" }
+  "_meta": {
+    "reviewed": false
+  },
+  "locale": {
+    "name": "Arabic",
+    "nativeName": "العربية"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "about": "نبذة عني",
+    "projects": "المشاريع",
+    "contact": "تواصل معي",
+    "skipToContent": "تخطَّ إلى المحتوى"
+  }
 }

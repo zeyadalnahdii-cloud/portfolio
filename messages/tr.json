@@ -1,4 +1,16 @@
 {
-  "_meta": { "reviewed": false },
-  "locale": { "name": "Turkish", "nativeName": "Türkçe" }
+  "_meta": {
+    "reviewed": false
+  },
+  "locale": {
+    "name": "Turkish",
+    "nativeName": "Türkçe"
+  },
+  "nav": {
+    "home": "Ana sayfa",
+    "about": "Hakkımda",
+    "projects": "Projeler",
+    "contact": "İletişim",
+    "skipToContent": "İçeriğe geç"
+  }
 }
