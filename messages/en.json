@@ -134,7 +134,10 @@
       "success": "Thank you — your message has arrived. I will reply within two business days.",
       "error": "Something went wrong and the message was not sent. You can email me directly instead.",
       "required": "This field is required.",
-      "invalidEmail": "Please enter a valid email address."
+      "invalidEmail": "Please enter a valid email address.",
+      "tooLong": "This is longer than the form accepts.",
+      "rateLimited": "Too many messages just now. Please try again shortly, or email me directly.",
+      "errorSummary": "The form could not be sent."
     },
     "elsewhereHeading": "Elsewhere",
     "emailLabel": "Email"
