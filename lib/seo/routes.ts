@@ -7,11 +7,11 @@
  * budget and dead-ends visitors. It is therefore the pages that *exist*, not
  * the pages that are planned.
  *
- * `/projects` and `/contact` are added by T-212 and T-213.
+ * `/contact` is added by T-213.
  * Adding a route here without building it is the one way to break both
  * quietly.
  */
-export const ROUTES = ['', '/about'] as const
+export const ROUTES = ['', '/about', '/projects'] as const
 
 export type Route = (typeof ROUTES)[number]
 
@@ -24,6 +24,7 @@ export type Route = (typeof ROUTES)[number]
 export const ROUTE_LABEL: Record<Route, 'home' | 'about' | 'projects' | 'contact'> = {
   '': 'home',
   '/about': 'about',
+  '/projects': 'projects',
 }
 
 /**
