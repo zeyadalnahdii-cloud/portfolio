@@ -1,4 +1,16 @@
 {
-  "_meta": { "reviewed": false },
-  "locale": { "name": "English", "nativeName": "English" }
+  "_meta": {
+    "reviewed": true
+  },
+  "locale": {
+    "name": "English",
+    "nativeName": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact",
+    "skipToContent": "Skip to content"
+  }
 }
