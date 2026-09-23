@@ -134,7 +134,10 @@
       "success": "Teşekkürler — mesajınız ulaştı. İki iş günü içinde yanıt vereceğim.",
       "error": "Bir sorun oluştu ve mesaj gönderilemedi. Bunun yerine doğrudan e-posta gönderebilirsiniz.",
       "required": "Bu alan zorunludur.",
-      "invalidEmail": "Geçerli bir e-posta adresi girin."
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "tooLong": "Bu, formun kabul ettiğinden uzun.",
+      "rateLimited": "Şu anda çok fazla mesaj var. Lütfen biraz sonra tekrar deneyin ya da doğrudan e-posta gönderin.",
+      "errorSummary": "Form gönderilemedi."
     },
     "elsewhereHeading": "Diğer bağlantılar",
     "emailLabel": "E-posta"

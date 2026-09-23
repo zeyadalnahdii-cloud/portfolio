@@ -1,7 +1,7 @@
 # 12 — Sprint 1 Gate Results
 
-**Task:** T-126 · **Run:** 2026-09-23
-**Verdict:** 7 of 8 pass. **Check 1 does not.** The gate is open.
+**Task:** T-126 · **First run:** 2026-09-23 · **Re-run:** 2026-09-23, after T-213
+**Verdict:** **8 of 8 pass. The gate is closed.** The exception has ended.
 
 Measured against a production build served locally, with
 `NEXT_PUBLIC_SITE_URL=https://zeyadalnahdi.test` and, where noted,
@@ -13,7 +13,7 @@ Measured against a production build served locally, with
 
 | # | Check | Result |
 |---|---|---|
-| 1 | 12 routes resolve; `/` 308s to `/en` | ❌ **3 routes, not 12** |
+| 1 | 12 routes resolve; `/` 308s to `/en` | ✅ **12** (was 3 on the first run) |
 | 2 | `lang` and `dir` correct | ✅ |
 | 3 | Reciprocal `hreflang` + `x-default` on every route | ✅ |
 | 4 | Toggling `_meta.reviewed` changes metadata, sitemap and alternates | ✅ |
@@ -24,7 +24,27 @@ Measured against a production build served locally, with
 
 ---
 
-## 1 — Routes · FAILED
+## 1 — Routes · PASSED on the re-run
+
+```
+/                   308 -> /en
+page routes         12
+assert-routes       prerendered 12 -> { ar: 4, en: 4, tr: 4 }  OK
+```
+
+The check was never wrong; the site was simply four pages short of being able
+to answer it. T-211, T-212 and T-213 built the missing three, and
+`assert-routes` rose from 3 to 12 without anyone editing it — the count comes
+from `lib/seo/routes.ts` and the filesystem, not from a number typed into the
+script.
+
+Lighthouse on the re-run, all four English routes: **SEO 100, accessibility
+100**.
+
+The wording was never softened to make this pass. It passed because the work
+was done.
+
+### What the first run recorded — kept for the record
 
 ```
 /            308 -> /en
@@ -160,9 +180,14 @@ latest dev run: success
 
 ---
 
-## Decision: Sprint 2 starts under a recorded exception
+## Decision: Sprint 2 started under a recorded exception — now discharged
 
-**Taken 2026-09-23 by the owner.** The gate stays open on check 1 and is
+**Closed 2026-09-23**, on the re-run above. The condition attached to the
+exception was that T-126 be run again in full once T-211 … T-213 had landed,
+and that Sprint 2's own gate would not substitute for it. Both held: the
+re-run above is a full one, and T-221 remains separate and outstanding.
+
+**Originally taken 2026-09-23 by the owner.** The gate stays open on check 1 and is
 revisited when the site has its twelve routes — which is a Sprint 2 outcome,
 so waiting would mean waiting for work that only Sprint 2 produces.
 
@@ -182,14 +207,13 @@ Conditions attached to the exception:
   its own as pages land, so check 1 converges without anyone remembering to
   update it.
 
-## What blocks closing the gate
+## What blocked closing the gate, and how it resolved
 
-**Check 1 needs a decision.** Either the wording changes to match what Sprint 1
-actually produces, or the gate stays open until Sprint 2 builds the remaining
-nine routes — in which case Sprint 2 starts before its own entry gate passes,
-which defeats the purpose of having one.
+**Check 1 needed either a rewording or nine more routes.** It got the routes.
+That is the outcome worth having: a gate that was left failing, stayed failing
+visibly for the duration, and then passed on its own terms.
 
-**D1 is not blocking after all.** The task text expected checks 3, 5 and 7 to
+**D1 was not blocking after all.** The task text expected checks 3, 5 and 7 to
 be unverifiable without the real domain. They were verifiable: the origin is
 injected, so a reserved `.test` domain exercises exactly the same code paths
 that a real one will. What a placeholder cannot prove is that the *deployed*
