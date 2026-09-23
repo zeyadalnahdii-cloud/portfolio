@@ -65,20 +65,32 @@ describe('the review flag against untranslated copy', () => {
   const english = new Map(leaves(en))
 
   /**
-   * Strings that are correctly identical across locales, so matching English
-   * does not mean untranslated:
-   *  - technology names, which stay Latin in Arabic and Turkish technical prose
-   *  - repository names, which are what the linked repository is actually called
-   *  - the locale block, which carries each language's own name
+   * Some strings are correctly identical across locales, so matching English
+   * is not evidence of anything. Two narrow allowances, by key and by value.
+   *
+   * By key: technology names, which stay Latin in Arabic and Turkish technical
+   * prose; repository names, which are what the linked repository is actually
+   * called; and the locale block, which carries each language's own name.
    */
-  const ALLOWED_IDENTICAL = /(\.stack\.|^locale\.|^projects\.[a-zA-Z]+\.name$)/
+  const ALLOWED_KEYS = /(\.stack\.|^locale\.|^projects\.[a-zA-Z]+\.name$)/
+
+  /**
+   * By value: proper nouns, and words a target language genuinely shares with
+   * English. Kept as an explicit list rather than a heuristic, because the
+   * failure this guard exists to catch is a file left mirroring English
+   * wholesale — and a loose rule would let that through.
+   */
+  const ALLOWED_VALUES = new Set(['GitHub', 'LinkedIn', 'Zeyad Alnahdi', 'Problem'])
+
+  const isAllowed = (key: string, value: string) =>
+    ALLOWED_KEYS.test(key) || ALLOWED_VALUES.has(value)
 
   it.each([
     ['tr', tr],
     ['ar', ar],
   ])('%s is not marked reviewed while it still mirrors English', (_name, messages) => {
     const untranslated = leaves(messages).filter(
-      ([key, value]) => !ALLOWED_IDENTICAL.test(key) && english.get(key) === value,
+      ([key, value]) => !isAllowed(key, value) && english.get(key) === value,
     )
 
     if (untranslated.length > 0) {

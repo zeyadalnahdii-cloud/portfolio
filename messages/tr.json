@@ -28,27 +28,27 @@
   "meta": {
     "home": {
       "title": "Zeyad Alnahdi — Backend ve Masaüstü Geliştirici",
-      "description": "C#, .NET ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Türkiye'de yaşıyor, freelance ve uzaktan çalışmaya açık."
+      "description": "C#, ASP.NET Core ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Aksaray'da yaşıyor, freelance ve uzaktan çalışmaya açık."
     },
     "about": {
-      "title": "About Zeyad Alnahdi — Backend Developer",
-      "description": "Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data."
+      "title": "Hakkımda — Zeyad Alnahdi, Yazılım Geliştirici",
+      "description": "Psikoloji mezunu, kendi kendine yetişmiş backend geliştirici. Bu altyapının arayüz tasarımına, hata yönetimine ve veri modellemeye katkısı."
     },
     "projects": {
-      "title": "Projects — Backend & AI Systems | Zeyad Alnahdi",
-      "description": "An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
+      "title": "Projeler — Backend ve Yapay Zekâ | Zeyad Alnahdi",
+      "description": "ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan RAG altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi."
     },
     "contact": {
-      "title": "Contact Zeyad Alnahdi — Backend Developer",
-      "description": "Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days."
+      "title": "İletişim — Zeyad Alnahdi, Yazılım Geliştirici",
+      "description": "Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt."
     }
   },
   "home": {
     "name": "Zeyad Alnahdi",
-    "role": "Backend & Desktop Application Developer",
-    "intro": "I build backend systems and desktop applications in C#, ASP.NET Core and SQL Server. Most of my work is the part nobody sees: data models that hold their shape, layers that stay separate, and systems that say what they are doing instead of failing quietly.",
-    "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
-    "stackHeading": "What I work with",
+    "role": "Backend ve Masaüstü Uygulama Geliştirici",
+    "intro": "C#, ASP.NET Core ve SQL Server ile backend sistemleri ve masaüstü uygulamaları geliştiriyorum. İşimin çoğu kimsenin görmediği kısımda: biçimini koruyan veri modelleri, birbirine karışmayan katmanlar ve sessizce başarısız olmak yerine ne yaptığını söyleyen sistemler.",
+    "location": "Aksaray'da yaşıyorum. Freelance işlere ve uzaktan pozisyonlara açığım.",
+    "stackHeading": "Kullandığım teknolojiler",
     "stack": [
       "C#",
       "ASP.NET Core",
@@ -62,44 +62,44 @@
       "FastAPI",
       "Docker"
     ],
-    "workHeading": "Selected work",
-    "seeProjects": "See all projects",
-    "cta": "Get in touch"
+    "workHeading": "Seçilmiş çalışmalar",
+    "seeProjects": "Tüm projeler",
+    "cta": "İletişime geçin"
   },
   "about": {
-    "heading": "About me",
-    "intro": "I studied psychology and then taught myself to program. Both turned out to be about the same thing: building models of something complicated that are simple enough to reason about, and finding out where they break.",
-    "learningHeading": "How I learned",
-    "learning": "I started with C++, moved to C# and SQL Server, and from there to ASP.NET Core and the layered architecture I still work in. No bootcamp and no degree in it — a long sequence of projects, each one larger than the last, and a habit of reading other people's code.",
-    "psychologyHeading": "Psychology, applied",
-    "psychology": "The degree shows up in design decisions more than in code. In the AI workspace, every answer the assistant gives carries the document and the page it came from, because an answer nobody can check is an answer nobody acts on. Confidence without a source is a liability, not a feature — and that is a claim about people, not about software.",
-    "lookingHeading": "What I'm looking for",
-    "looking": "Freelance projects, remote roles, or local work. I live in Aksaray and I am open to positions in Ankara.",
-    "cvHeading": "Curriculum vitae",
-    "cvDownload": "Download CV (PDF)"
+    "heading": "Hakkımda",
+    "intro": "Psikoloji okudum, sonra kendi kendime programlamayı öğrendim. İkisinin de aynı şey olduğu ortaya çıktı: karmaşık bir şeyin, üzerinde düşünülebilecek kadar basit bir modelini kurmak ve sonra nerede çöktüğünü bulmak.",
+    "learningHeading": "Nasıl öğrendim",
+    "learning": "C++ ile başladım, ardından C# ve SQL Server'a, oradan da ASP.NET Core'a ve hâlâ kullandığım katmanlı mimariye geçtim. Bootcamp yok, alanında diploma yok — her biri bir öncekinden büyük uzun bir proje dizisi ve başkalarının kodunu okuma alışkanlığı.",
+    "psychologyHeading": "Psikoloji, uygulamada",
+    "psychology": "Diploma kendini koddan çok tasarım kararlarında gösteriyor. Yapay zekâ çalışma alanında asistanın verdiği her yanıt, geldiği belgeyi ve sayfayı da taşıyor; çünkü kimsenin doğrulayamadığı bir yanıt, kimsenin üzerine hareket etmediği bir yanıttır. Kaynağı olmayan kesinlik bir özellik değil, bir yüktür — ve bu, yazılım hakkında değil insanlar hakkında bir gözlem.",
+    "lookingHeading": "Ne arıyorum",
+    "looking": "Freelance projeler, uzaktan pozisyonlar veya yerel işler. Aksaray'da yaşıyorum ve Ankara'daki pozisyonlara açığım.",
+    "cvHeading": "Özgeçmiş",
+    "cvDownload": "Özgeçmişi indir (PDF)"
   },
   "projects": {
-    "heading": "Projects",
-    "intro": "Two systems, both built end to end. One is a distributed AI workspace; the other is a desktop application over SQL Server. Together they are most of what I do.",
+    "heading": "Projeler",
+    "intro": "İki sistem, ikisi de baştan sona kuruldu. Biri dağıtık bir yapay zekâ çalışma alanı, diğeri SQL Server üzerinde bir masaüstü uygulaması. İkisi birlikte yaptığım işin büyük bölümü.",
     "labels": {
       "problem": "Problem",
-      "architecture": "Architecture",
-      "scale": "Scale",
-      "result": "Result",
-      "scope": "Scope",
-      "notable": "Notable",
-      "stack": "Stack",
-      "repository": "View repository",
-      "demo": "Live demo"
+      "architecture": "Mimari",
+      "scale": "Ölçek",
+      "result": "Sonuç",
+      "scope": "Kapsam",
+      "notable": "Dikkate değer",
+      "stack": "Teknolojiler",
+      "repository": "Depoyu görüntüle",
+      "demo": "Canlı demo"
     },
     "aiWorkspace": {
       "name": "AI Autonomous Workspace",
-      "status": "Built and verified · deployment pending",
-      "problem": "Documents accumulate faster than anyone reads them. This workspace stores them, indexes what is in them, and answers questions about them with the source attached.",
-      "architecture": "ASP.NET Core in four layers — Domain, Application, Infrastructure and Api — with a Python FastAPI service for the retrieval work, PostgreSQL and Qdrant in Docker, and the language model running locally. No third-party AI provider: the whole pipeline runs on its own hardware.",
-      "scale": "598 files · 189 C# · 80 Python · 85 test files · 74 merged pull requests",
-      "result": "Measured on a running stack rather than estimated: a 35-page PDF goes from upload to searchable in 32.6 seconds, and every answer comes back with the page it was drawn from.",
-      "scope": "Feature-complete through its ninth sprint. The tenth is release preparation, so the system is built and verified but not yet deployed.",
+      "status": "Kuruldu ve doğrulandı · yayına alma bekliyor",
+      "problem": "Belgeler kimsenin okuyabileceğinden hızlı birikiyor. Bu çalışma alanı onları saklıyor, içindekileri indeksliyor ve sorulara kaynağıyla birlikte yanıt veriyor.",
+      "architecture": "Dört katmanlı ASP.NET Core — Domain, Application, Infrastructure ve Api — erişim işleri için bir Python FastAPI servisi, Docker içinde PostgreSQL ve Qdrant, ve yerelde çalışan bir dil modeli. Üçüncü taraf bir yapay zekâ sağlayıcısı yok: tüm hat kendi donanımında çalışıyor.",
+      "scale": "598 dosya · 189 C# · 80 Python · 85 test dosyası · 74 birleştirilmiş pull request",
+      "result": "Tahmin değil, çalışan bir sistem üzerinde ölçüldü: 35 sayfalık bir PDF, yüklemeden aranabilir olmaya 32,6 saniyede geçiyor ve her yanıt alındığı sayfayla birlikte dönüyor.",
+      "scope": "Dokuzuncu sprintine kadar özellikleri tamamlandı. Onuncu sprint yayına hazırlık, yani sistem kurulu ve doğrulanmış durumda ama henüz yayına alınmadı.",
       "stack": [
         "ASP.NET Core",
         "C#",
@@ -113,35 +113,35 @@
     },
     "restaurant": {
       "name": "Restaurant Management",
-      "status": "Complete",
-      "problem": "Purchasing and inventory for a restaurant, as a Windows desktop application the staff could use in their own language.",
-      "architecture": "Three tiers — forms, business logic, data access — with every database call going through a stored procedure and none through inline SQL.",
-      "scale": "9 forms · 10 tables · 37 stored procedures · RDLC reports",
-      "notable": "The interface is Arabic and right-to-left throughout, which is where I first learned how much of a layout is direction-dependent.",
+      "status": "Tamamlandı",
+      "problem": "Bir restoran için satın alma ve stok yönetimi; personelin kendi dilinde kullanabileceği bir Windows masaüstü uygulaması.",
+      "architecture": "Üç katman — formlar, iş mantığı ve veri erişimi — her veritabanı çağrısı bir saklı yordamdan geçiyor, hiçbiri gömülü SQL'den değil.",
+      "scale": "9 form · 10 tablo · 37 saklı yordam · RDLC raporları",
+      "notable": "Arayüz baştan sona Arapça ve sağdan sola; bir yerleşimin ne kadarının yön bağımlı olduğunu ilk orada öğrendim.",
       "stack": ["C#", "Windows Forms", ".NET Framework", "SQL Server", "T-SQL", "RDLC"]
     }
   },
   "contact": {
-    "heading": "Get in touch",
-    "intro": "About freelance projects, remote roles, or anything you would like built. I read everything that arrives.",
-    "responseTime": "I reply within two business days.",
+    "heading": "İletişime geçin",
+    "intro": "Freelance projeler, uzaktan pozisyonlar veya kurmak istediğiniz herhangi bir şey için. Gelen her mesajı okuyorum.",
+    "responseTime": "İki iş günü içinde yanıt veriyorum.",
     "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "send": "Send",
-      "sending": "Sending…",
-      "success": "Thank you — your message has arrived. I will reply within two business days.",
-      "error": "Something went wrong and the message was not sent. You can email me directly instead.",
-      "required": "This field is required.",
-      "invalidEmail": "Please enter a valid email address."
+      "name": "Ad",
+      "email": "E-posta",
+      "message": "Mesaj",
+      "send": "Gönder",
+      "sending": "Gönderiliyor…",
+      "success": "Teşekkürler — mesajınız ulaştı. İki iş günü içinde yanıt vereceğim.",
+      "error": "Bir sorun oluştu ve mesaj gönderilemedi. Bunun yerine doğrudan e-posta gönderebilirsiniz.",
+      "required": "Bu alan zorunludur.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin."
     },
-    "elsewhereHeading": "Elsewhere",
-    "emailLabel": "Email"
+    "elsewhereHeading": "Diğer bağlantılar",
+    "emailLabel": "E-posta"
   },
   "notFound": {
-    "heading": "Page not found",
-    "body": "This page does not exist, or it moved. The links below still work.",
-    "backHome": "Back to the home page"
+    "heading": "Sayfa bulunamadı",
+    "body": "Bu sayfa yok ya da taşınmış. Aşağıdaki bağlantılar hâlâ çalışıyor.",
+    "backHome": "Ana sayfaya dön"
   }
 }
