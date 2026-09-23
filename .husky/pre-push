@@ -1,1 +1,4 @@
-npx tsc --noEmit
+# `npm run typecheck`, not a bare tsc: Next 16 generates LayoutProps and
+# PageProps into .next/types, so tsc alone fails on a clean checkout or after
+# .next is removed. The script runs `next typegen` first.
+npm run typecheck
