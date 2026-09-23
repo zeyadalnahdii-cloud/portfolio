@@ -825,6 +825,61 @@ first time, and the exception it was entered under ends here.
 **Watch out:** it is not a page route and must not enter `ROUTES` — it has no
 place in the sitemap or the navigation.
 
+#### Status 2026-09-23: **not complete.** X-04 met, F-08 deferred to Sprint 3
+
+Step 2 passes and step 1 does not. The requirement is unchanged and the task
+stays open; only the schedule moved.
+
+**What works today, with no code written for this task:**
+
+```
+/en/nonexistent · /tr/nonexistent · /ar/nonexistent   404
+/fr · /fr/about · /en/a/b/c · /nonexistent            404
+```
+
+Real 404 statuses, no soft 404, nothing in the sitemap — **X-04 is met**. What
+is served is Next's built-in 404: no header, no footer, no `lang`/`dir`, not in
+the visitor's language. **F-08 is not met.**
+
+**Why it is deferred, with the evidence — so nobody investigates this twice.**
+
+Three hypotheses were tested against a running production build. Every
+experiment was reverted; the tree is byte-identical to where it started.
+
+*1. "The not-found component was throwing."* — **Disproved.** A trivial server
+component with hardcoded text and no next-intl and no hooks behaves the same.
+
+*2. "`dynamicParams = false` on the locale layout blocks the catch-all."* —
+**Confirmed as a blocker, and it cannot be overridden per segment.** With it in
+place the catch-all is never invoked at all: the marker string is absent from
+the payload entirely. Relaxing it on the layout does let the catch-all run —
+and, separately, `/fr` still returns 404, because the guard that actually
+rejects unknown locales is the explicit `isLocale()` check, not this setting.
+
+*3. "There is no root layout for the not-found boundary to render into."* —
+**Confirmed, and it is the one that matters.** With the catch-all reachable,
+`notFound()` renders the component — the marker appears in the HTML — but Next
+wraps it in `<html id="__next_error__">` rather than in the locale layout.
+
+**The restructure does not fix it.** Both shapes were built and served:
+
+| Shape | Build | `lang`/`dir` on the 12 routes | Localised 404 |
+|---|---|---|---|
+| Root layout returning `children` only | passes | preserved | **no** — still `__next_error__` |
+| Root layout with `<html>`, locale layout without | passes | **lost entirely** | **no** — still `__next_error__`, no header |
+
+So the full restructure pays the cost — `<html>` served with no `lang` and no
+`dir`, breaking I-05 and I-06 — and does not collect the benefit. That is why
+option A was rejected after being chosen: the plan was written before these
+measurements existed, and the measurements contradicted it.
+
+**Not attempted, deliberately:** a middleware rewrite. It is the one remaining
+untried path, and it was ruled out in T-102 for reasons that still hold — it
+adds an edge function and ends the site being fully static. Revisit only if
+Sprint 3 finds nothing better.
+
+Scheduled as **T-320**.
+
 ---
 
 ### T-215 · Metadata verification — M
@@ -1039,6 +1094,14 @@ Enumerated only. Expanded when Sprint 2 closes.
 | T-317 | GitHub + LinkedIn: canonical name, link to domain | S | T-311 |
 | T-318 | Repository READMEs in English | M | **D2/D3** |
 | T-319 | Sprint 3 gate | M | all |
+| T-320 | Localised 404 (F-08), deferred from T-214 | M | — |
+
+> **T-320** carries the open half of T-214. X-04 is already met; F-08 is not.
+> The investigation is written up under T-214 above — three hypotheses tested,
+> two restructure shapes built and measured, all reverted. Start from those
+> findings rather than from the beginning: what is left to try is a newer
+> Next.js release, or the middleware rewrite that T-102 ruled out and that
+> would cost the site its fully static build.
 
 > T-317 and T-318 are the only tasks that do work **outside** this repository, and they
 > carry more weight for G1 than anything on-page. The `rel="me"` links only consolidate
