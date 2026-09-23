@@ -4,6 +4,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { LOCALES, LOCALE_DIRECTION, isLocale } from '@/lib/i18n/config'
+import { buildSchema, serialiseSchema } from '@/lib/seo/schema'
 
 import '../globals.css'
 
@@ -39,6 +40,14 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* SRS S-01, S-02. Rendered in the layout so the Person and WebSite
+            entities appear on every route with the same @id, which is what
+            lets a crawler resolve one entity rather than one per page. */}
+        <script
+          type="application/ld+json"
+          // The payload is escaped in serialiseSchema.
+          dangerouslySetInnerHTML={{ __html: serialiseSchema(buildSchema(locale)) }}
+        />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
