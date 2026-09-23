@@ -28,6 +28,8 @@ Next.js (App Router) · TypeScript (strict) · next-intl · Vercel + custom doma
 | 8 | Sprint Plans | `08-sprint-plans.md` | draft |
 | 9 | CI/CD Plan | `09-cicd.md` | draft |
 | 10 | Developer Task Breakdown | `10-task-breakdown.md` | S1 detailed; S2–S3 enumerated |
+| 11 | Spike Findings | `11-spike-findings.md` | closed |
+| 12 | Sprint 1 Gate Results | `12-sprint-1-gate.md` | 7 of 8 — gate open |
 
 Deliberately excluded: Gantt chart (replaced by document 5 + sprint plans).
 
