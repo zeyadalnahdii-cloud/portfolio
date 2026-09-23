@@ -27,5 +27,8 @@
     "email": "E-posta",
     "github": "GitHub",
     "linkedin": "LinkedIn"
+  },
+  "theme": {
+    "darkMode": "Karanlık mod"
   }
 }

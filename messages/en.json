@@ -27,5 +27,8 @@
     "email": "Email",
     "github": "GitHub",
     "linkedin": "LinkedIn"
+  },
+  "theme": {
+    "darkMode": "Dark mode"
   }
 }

@@ -8,6 +8,7 @@ import { buildSchema, serialiseSchema } from '@/lib/seo/schema'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SkipLink } from '@/components/layout/SkipLink'
+import { THEME_SCRIPT } from '@/lib/theme'
 
 import '../globals.css'
 
@@ -41,7 +42,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
       lang={locale}
       dir={LOCALE_DIRECTION[locale]}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // The inline script below sets data-theme before React hydrates, so the
+      // server markup and the live DOM legitimately differ on this element.
+      suppressHydrationWarning
     >
+      <head>
+        {/* Blocking and inline on purpose: applying the stored theme in an
+            effect paints the wrong colours first and repaints, which costs
+            LCP and CLS as well as looking broken (SRS P-02). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col">
         {/* SRS S-01, S-02. Rendered in the layout so the Person and WebSite
             entities appear on every route with the same @id, which is what
