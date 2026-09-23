@@ -17,18 +17,131 @@
     "primary": "Ana",
     "language": "Dil"
   },
-  "meta": {
-    "home": {
-      "title": "Zeyad Alnahdi — Backend ve Masaüstü Geliştirici",
-      "description": "C#, .NET ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Türkiye'de yaşıyor, freelance ve uzaktan çalışmaya açık."
-    }
+  "theme": {
+    "darkMode": "Karanlık mod"
   },
   "footer": {
     "email": "E-posta",
     "github": "GitHub",
     "linkedin": "LinkedIn"
   },
-  "theme": {
-    "darkMode": "Karanlık mod"
+  "meta": {
+    "home": {
+      "title": "Zeyad Alnahdi — Backend ve Masaüstü Geliştirici",
+      "description": "C#, .NET ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Türkiye'de yaşıyor, freelance ve uzaktan çalışmaya açık."
+    },
+    "about": {
+      "title": "About Zeyad Alnahdi — Backend Developer",
+      "description": "Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data."
+    },
+    "projects": {
+      "title": "Projects — Backend & AI Systems | Zeyad Alnahdi",
+      "description": "An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
+    },
+    "contact": {
+      "title": "Contact Zeyad Alnahdi — Backend Developer",
+      "description": "Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days."
+    }
+  },
+  "home": {
+    "name": "Zeyad Alnahdi",
+    "role": "Backend & Desktop Application Developer",
+    "intro": "I build backend systems and desktop applications in C#, ASP.NET Core and SQL Server. Most of my work is the part nobody sees: data models that hold their shape, layers that stay separate, and systems that say what they are doing instead of failing quietly.",
+    "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
+    "stackHeading": "What I work with",
+    "stack": [
+      "C#",
+      "ASP.NET Core",
+      ".NET",
+      "SQL Server",
+      "PostgreSQL",
+      "Clean Architecture",
+      "TypeScript",
+      "Next.js",
+      "Python",
+      "FastAPI",
+      "Docker"
+    ],
+    "workHeading": "Selected work",
+    "seeProjects": "See all projects",
+    "cta": "Get in touch"
+  },
+  "about": {
+    "heading": "About me",
+    "intro": "I studied psychology and then taught myself to program. Both turned out to be about the same thing: building models of something complicated that are simple enough to reason about, and finding out where they break.",
+    "learningHeading": "How I learned",
+    "learning": "I started with C++, moved to C# and SQL Server, and from there to ASP.NET Core and the layered architecture I still work in. No bootcamp and no degree in it — a long sequence of projects, each one larger than the last, and a habit of reading other people's code.",
+    "psychologyHeading": "Psychology, applied",
+    "psychology": "The degree shows up in design decisions more than in code. In the AI workspace, every answer the assistant gives carries the document and the page it came from, because an answer nobody can check is an answer nobody acts on. Confidence without a source is a liability, not a feature — and that is a claim about people, not about software.",
+    "lookingHeading": "What I'm looking for",
+    "looking": "Freelance projects, remote roles, or local work. I live in Aksaray and I am open to positions in Ankara.",
+    "cvHeading": "Curriculum vitae",
+    "cvDownload": "Download CV (PDF)"
+  },
+  "projects": {
+    "heading": "Projects",
+    "intro": "Two systems, both built end to end. One is a distributed AI workspace; the other is a desktop application over SQL Server. Together they are most of what I do.",
+    "labels": {
+      "problem": "Problem",
+      "architecture": "Architecture",
+      "scale": "Scale",
+      "result": "Result",
+      "scope": "Scope",
+      "notable": "Notable",
+      "stack": "Stack",
+      "repository": "View repository",
+      "demo": "Live demo"
+    },
+    "aiWorkspace": {
+      "name": "AI Autonomous Workspace",
+      "status": "Built and verified · deployment pending",
+      "problem": "Documents accumulate faster than anyone reads them. This workspace stores them, indexes what is in them, and answers questions about them with the source attached.",
+      "architecture": "ASP.NET Core in four layers — Domain, Application, Infrastructure and Api — with a Python FastAPI service for the retrieval work, PostgreSQL and Qdrant in Docker, and the language model running locally. No third-party AI provider: the whole pipeline runs on its own hardware.",
+      "scale": "598 files · 189 C# · 80 Python · 85 test files · 74 merged pull requests",
+      "result": "Measured on a running stack rather than estimated: a 35-page PDF goes from upload to searchable in 32.6 seconds, and every answer comes back with the page it was drawn from.",
+      "scope": "Feature-complete through its ninth sprint. The tenth is release preparation, so the system is built and verified but not yet deployed.",
+      "stack": [
+        "ASP.NET Core",
+        "C#",
+        "PostgreSQL",
+        "Python",
+        "FastAPI",
+        "Qdrant",
+        "Docker",
+        "Next.js"
+      ]
+    },
+    "restaurant": {
+      "name": "Restaurant Management",
+      "status": "Complete",
+      "problem": "Purchasing and inventory for a restaurant, as a Windows desktop application the staff could use in their own language.",
+      "architecture": "Three tiers — forms, business logic, data access — with every database call going through a stored procedure and none through inline SQL.",
+      "scale": "9 forms · 10 tables · 37 stored procedures · RDLC reports",
+      "notable": "The interface is Arabic and right-to-left throughout, which is where I first learned how much of a layout is direction-dependent.",
+      "stack": ["C#", "Windows Forms", ".NET Framework", "SQL Server", "T-SQL", "RDLC"]
+    }
+  },
+  "contact": {
+    "heading": "Get in touch",
+    "intro": "About freelance projects, remote roles, or anything you would like built. I read everything that arrives.",
+    "responseTime": "I reply within two business days.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send",
+      "sending": "Sending…",
+      "success": "Thank you — your message has arrived. I will reply within two business days.",
+      "error": "Something went wrong and the message was not sent. You can email me directly instead.",
+      "required": "This field is required.",
+      "invalidEmail": "Please enter a valid email address."
+    },
+    "elsewhereHeading": "Elsewhere",
+    "emailLabel": "Email"
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "body": "This page does not exist, or it moved. The links below still work.",
+    "backHome": "Back to the home page"
   }
 }
