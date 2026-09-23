@@ -2,6 +2,11 @@ import createNextIntlPlugin from 'next-intl/plugin'
 import type { NextConfig } from 'next'
 
 import { DEFAULT_LOCALE } from './lib/i18n/config'
+// Imported for its side effect: the module validates NEXT_PUBLIC_SITE_URL at
+// load and throws if it is missing or malformed. next.config is evaluated
+// before anything is compiled, so a bad origin fails the build immediately
+// rather than after a full compile — or, worse, not at all.
+import './lib/seo/origin'
 
 const nextConfig: NextConfig = {
   // One canonical URL form. See docs/05-ia-url-map.md §2 and SRS X-05.

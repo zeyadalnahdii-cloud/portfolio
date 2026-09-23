@@ -19,6 +19,14 @@ concurrency:
 permissions:
   contents: read
 
+# lib/seo/origin.ts validates this at module load and throws without it, and
+# next.config.ts imports it, so anything that evaluates the config needs it —
+# `next typegen` in validate as well as `next build`. A placeholder is correct
+# here: CI checks that the code compiles, not which host it will be served
+# from. The real origin lives in Vercel's environment variables.
+env:
+  NEXT_PUBLIC_SITE_URL: https://example.com
+
 jobs:
   validate:
     name: validate
@@ -80,10 +88,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # T-112 replaces this with a validated origin; the build fails
-          # without the variable by design.
-          NEXT_PUBLIC_SITE_URL: https://example.com
 
       # A dropped locale does not fail `next build`. It succeeds, pages vanish,
       # and nothing reports it. This is the check that notices.
