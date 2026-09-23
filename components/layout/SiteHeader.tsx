@@ -4,6 +4,7 @@ import type { Locale } from '@/lib/i18n/config'
 
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { SiteNav } from './SiteNav'
+import { ThemeToggle } from './ThemeToggle'
 
 interface SiteHeaderProps {
   locale: Locale
@@ -28,7 +29,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher locale={locale} />
-          {/* Slot filled by T-122 (theme toggle). */}
+          <ThemeToggle />
         </div>
       </div>
     </header>
