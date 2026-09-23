@@ -85,12 +85,24 @@ describe('SiteNav', () => {
       expect(reopened).toHaveFocus()
     })
 
+    /**
+     * Tabs until the button has focus rather than assuming how many stops away
+     * it is. The first version counted them, and broke the moment /about was
+     * added to the navigation — the assertion was about the route count, not
+     * about keyboard reachability.
+     */
     it('is reachable by keyboard alone', async () => {
       const user = userEvent.setup()
       renderNav()
 
-      await user.tab()
-      await user.tab()
+      const button = screen.getByRole('button', { name: 'Menu' })
+
+      for (let stop = 0; stop < 20 && document.activeElement !== button; stop += 1) {
+        await user.tab()
+      }
+
+      expect(button).toHaveFocus()
+
       await user.keyboard('{Enter}')
 
       expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
