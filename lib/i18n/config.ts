@@ -18,6 +18,17 @@ export const LOCALE_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = {
   ar: 'rtl',
 }
 
+/**
+ * Each locale's name in its own language. Not translated: العربية is العربية
+ * whatever page you are reading, and a visitor looking for their language
+ * scans for the word they recognise.
+ */
+export const LOCALE_NATIVE_NAME: Record<Locale, string> = {
+  en: 'English',
+  tr: 'Türkçe',
+  ar: 'العربية',
+}
+
 export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value)
 }
