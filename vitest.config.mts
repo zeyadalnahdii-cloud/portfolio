@@ -17,9 +17,15 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['lib/seo/**'],
-      // No threshold yet: origin.ts is not covered until T-125, which owns the
-      // >=90% bar for lib/seo. Enforcing it here would make the gate red on
-      // arrival, which is how gates get disabled (docs/09-cicd.md §6).
+      // docs/07-repo-standards.md §7. This module is held to a bar the rest of
+      // the code is not, because its failures are silent: a broken hreflang set
+      // produces no error, no failed build and no visible defect — only a
+      // Search Console warning, weeks later. Nothing else here fails that
+      // quietly.
+      //
+      // Enabled now rather than in T-114, because a gate introduced before the
+      // code can pass it is a gate someone disables (docs/09-cicd.md §6).
+      thresholds: { statements: 90, branches: 90, functions: 90, lines: 90 },
     },
   },
 })
