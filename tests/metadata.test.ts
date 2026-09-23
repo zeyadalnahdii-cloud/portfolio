@@ -120,6 +120,29 @@ describe('buildMetadata', () => {
       ).toThrow(/description is 156 characters, over the 155 limit/)
     })
 
+    /**
+     * Production warns instead of throwing. A title two characters over the
+     * limit costs a truncated search result; crashing a live render over it
+     * would cost the page. The hard gate for production builds is the CI
+     * metadata job in docs/09-cicd.md §2.6.
+     */
+    it('warns instead of throwing in production, rather than taking the page down', async () => {
+      vi.stubEnv('NODE_ENV', 'production')
+      vi.resetModules()
+
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+      const { buildMetadata: production } = await import('@/lib/seo/metadata')
+
+      const meta = production({ ...INPUT, title: 'x'.repeat(TITLE_MAX + 1) })
+
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('over the 60 limit'))
+      expect(meta.title).toHaveLength(TITLE_MAX + 1)
+
+      warn.mockRestore()
+      vi.unstubAllEnvs()
+      vi.resetModules()
+    })
+
     it('accepts values exactly at the limit', () => {
       expect(() =>
         buildMetadata({
