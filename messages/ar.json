@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "reviewed": false
+    "reviewed": true
   },
   "locale": {
     "name": "Arabic",
@@ -27,28 +27,28 @@
   },
   "meta": {
     "home": {
-      "title": "زياد النهدي — مطور باك اند وتطبيقات سطح المكتب",
-      "description": "مطوّر باك اند وتطبيقات سطح المكتب بلغة C# و .NET و SQL Server. مقيم في تركيا، متاح للعمل الحر والعمل عن بُعد."
+      "title": "زياد النهدي — مطوّر باك اند وتطبيقات سطح المكتب",
+      "description": "مطوّر باك اند وتطبيقات سطح مكتب بلغة C# و ASP.NET Core و SQL Server. مقيم في أق سراي بتركيا، ومتاح للعمل الحر والعمل عن بُعد."
     },
     "about": {
-      "title": "About Zeyad Alnahdi — Backend Developer",
-      "description": "Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data."
+      "title": "نبذة عن زياد النهدي — مطوّر باك اند",
+      "description": "مطوّر باك اند علّم نفسه بنفسه، وخريج علم النفس. كيف تظهر هذه الخلفية في تصميم الواجهات ومعالجة الأخطاء ونمذجة البيانات."
     },
     "projects": {
-      "title": "Projects — Backend & AI Systems | Zeyad Alnahdi",
-      "description": "An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
+      "title": "المشاريع — باك اند وذكاء اصطناعي | زياد النهدي",
+      "description": "منصة عمل بخطّ RAG ذاتي الاستضافة على ASP.NET Core و FastAPI و Qdrant، ونظام إدارة مطعم بثلاث طبقات فوق SQL Server."
     },
     "contact": {
-      "title": "Contact Zeyad Alnahdi — Backend Developer",
-      "description": "Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days."
+      "title": "تواصل مع زياد النهدي — مطوّر باك اند",
+      "description": "للتواصل بشأن مشاريع العمل الحر أو الوظائف عن بُعد أو التعاون. عبر البريد الإلكتروني أو غيت هب، والردّ خلال يومَي عمل."
     }
   },
   "home": {
-    "name": "Zeyad Alnahdi",
-    "role": "Backend & Desktop Application Developer",
-    "intro": "I build backend systems and desktop applications in C#, ASP.NET Core and SQL Server. Most of my work is the part nobody sees: data models that hold their shape, layers that stay separate, and systems that say what they are doing instead of failing quietly.",
-    "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
-    "stackHeading": "What I work with",
+    "name": "زياد النهدي",
+    "role": "مطوّر باك اند وتطبيقات سطح المكتب",
+    "intro": "أبني أنظمة باك اند وتطبيقات سطح مكتب بلغة سي شارب و ASP.NET Core و SQL Server. معظم عملي في الجزء الذي لا يراه أحد: نماذج بيانات تصمد، وطبقات لا يتسرّب بعضها إلى بعض، وأنظمة تقول ما تفعله بدل أن تفشل بصمت.",
+    "location": "مقيم في أق سراي بتركيا. متاح للعمل الحر وللوظائف عن بُعد.",
+    "stackHeading": "ما أعمل به",
     "stack": [
       "C#",
       "ASP.NET Core",
@@ -62,44 +62,44 @@
       "FastAPI",
       "Docker"
     ],
-    "workHeading": "Selected work",
-    "seeProjects": "See all projects",
-    "cta": "Get in touch"
+    "workHeading": "مختارات من العمل",
+    "seeProjects": "كل المشاريع",
+    "cta": "تواصل معي"
   },
   "about": {
-    "heading": "About me",
-    "intro": "I studied psychology and then taught myself to program. Both turned out to be about the same thing: building models of something complicated that are simple enough to reason about, and finding out where they break.",
-    "learningHeading": "How I learned",
-    "learning": "I started with C++, moved to C# and SQL Server, and from there to ASP.NET Core and the layered architecture I still work in. No bootcamp and no degree in it — a long sequence of projects, each one larger than the last, and a habit of reading other people's code.",
-    "psychologyHeading": "Psychology, applied",
-    "psychology": "The degree shows up in design decisions more than in code. In the AI workspace, every answer the assistant gives carries the document and the page it came from, because an answer nobody can check is an answer nobody acts on. Confidence without a source is a liability, not a feature — and that is a claim about people, not about software.",
-    "lookingHeading": "What I'm looking for",
-    "looking": "Freelance projects, remote roles, or local work. I live in Aksaray and I am open to positions in Ankara.",
-    "cvHeading": "Curriculum vitae",
-    "cvDownload": "Download CV (PDF)"
+    "heading": "نبذة عني",
+    "intro": "درست علم النفس ثم علّمت نفسي البرمجة. تبيّن لي أن الاثنين عن الشيء نفسه: أن تبني نموذجًا مبسّطًا لشيء معقّد، بسيطًا بما يكفي لتفكّر فيه، ثم تكتشف أين ينهار.",
+    "learningHeading": "كيف تعلّمت",
+    "learning": "بدأت بلغة C++، ثم انتقلت إلى سي شارب و SQL Server، ومنهما إلى ASP.NET Core والمعمارية الطبقية التي ما زلت أعمل بها. بلا معسكر تدريبي وبلا شهادة في المجال — سلسلة طويلة من المشاريع، كلّ واحد أكبر من سابقه، وعادة قراءة كود الآخرين.",
+    "psychologyHeading": "علم النفس، مطبَّقًا",
+    "psychology": "الشهادة تظهر في قرارات التصميم أكثر مما تظهر في الكود. في منصة العمل الذكية، كل إجابة يعطيها المساعد تحمل المستند والصفحة التي جاءت منها، لأن إجابة لا يستطيع أحد التحقق منها هي إجابة لا يتصرّف أحد بناءً عليها. الثقة بلا مصدر عبء لا ميزة — وهذه ملاحظة عن الناس لا عن البرمجيات.",
+    "lookingHeading": "ما أبحث عنه",
+    "looking": "مشاريع عمل حر، أو وظائف عن بُعد، أو عمل محلي. أقيم في أق سراي، ومنفتح على وظائف في أنقرة.",
+    "cvHeading": "السيرة الذاتية",
+    "cvDownload": "تحميل السيرة الذاتية (PDF)"
   },
   "projects": {
-    "heading": "Projects",
-    "intro": "Two systems, both built end to end. One is a distributed AI workspace; the other is a desktop application over SQL Server. Together they are most of what I do.",
+    "heading": "المشاريع",
+    "intro": "نظامان، كلاهما مبنيّ من طرفه إلى طرفه. الأول منصة عمل موزّعة بالذكاء الاصطناعي، والثاني تطبيق سطح مكتب فوق SQL Server. وهما معًا معظم ما أفعله.",
     "labels": {
-      "problem": "Problem",
-      "architecture": "Architecture",
-      "scale": "Scale",
-      "result": "Result",
-      "scope": "Scope",
-      "notable": "Notable",
-      "stack": "Stack",
-      "repository": "View repository",
-      "demo": "Live demo"
+      "problem": "المشكلة",
+      "architecture": "المعمارية",
+      "scale": "الحجم",
+      "result": "النتيجة",
+      "scope": "النطاق",
+      "notable": "ما يستحق الذكر",
+      "stack": "التقنيات",
+      "repository": "المستودع",
+      "demo": "نسخة حيّة"
     },
     "aiWorkspace": {
       "name": "AI Autonomous Workspace",
-      "status": "Built and verified · deployment pending",
-      "problem": "Documents accumulate faster than anyone reads them. This workspace stores them, indexes what is in them, and answers questions about them with the source attached.",
-      "architecture": "ASP.NET Core in four layers — Domain, Application, Infrastructure and Api — with a Python FastAPI service for the retrieval work, PostgreSQL and Qdrant in Docker, and the language model running locally. No third-party AI provider: the whole pipeline runs on its own hardware.",
-      "scale": "598 files · 189 C# · 80 Python · 85 test files · 74 merged pull requests",
-      "result": "Measured on a running stack rather than estimated: a 35-page PDF goes from upload to searchable in 32.6 seconds, and every answer comes back with the page it was drawn from.",
-      "scope": "Feature-complete through its ninth sprint. The tenth is release preparation, so the system is built and verified but not yet deployed.",
+      "status": "مبنيّ ومُتحقَّق منه · الرفع معلّق",
+      "problem": "المستندات تتراكم أسرع مما يقرؤها أحد. هذه المنصة تخزّنها، وتفهرس ما فيها، وتجيب عن الأسئلة عنها مع إرفاق المصدر.",
+      "architecture": "ASP.NET Core بأربع طبقات — Domain و Application و Infrastructure و Api — مع خدمة بايثون على FastAPI لأعمال الاسترجاع، و PostgreSQL و Qdrant داخل Docker، والنموذج اللغوي يعمل محليًا. بلا أي مزوّد ذكاء اصطناعي خارجي: الخطّ كله يعمل على عتاده الخاص.",
+      "scale": "598 ملفًا · 189 سي شارب · 80 بايثون · 85 ملف اختبار · 74 طلب دمج",
+      "result": "مقيس على نظام يعمل لا مقدَّر: ملف PDF من 35 صفحة ينتقل من الرفع إلى قابلية البحث في 32.6 ثانية، وكل إجابة تعود ومعها الصفحة التي استُخرجت منها.",
+      "scope": "مكتمل الميزات حتى سبرنته التاسع. العاشر هو التحضير للإصدار، فالنظام مبنيّ ومُتحقَّق منه لكنه لم يُرفَع بعد.",
       "stack": [
         "ASP.NET Core",
         "C#",
@@ -113,35 +113,35 @@
     },
     "restaurant": {
       "name": "Restaurant Management",
-      "status": "Complete",
-      "problem": "Purchasing and inventory for a restaurant, as a Windows desktop application the staff could use in their own language.",
-      "architecture": "Three tiers — forms, business logic, data access — with every database call going through a stored procedure and none through inline SQL.",
-      "scale": "9 forms · 10 tables · 37 stored procedures · RDLC reports",
-      "notable": "The interface is Arabic and right-to-left throughout, which is where I first learned how much of a layout is direction-dependent.",
+      "status": "مكتمل",
+      "problem": "نظام إدارة مطعم للمشتريات والمخزون، كتطبيق سطح مكتب على ويندوز يستطيع الطاقم استخدامه بلغته.",
+      "architecture": "ثلاث طبقات — النماذج، ومنطق العمل، والوصول إلى البيانات — وكل استدعاء لقاعدة البيانات يمرّ عبر إجراء مخزَّن، ولا شيء منها عبر SQL مضمَّن.",
+      "scale": "9 نماذج · 10 جداول · 37 إجراءً مخزَّنًا · تقارير RDLC",
+      "notable": "الواجهة عربية ومن اليمين إلى اليسار بالكامل، وفيها تعلّمت أول مرة كم من التخطيط يعتمد على اتجاه القراءة.",
       "stack": ["C#", "Windows Forms", ".NET Framework", "SQL Server", "T-SQL", "RDLC"]
     }
   },
   "contact": {
-    "heading": "Get in touch",
-    "intro": "About freelance projects, remote roles, or anything you would like built. I read everything that arrives.",
-    "responseTime": "I reply within two business days.",
+    "heading": "تواصل معي",
+    "intro": "بشأن مشاريع العمل الحر، أو الوظائف عن بُعد، أو أي شيء تودّ بناءه. أقرأ كل ما يصلني.",
+    "responseTime": "أردّ خلال يومَي عمل.",
     "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "send": "Send",
-      "sending": "Sending…",
-      "success": "Thank you — your message has arrived. I will reply within two business days.",
-      "error": "Something went wrong and the message was not sent. You can email me directly instead.",
-      "required": "This field is required.",
-      "invalidEmail": "Please enter a valid email address."
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "message": "الرسالة",
+      "send": "إرسال",
+      "sending": "جارٍ الإرسال…",
+      "success": "شكرًا لك — وصلت رسالتك. سأردّ خلال يومَي عمل.",
+      "error": "حدث خطأ ولم تُرسَل الرسالة. يمكنك مراسلتي على البريد مباشرة.",
+      "required": "هذا الحقل مطلوب.",
+      "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا."
     },
-    "elsewhereHeading": "Elsewhere",
-    "emailLabel": "Email"
+    "elsewhereHeading": "في أماكن أخرى",
+    "emailLabel": "البريد الإلكتروني"
   },
   "notFound": {
-    "heading": "Page not found",
-    "body": "This page does not exist, or it moved. The links below still work.",
-    "backHome": "Back to the home page"
+    "heading": "الصفحة غير موجودة",
+    "body": "هذه الصفحة غير موجودة، أو أنها انتقلت. الروابط أدناه ما زالت تعمل.",
+    "backHome": "العودة إلى الصفحة الرئيسية"
   }
 }
