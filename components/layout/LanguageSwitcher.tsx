@@ -38,7 +38,13 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   const pathname = usePathname()
 
   return (
-    <nav aria-label={t('language')}>
+    <nav
+      aria-label={t('language')}
+      // The only element on the site allowed to link across locales
+      // (docs/05-ia-url-map.md §4.1). scripts/verify-links.mjs excludes this
+      // subtree and treats a cross-locale href anywhere else as a leak.
+      data-locale-switcher=""
+    >
       <ul className="flex items-center gap-2 text-sm">
         {LOCALES.map((candidate) => {
           const current = candidate === locale

@@ -980,6 +980,29 @@ keywords are most winnable.
 place on the site where that is legitimate (`05` §4.1). A stray `/en/about` link
 on an Arabic page is a silent locale leak.
 
+**Status — complete except step 1's 404 link.**
+
+| Link | State |
+|---|---|
+| Home → Projects | Done — the two project cards link to their sections on `/projects` via `projectAnchor()`, plus the existing "see all projects" link |
+| Home → Contact | Done — the primary CTA |
+| About → Projects | Done — `about.seeProjects` |
+| Projects → Contact | Done — `projects.ctaLead` + `projects.cta` |
+| 404 → Home | **Blocked.** No localised 404 page exists; T-214 was deferred to **T-320**. Copy (`notFound.backHome`) is written in all three locales and ships with that page |
+
+Steps 2 and 3 pass: anchor text is descriptive and localised in all three
+locales, no "click here" or "read more"; `rel="me noopener"` was already on both
+profile links (footer and Contact) from T-210/T-213.
+
+Measured inbound internal links per locale, from the prerendered HTML:
+`/projects` 10 · `/` 9 · `/contact` 8 · `/about` 6. Projects leads, as the
+done-when requires.
+
+`scripts/verify-links.mjs` (wired into the CI build job) enforces all three
+properties. Each check was fault-injected and confirmed to fail: a stray `/en`
+href on `/ar/about`, an unmarked language switcher, and Projects losing its
+lead each produce a red run.
+
 ---
 
 ### T-219 · RTL and theme review — L

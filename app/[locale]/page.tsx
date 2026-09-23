@@ -6,7 +6,7 @@ import { isLocale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
-import { hasRoute } from '@/lib/seo/routes'
+import { hasRoute, projectAnchor } from '@/lib/seo/routes'
 
 export async function generateMetadata({ params }: PageProps<'/[locale]'>): Promise<Metadata> {
   const { locale } = await params
@@ -90,8 +90,22 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
                 key={project.name}
                 className="border-subtle bg-surface flex min-h-56 flex-col rounded-lg border p-4"
               >
-                <h3 className="font-semibold" dir="ltr">
-                  {project.name}
+                <h3 className="font-semibold">
+                  {/* docs/05-ia-url-map.md §4.2: the cards are the Home →
+                    Projects link. The project name is the anchor text — a
+                    recruiter scanning link text learns what is on the other
+                    end, which "read more" never tells them. */}
+                  {hasRoute('/projects') ? (
+                    <Link
+                      href={`/${locale}/projects#${projectAnchor(project.name)}`}
+                      className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                      dir="ltr"
+                    >
+                      {project.name}
+                    </Link>
+                  ) : (
+                    <span dir="ltr">{project.name}</span>
+                  )}
                 </h3>
                 <p className="text-muted mt-1 text-xs">{project.status}</p>
                 <p className="mt-3 text-sm leading-relaxed">{project.problem}</p>

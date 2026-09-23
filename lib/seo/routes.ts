@@ -38,3 +38,14 @@ export const ROUTE_LABEL: Record<Route, 'home' | 'about' | 'projects' | 'contact
 export function hasRoute(route: string): boolean {
   return (ROUTES as readonly string[]).includes(route)
 }
+
+/**
+ * The fragment id of one project's section on /projects.
+ *
+ * Home links to these anchors and /projects renders them; deriving both from
+ * this function is what keeps the two from drifting into dead fragments
+ * (docs/05-ia-url-map.md §4.2).
+ */
+export function projectAnchor(name: string): string {
+  return `${name.replace(/\s+/g, '-').toLowerCase()}-heading`
+}

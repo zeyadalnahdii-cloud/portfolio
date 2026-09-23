@@ -140,8 +140,23 @@ Beyond the navigation, these contextual links exist on purpose:
 /{locale}            → /{locale}/contact     (primary CTA)
 /{locale}/about      → /{locale}/projects    ("see what I've built")
 /{locale}/projects   → /{locale}/contact     ("interested? get in touch")
-/{locale}/404        → /{locale}             (recovery)
+/{locale}/404        → /{locale}             (recovery)  — NOT BUILT, see below
 ```
+
+**Status (T-218).** Four of the five links are implemented. The Home → Projects
+link is the project cards themselves, which link to each project's section on
+`/projects` via `projectAnchor()` — the same function `/projects` renders its
+`id` attributes from, so the two cannot drift into dead fragments.
+
+The **404 → Home** link does not exist, because the localised 404 page does not
+exist: `dynamicParams = false` on `[locale]` prevents a `[locale]/not-found`
+boundary from being reached, and both restructures were measured and rejected
+(T-214, deferred to **T-320**). The link ships with that page, not before. The
+`notFound.backHome` copy is already written in all three locales.
+
+`scripts/verify-links.mjs` enforces §4.1 and §4.2 against the prerendered HTML:
+no body link crosses locales, every page links to every other, and `/projects`
+carries strictly the most inbound internal links.
 
 Rationale: Projects receives the most inbound internal links because it is the page
 that converts a recruiter, and the page whose keywords are the most winnable

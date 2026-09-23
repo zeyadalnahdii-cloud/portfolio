@@ -96,3 +96,8 @@ jobs:
       # and nothing reports it. This is the check that notices.
       - name: Assert every route prerendered
         run: npm run assert:routes
+
+      # A cross-locale body link works when clicked, so review never catches
+      # it. This reads the same HTML that ships (T-218, docs/05 §4.2).
+      - name: Verify the internal link graph
+        run: npm run verify:links

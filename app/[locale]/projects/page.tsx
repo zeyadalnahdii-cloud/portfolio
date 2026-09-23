@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { LOCALES, isLocale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
+import { hasRoute, projectAnchor } from '@/lib/seo/routes'
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }))
@@ -88,14 +90,10 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
         {entries.map((project) => (
           <article
             key={project.name}
-            aria-labelledby={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
+            aria-labelledby={projectAnchor(project.name)}
             className="border-subtle mt-12 border-t pt-8"
           >
-            <h2
-              id={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
-              className="text-xl font-semibold"
-              dir="ltr"
-            >
+            <h2 id={projectAnchor(project.name)} className="text-xl font-semibold" dir="ltr">
               {project.name}
             </h2>
             <p className="text-muted mt-1 text-sm">{project.status}</p>
@@ -127,6 +125,20 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
             </dl>
           </article>
         ))}
+
+        {/* docs/05-ia-url-map.md §4.2: Contact is the terminal node of every
+          path, and this is the page a reader reaches it from. */}
+        {hasRoute('/contact') && (
+          <p className="border-subtle mt-12 border-t pt-8">
+            {t('ctaLead')}{' '}
+            <Link
+              href={`/${locale}/contact`}
+              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {t('cta')}
+            </Link>
+          </p>
+        )}
       </main>
     </>
   )
