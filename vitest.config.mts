@@ -6,6 +6,11 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],
+    // Pinned so the suite is hermetic. lib/seo/origin.ts reads this at module
+    // load, so without it the expected URLs would depend on whatever the
+    // surrounding environment happened to set — which is how a suite passes
+    // locally and fails in CI.
+    env: { NEXT_PUBLIC_SITE_URL: 'https://zeyadalnahdi.test' },
     coverage: {
       provider: 'v8',
       include: ['lib/seo/**'],

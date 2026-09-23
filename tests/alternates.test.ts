@@ -2,7 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LOCALES } from '@/lib/i18n/config'
 
-const ORIGIN = 'https://zeyadalnahdi.com'
+// Pinned in vitest.config.mts so the suite does not depend on the ambient
+// NEXT_PUBLIC_SITE_URL. A .test TLD makes it obvious this is never a real host.
+const ORIGIN = 'https://zeyadalnahdi.test'
 
 // isReviewed is mocked so the review state can be varied per test. The point
 // of the gate is what happens when a locale is NOT reviewed, and the real
