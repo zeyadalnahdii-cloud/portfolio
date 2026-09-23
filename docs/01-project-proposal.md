@@ -163,7 +163,18 @@ gap between "I built a working RAG pipeline" and a reader confirming it is the e
 distance between a claim and evidence. The measured numbers in `runtime-verification.md`
 lose most of their force when nobody can open the file they came from.
 
-**Recommendation:** make the repository public permanently. If specific material must
+> **Resolved 2026-09-23: both repositories stay private.** The owner does not
+> want them public for the portfolio. The Projects page therefore carries no
+> repository links at all — not a disabled or conditional one — and the
+> recommendation below is recorded as advice that was considered and declined,
+> not as an open question. The documented fallback applies: repository evidence
+> is replaced by screenshots and demo evidence (F-52), scoped to what each task
+> requires and no further.
+>
+> The consequence to keep in view is S-04: structured data must not claim a
+> `codeRepository` nobody can open, so T-216 emits none.
+
+**Recommendation as originally written:** make the repository public permanently. If specific material must
 stay private, the narrower options in descending preference are:
 
 1. **Public repo, `main` branch curated** — merge a presentable state to `main`, keep
