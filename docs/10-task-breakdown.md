@@ -1,6 +1,6 @@
 # 10 — Developer Task Breakdown
 
-**Status:** Sprint 1 fully specified · Sprints 2–3 enumerated, expanded on arrival
+**Status:** Sprints 1 and 2 fully specified · Sprint 3 enumerated, expanded on arrival
 **Method:** one task per branch, one branch per PR (`07-repo-standards.md` §5)
 
 ---
@@ -19,14 +19,15 @@ A task is finished when its *Done when* passes, not when the code is written.
 
 **Sizes:** S ≈ under an hour · M ≈ half a day · L ≈ a full day or more.
 
-### Why Sprints 2–3 are not expanded yet
+### Why Sprint 3 is not expanded yet
 
-Their tasks are listed with dependencies and acceptance criteria, but not with
-step-level detail. That detail depends on decisions made during Sprint 1 — the shape
-of `buildMetadata`, how the message files end up structured, what the spike rejects.
+Its tasks are listed with dependencies and acceptance criteria, but not with
+step-level detail. That detail depends on what Sprint 2 produces — which pages
+exist, what the measured performance actually is, what the deploy needs.
 Writing it now produces detail that must be rewritten before it is used.
 
-Each sprint is expanded when the previous one closes.
+Sprint 2 was expanded on the same principle, once Sprint 1 had settled the shape
+of `buildMetadata`, the message files and the route registry.
 
 ---
 
@@ -529,32 +530,487 @@ origin — the domain must exist by now.
 
 # Sprint 2 — Content
 
-Enumerated only. Expanded when Sprint 1 closes.
+**Goal:** twelve routes live, in three languages, each one indexable and correct.
 
-**Content track — starts day 1, parallel to the build.** It is the critical path:
-four pages × three languages is more writing than it looks, and the Turkish review is
-an external dependency with its own latency.
+Sprint 1 built the machinery and left it running on one page. This sprint is
+mostly writing, and the code is thin by comparison: every page passes copy to
+`buildMetadata` and is added to `lib/seo/routes.ts`, and the sitemap, navigation,
+redirects and route assertion follow on their own.
 
-| ID | Task | Size | Depends on |
-|---|---|---|---|
-| T-201 | English copy, all four pages | L | — |
-| T-202 | Arabic copy — written, not translated | L | T-201 |
-| T-203 | Turkish copy — drafted | L | T-201 |
-| T-204 | Turkish native review → `_meta.reviewed = true` | M | T-203, **D4** |
-| T-205 | Keyword validation against real tool data | M | — |
-| T-206 | CV in three locales | M | T-201 |
-| T-210 | Home page | L | T-126 |
-| T-211 | About page | M | T-210 |
-| T-212 | Projects page | L | T-210, **D2/D3** |
-| T-213 | Contact page + form handler | L | T-210 |
-| T-214 | 404 page | S | T-210 |
-| T-215 | Per-route metadata wired from `02` §4 | M | T-210…T-214 |
-| T-216 | `BreadcrumbList`, `SoftwareSourceCode`, `ContactPage` schema | M | T-215 |
-| T-217 | OG images per route per locale | M | T-105, T-215 |
-| T-218 | Internal linking per `05` §4.2 | S | T-210…T-214 |
-| T-219 | RTL review, all screens, four theme/direction combinations | L | T-210…T-214 |
-| T-220 | `metadata` and `axe` CI jobs promoted to blocking | M | T-215 |
-| T-221 | Sprint 2 gate | M | all |
+**Entered under a recorded exception.** T-126 check 1 is still failing and is
+re-run once T-211..T-213 land — see `12-sprint-1-gate.md`.
+
+## What changed since these tasks were enumerated
+
+Three facts from Sprint 1 shape the work and were not known when this list was
+first written:
+
+**`lib/seo/routes.ts` is the single source of truth for which pages exist.** The
+sitemap, the header navigation, the locale-less redirects and
+`scripts/assert-routes.mjs` all read it. Adding a route there before its page
+exists breaks all four at once — a sitemap advertising a 404, a nav item that
+dead-ends, a redirect chain into nothing, and a failing CI assertion. So every
+page task ends by adding its route, never begins with it.
+
+**`ROUTE_LABEL` is typed against `ROUTES`.** Adding a route without giving it a
+navigation label does not compile. That is deliberate and means nothing extra is
+needed to keep the nav honest.
+
+**Metadata is not a separate step per page.** `buildMetadata` is a single call
+and belongs in the page task that creates the route. T-215 is therefore a
+verification and consolidation task, not wiring — see its entry.
+
+## Sequencing
+
+The content track is the critical path, not the build. Four pages in three
+languages is more writing than it looks, and the Turkish review (D4) is an
+external dependency with its own latency. **T-201 and T-203 start on day 1**,
+in parallel with T-210.
+
+Pages land one at a time, each complete: copy, metadata, route registration,
+RTL check. A half-finished page in `ROUTES` is worse than no page.
+
+---
+
+## Content track
+
+### T-201 · English copy, all four pages — L
+
+**Depends on:** —
+**Requirements:** I-10, `02` §4, §5
+
+**Steps**
+
+1. Write Home, About, Projects and Contact from the outlines in `02` §5, using
+   the titles and descriptions already mapped in `02` §4.
+2. Put every string in `messages/en.json`. Nothing user-facing in a component
+   (SRS I-10).
+3. Keep titles ≤ 60 characters and descriptions ≤ 155. `buildMetadata` throws in
+   development if either is over, so this is checked as you write.
+4. Follow the content rules already recorded: the psychology background as an
+   added capability with one concrete example, never a career-change story
+   (`01` §2, F-31); the AI Autonomous Workspace described as built and verified
+   with deployment pending, never "in development" (`03` §1.3).
+
+**Done when:** all four pages' copy exists in `en.json`, within the length
+limits, and `npm run build` passes.
+
+**Watch out:** the Projects copy is the one with a factual obligation. State the
+measured result — a 35-page PDF indexed end to end in 32.6s on a self-hosted
+stack — and say plainly what is not finished. A portfolio that is precise about
+scope is read as trustworthy about results; one that rounds up is not.
+
+---
+
+### T-202 · Arabic copy — L
+
+**Depends on:** T-201
+**Requirements:** I-10, I-12, `02` §3.3
+
+**Steps**
+
+1. Write the Arabic in `messages/ar.json`. Written, not translated — the keyword
+   research for Arabic is independent of the English set (`02` §3.3).
+2. Include both transliterated and Latin forms of technical terms where people
+   search both (`باك اند` alongside `backend`).
+3. Set `ar._meta.reviewed = true` once the owner has read it through.
+
+**Done when:** the Arabic reads as Arabic rather than as English with Arabic
+words, and `/ar` drops its `noindex`.
+
+**Watch out:** this is the one locale with no external dependency — the owner is
+a native speaker. It is also the one most likely to be left at `reviewed: false`
+because nothing forces the moment of sign-off. Set the flag deliberately.
+
+---
+
+### T-203 · Turkish copy, drafted — L
+
+**Depends on:** T-201
+**Requirements:** I-10, I-12, `02` §3.2
+
+**Steps**
+
+1. Draft Turkish in `messages/tr.json`.
+2. Use `geliştirici`, not `mühendis`: the latter implies a formal engineering
+   degree in Turkish professional usage (`02` §3.2).
+3. Preserve every diacritic. `tests/typography.test.ts` guards this.
+
+**Done when:** the draft is complete and ready for review. `tr._meta.reviewed`
+stays `false`.
+
+**Watch out:** `yazilim` and `yazılım` are different strings to a search engine,
+and the second is what people type. Stripping diacritics does not merely look
+wrong, it changes the word.
+
+---
+
+### T-204 · Turkish native review — M
+
+**Depends on:** T-203, **D4**
+**Requirements:** I-12, I-14
+
+**Steps**
+
+1. A competent Turkish speaker reads the whole of `tr.json`.
+2. Corrections applied.
+3. `tr._meta.reviewed = true`.
+
+**Done when:** `/tr` drops its `noindex`, appears in the sitemap and in every
+`hreflang` set, and Lighthouse SEO on `/tr` reaches 100.
+
+**Watch out:** blocked on D4, which is a person, not a decision. Start looking
+for the reviewer in week 1 rather than discovering in week 2 that nobody is
+available. Until then the gate degrades gracefully — `/tr` builds and serves,
+it is simply kept out of the index.
+
+---
+
+### T-205 · Keyword validation — M
+
+**Depends on:** —
+**Requirements:** `02` §1
+
+**Steps**
+
+1. Run the terms in `02` §3 through Google Keyword Planner per locale.
+2. Check autocomplete and "People also ask" from the target region and language.
+3. Adjust the titles and descriptions in `02` §4 where the data disagrees with
+   the hypothesis, then update the copy.
+
+**Done when:** `02` §1's caveat can be removed, because the terms are measured
+rather than reasoned.
+
+**Watch out:** every term in `02` is explicitly a hypothesis. Some will be
+wrong. Changing them is the point of this task, not a sign the plan failed.
+
+---
+
+### T-206 · CV, three locales — M
+
+**Depends on:** T-201
+**Requirements:** F-34
+
+**Steps**
+
+1. One PDF per locale in `public/`.
+2. Filenames carry the canonical name spelling — `Zeyad-Alnahdi-CV-en.pdf` —
+   because the filename is visible in the URL and in the reader's downloads.
+3. Link from About with the file size and format in the link text.
+
+**Done when:** each locale's About page offers its own CV and the links resolve.
+
+**Watch out:** the canonical spelling matters here as much as on the page. A CV
+filed as `cv-final-2.pdf` in someone's downloads folder is not findable later
+by the name it should reinforce.
+
+---
+
+## Build track
+
+### T-210 · Home page — L
+
+**Depends on:** T-126 *(under exception)*, T-201
+**Requirements:** F-10 … F-14, `06` §2.2
+
+**Steps**
+
+1. Replace the placeholder in `app/[locale]/page.tsx` with the real page:
+   positioning line, introduction, stack as plain text, two project cards,
+   one call to action.
+2. Call `buildMetadata` with the Home copy. Nothing else — no hand-written
+   canonical or alternates.
+3. The stack list is text, not logos (F-12): text is indexable, images are not.
+4. Fixed card heights so nothing shifts as content loads (P-02).
+
+**Done when:** `/en`, `/tr` and `/ar` render the real Home page, `npm run
+assert:routes` passes, and Lighthouse SEO on `/en` is still 100.
+
+**Watch out:** no hero image, carousel or background video. Each is a direct LCP
+cost and LCP is a gate (P-01). The LCP element on this page should be text.
+
+---
+
+### T-211 · About page — M
+
+**Depends on:** T-210, T-201
+**Requirements:** F-30 … F-34, `06` §2.4
+
+**Steps**
+
+1. `app/[locale]/about/page.tsx`, `generateStaticParams` and `setRequestLocale`
+   as the other routes do.
+2. `buildMetadata` with the About copy.
+3. Sections: how I learned, psychology applied, what I am looking for, CV
+   download.
+4. **Then** add `'/about'` to `ROUTES` and its label to `ROUTE_LABEL`.
+
+**Done when:** six routes prerender, `/about` appears in the navigation, the
+sitemap and the locale-less redirect map, and `assert:routes` passes at 6.
+
+**Watch out:** step 4 is last for a reason. Adding the route first puts a 404 in
+the sitemap and a dead link in the header until the page exists.
+
+---
+
+### T-212 · Projects page — L
+
+**Depends on:** T-210, T-201, **D2/D3**
+**Requirements:** F-20 … F-23, `06` §2.3
+
+**Steps**
+
+1. `app/[locale]/projects/page.tsx` with one `h2` per project and a consistent
+   internal shape: problem, architecture, scale, result, stack tags, links.
+2. `buildMetadata` with the Projects copy.
+3. Repository links — blocked on D2/D3. A link to a private repository is a 404
+   and is worse than no link.
+4. A live demo link for the AI workspace if it has been deployed by then; it
+   outweighs everything else on the page (`01` §7.1).
+5. Add `'/projects'` to `ROUTES` and `ROUTE_LABEL`.
+
+**Done when:** nine routes prerender and both projects are presented with the
+same internal structure.
+
+**Watch out:** consistency beats decoration here. A recruiter scans for stack
+and scale; both should sit in the same position on every card.
+
+---
+
+### T-213 · Contact page and form — L
+
+**Depends on:** T-210, T-201
+**Requirements:** F-40 … F-45, C-01 … C-08
+
+**Steps**
+
+1. `app/[locale]/contact/page.tsx` with the form, the email as selectable text,
+   and the profile links carrying `rel="me"`.
+2. `buildMetadata` with the Contact copy.
+3. Server-side validation as the boundary; client validation is UX only (C-02).
+4. Honeypot plus per-IP rate limiting. **No CAPTCHA** — it costs INP and
+   accessibility, both of which are gates (C-03).
+5. Email provider decision (C-04, still open). Credentials from environment
+   variables, documented in `.env.example` (C-05).
+6. Reserve the height of the status message from the start, so submitting does
+   not shift the page (P-02, A-08).
+7. Degrade to a visible `mailto:` link if JavaScript fails (C-07).
+8. Add `'/contact'` to `ROUTES` and `ROUTE_LABEL`.
+
+**Done when:** twelve routes prerender, a submission arrives, and the form is
+usable by keyboard with errors announced.
+
+**Watch out:** this is the one route that stops being purely static. Keep the
+handler at the edge of the app so the twelve pages stay prerendered — if the
+route itself goes dynamic, the performance budget goes with it.
+
+**On landing this task, re-run T-126.** Check 1 becomes satisfiable for the
+first time, and the exception it was entered under ends here.
+
+---
+
+### T-214 · 404 page — S
+
+**Depends on:** T-210
+**Requirements:** F-08, X-04
+
+**Steps**
+
+1. Localised not-found page linking back into the site.
+2. Confirm it returns a real 404 status, not a soft 404 (X-04).
+
+**Done when:** an unknown path in each locale renders the localised page with a
+404 status.
+
+**Watch out:** it is not a page route and must not enter `ROUTES` — it has no
+place in the sitemap or the navigation.
+
+---
+
+### T-215 · Metadata verification — M
+
+**Depends on:** T-210 … T-214
+**Requirements:** M-01 … M-04
+
+Not wiring: each page calls `buildMetadata` when it is created, because that is
+one line and separating it invites a route to ship without metadata. This task
+verifies the result across all twelve.
+
+**Steps**
+
+1. Confirm every route has a title and description, unique within its locale.
+2. Confirm every title ≤ 60 and description ≤ 155.
+3. Confirm every canonical is absolute and matches its route.
+4. Confirm exactly one `h1` per page and no skipped heading levels (M-09, M-10).
+5. Reconcile against the map in `02` §4 — the copy that shipped should be the
+   copy that was planned, or the plan should be updated to match.
+
+**Done when:** 12 of 12 routes verified on every point.
+
+**Watch out:** duplicate descriptions across pages are the usual finding, and
+they are invisible in a browser.
+
+---
+
+### T-216 · Per-page structured data — M
+
+**Depends on:** T-215
+**Requirements:** S-03, S-04, S-05, S-07
+
+**Steps**
+
+1. `BreadcrumbList` on About, Projects and Contact.
+2. `SoftwareSourceCode` per project, linked to the Person by `@id`, with
+   `codeRepository` **only** if the repository is public (D2/D3).
+3. `ContactPage` on Contact.
+4. Extend `lib/seo/schema.ts` rather than adding JSON-LD in pages, so the graph
+   stays one graph and `@id`s stay consistent.
+
+**Done when:** the graph validates in the Rich Results Test and every entity is
+referenced by `@id` rather than repeated.
+
+**Watch out:** S-07. Structured data describing content that is not on the page
+is a manual-action risk, and `codeRepository` pointing at a repository nobody
+can open is exactly that.
+
+---
+
+### T-217 · Open Graph images — M
+
+**Depends on:** T-215
+**Requirements:** M-08, `06` §4
+
+Rebuilt from scratch — the T-105 spike route was deleted in T-106, deliberately.
+Its findings are in `11-spike-findings.md` §2 and all three apply:
+
+**Steps**
+
+1. `app/[locale]/opengraph-image.tsx`, 1200×630, per route per locale.
+2. Load font buffers explicitly. `next/og` does not inherit the app's fonts, and
+   without them the Arabic card renders as tofu boxes with no warning.
+3. Read `.woff`, not `.woff2` — satori cannot decode the latter.
+4. Alignment comes from the container's `alignItems`; `textAlign` does nothing,
+   because satori sizes flex children to their content.
+5. Arabic word order must be reversed as layout — one flex item per word in a
+   `row-reverse` container. satori does not run the bidirectional algorithm, and
+   Unicode embedding controls make it worse.
+6. Use the design tokens and real copy, not the spike's placeholders.
+
+**Done when:** every card renders correctly in all three locales, checked by
+opening the images.
+
+**Watch out:** the Arabic failure is the dangerous one. The card looks polished
+to anyone who does not read Arabic — the script is beautiful and correctly
+joined, and only the reading order is wrong. Have someone read it.
+
+---
+
+### T-218 · Internal linking — S
+
+**Depends on:** T-210 … T-214
+**Requirements:** X-08, `05` §4.2
+
+**Steps**
+
+1. Add the contextual links in `05` §4.2 beyond the navigation: Home → Projects,
+   Home → Contact, About → Projects, Projects → Contact, 404 → Home.
+2. Descriptive anchor text, localised. No "click here", no "read more".
+3. `rel="me"` on the profile links; `rel="noopener"` on external ones.
+
+**Done when:** every page is reachable from every other, and Projects carries the
+most inbound internal links — it is the page that converts and the one whose
+keywords are most winnable.
+
+**Watch out:** body links never cross locales. The language switcher is the only
+place on the site where that is legitimate (`05` §4.1). A stray `/en/about` link
+on an Arabic page is a silent locale leak.
+
+---
+
+### T-219 · RTL and theme review — L
+
+**Depends on:** T-210 … T-214
+**Requirements:** F-03, A-03, `06` §3.2, §6
+
+**Steps**
+
+1. Every screen in four combinations: LTR light, LTR dark, RTL light, RTL dark.
+2. Including the mobile navigation, the language switcher, form error states and
+   the 404 page.
+3. Contrast checked in **both** themes (A-03).
+4. Confirm no physical direction properties have crept in.
+
+**Done when:** all four combinations signed off for all twelve routes.
+
+**Watch out:** review with the real Arabic and Turkish content. Latin filler in
+an RTL layout hides every bidi bug the real copy exposes, and dark-mode contrast
+is the regression that reliably gets missed.
+
+---
+
+### T-220 · Promote the CI gates — M
+
+**Depends on:** T-215
+**Requirements:** `09` §2.5, §2.6, §6
+
+**Steps**
+
+1. Build the `metadata` job from `09` §2.6: per-route title and description
+   presence, uniqueness and length; absolute canonical; **reciprocal**
+   `hreflang`; `x-default` correctness; one `h1`; valid JSON-LD; sitemap
+   matching the indexable routes.
+2. Add the `axe` job across all twelve routes, zero violations.
+3. Promote both to blocking.
+
+**Done when:** a pull request that breaks any of them cannot merge.
+
+**Watch out:** these are promoted now rather than in Sprint 1 because only now
+can the code pass them. A gate enforced before that is a gate someone disables
+within a week (`09` §6) — and the reciprocity check in particular earns its
+place, because a one-directional `hreflang` set renders perfectly and is
+undetectable by eye.
+
+---
+
+### T-221 · Sprint 2 gate — M
+
+**Depends on:** all of the above
+**Requirements:** `08` §Sprint 2 gate
+
+**Verify, one by one**
+
+| # | Check |
+|---|---|
+| 1 | 12/12 routes: unique title and description, within length limits |
+| 2 | Absolute, correct canonical on every route |
+| 3 | JSON-LD passes the Rich Results Test; `@id` graph linked; reflects visible content |
+| 4 | OG images render correctly in all three locales, Arabic included |
+| 5 | One `h1`, no skipped heading levels, on all 12 |
+| 6 | Images have explicit dimensions; zero CLS contribution |
+| 7 | No missing translation keys; build fails if any |
+| 8 | Turkish native-reviewed; `_meta.reviewed = true` |
+| 9 | RTL signed off in four theme and direction combinations |
+| 10 | Language switcher maps to equivalent routes, never to home |
+| 11 | Zero broken internal links |
+
+**Done when:** all green. A locale still failing review stays `noindex` — the
+sprint may close, but that locale does not ship indexed.
+
+**Also re-run T-126.** Its check 1 is satisfiable once twelve routes exist, and
+the exception recorded in `12-sprint-1-gate.md` ends when it passes, not when
+this gate does.
+
+---
+
+## Risks specific to this sprint
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Content underestimated | The sprint overruns on writing, not code | Content track starts day 1, parallel to the build |
+| D4 unresolved | `/tr` ships `noindex` | I-14 makes this a controlled degradation, not a failure |
+| D2/D3 unresolved | Projects page loses its evidence | F-52 moves into scope — screenshots and a demo video |
+| Arabic never signed off | `/ar` ships `noindex` for want of one deliberate act | Treat T-202 step 3 as a real step, not a formality |
+| Contact form goes dynamic | The performance budget goes with it | Keep the handler at the edge; `assert:routes` catches the rest |
 
 ---
 

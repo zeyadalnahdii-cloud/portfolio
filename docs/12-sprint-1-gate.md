@@ -160,6 +160,28 @@ latest dev run: success
 
 ---
 
+## Decision: Sprint 2 starts under a recorded exception
+
+**Taken 2026-09-23 by the owner.** The gate stays open on check 1 and is
+revisited when the site has its twelve routes — which is a Sprint 2 outcome,
+so waiting would mean waiting for work that only Sprint 2 produces.
+
+The wording is deliberately **not** softened to match what exists today.
+Rewriting a check so it passes is how a gate stops meaning anything; leaving
+it failing keeps the record honest and keeps the obligation visible.
+
+Conditions attached to the exception:
+
+- T-126 is re-run in full once T-211, T-212 and T-213 have landed. It is not
+  closed by the passage of time, and Sprint 2's own gate (T-221) does not
+  substitute for it.
+- Checks 2–8 are already green and remain enforced in CI, so the exception
+  covers exactly one check, not the gate as a whole.
+- `scripts/assert-routes.mjs` continues to enforce that every route in
+  `lib/seo/routes.ts` prerenders in every locale. The count it asserts rises on
+  its own as pages land, so check 1 converges without anyone remembering to
+  update it.
+
 ## What blocks closing the gate
 
 **Check 1 needs a decision.** Either the wording changes to match what Sprint 1
