@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { ContactForm } from '@/components/contact/ContactForm'
 import { LOCALES, isLocale } from '@/lib/i18n/config'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
 
 const EMAIL = 'zeyadalnahdii@gmail.com'
@@ -55,41 +56,44 @@ export default async function ContactPage({ params }: PageProps<'/[locale]/conta
   const t = await getTranslations('contact')
 
   return (
-    <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
-      <p className="mt-6 leading-relaxed">{t('intro')}</p>
-      <p className="text-muted mt-2 text-sm">{t('responseTime')}</p>
+    <>
+      <JsonLd locale={locale} page={'/contact'} />
+      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
+        <p className="mt-6 leading-relaxed">{t('intro')}</p>
+        <p className="text-muted mt-2 text-sm">{t('responseTime')}</p>
 
-      <ContactForm />
+        <ContactForm />
 
-      <section aria-labelledby="elsewhere-heading" className="mt-12">
-        <h2 id="elsewhere-heading" className="text-lg font-semibold">
-          {t('elsewhereHeading')}
-        </h2>
-        <ul className="mt-3 space-y-2 text-sm">
-          <li>
-            <span className="text-muted">{t('emailLabel')}: </span>
-            <a
-              href={`mailto:${EMAIL}`}
-              dir="ltr"
-              className="hover:text-accent focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              {EMAIL}
-            </a>
-          </li>
-          <li>
-            <a
-              href={GITHUB}
-              rel="me noopener"
-              target="_blank"
-              dir="ltr"
-              className="hover:text-accent focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              GitHub
-            </a>
-          </li>
-        </ul>
-      </section>
-    </main>
+        <section aria-labelledby="elsewhere-heading" className="mt-12">
+          <h2 id="elsewhere-heading" className="text-lg font-semibold">
+            {t('elsewhereHeading')}
+          </h2>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>
+              <span className="text-muted">{t('emailLabel')}: </span>
+              <a
+                href={`mailto:${EMAIL}`}
+                dir="ltr"
+                className="hover:text-accent focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {EMAIL}
+              </a>
+            </li>
+            <li>
+              <a
+                href={GITHUB}
+                rel="me noopener"
+                target="_blank"
+                dir="ltr"
+                className="hover:text-accent focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </>
   )
 }

@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { LOCALES, isLocale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
 
 export function generateStaticParams() {
@@ -78,52 +79,55 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
   ]
 
   return (
-    <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
-      <p className="mt-6 leading-relaxed">{t('intro')}</p>
+    <>
+      <JsonLd locale={locale} page={'/projects'} />
+      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
+        <p className="mt-6 leading-relaxed">{t('intro')}</p>
 
-      {entries.map((project) => (
-        <article
-          key={project.name}
-          aria-labelledby={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
-          className="border-subtle mt-12 border-t pt-8"
-        >
-          <h2
-            id={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
-            className="text-xl font-semibold"
-            dir="ltr"
+        {entries.map((project) => (
+          <article
+            key={project.name}
+            aria-labelledby={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
+            className="border-subtle mt-12 border-t pt-8"
           >
-            {project.name}
-          </h2>
-          <p className="text-muted mt-1 text-sm">{project.status}</p>
+            <h2
+              id={`${project.name.replace(/\s+/g, '-').toLowerCase()}-heading`}
+              className="text-xl font-semibold"
+              dir="ltr"
+            >
+              {project.name}
+            </h2>
+            <p className="text-muted mt-1 text-sm">{project.status}</p>
 
-          <dl className="mt-6 space-y-4">
-            {project.rows.map(([label, value]) => (
-              <div key={label} className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
-                <dt className="text-muted text-sm font-medium">{t(`labels.${label}`)}</dt>
-                <dd className="mt-1 text-sm leading-relaxed sm:mt-0">{value}</dd>
+            <dl className="mt-6 space-y-4">
+              {project.rows.map(([label, value]) => (
+                <div key={label} className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
+                  <dt className="text-muted text-sm font-medium">{t(`labels.${label}`)}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed sm:mt-0">{value}</dd>
+                </div>
+              ))}
+
+              <div className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
+                <dt className="text-muted text-sm font-medium">{t('labels.stack')}</dt>
+                <dd className="mt-1 sm:mt-0">
+                  <ul className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
+                    {project.stack.map((item) => (
+                      <li
+                        key={item}
+                        className="border-subtle bg-surface rounded-md border px-2 py-1"
+                        dir="ltr"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
               </div>
-            ))}
-
-            <div className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
-              <dt className="text-muted text-sm font-medium">{t('labels.stack')}</dt>
-              <dd className="mt-1 sm:mt-0">
-                <ul className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-                  {project.stack.map((item) => (
-                    <li
-                      key={item}
-                      className="border-subtle bg-surface rounded-md border px-2 py-1"
-                      dir="ltr"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          </dl>
-        </article>
-      ))}
-    </main>
+            </dl>
+          </article>
+        ))}
+      </main>
+    </>
   )
 }

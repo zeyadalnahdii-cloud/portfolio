@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { isLocale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
 import { hasRoute } from '@/lib/seo/routes'
 
@@ -52,81 +53,84 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   const projects = [messages.projects.aiWorkspace, messages.projects.restaurant]
 
   return (
-    <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{t('name')}</h1>
-      <p className="text-accent mt-2 text-xl font-medium sm:text-2xl">{t('role')}</p>
+    <>
+      <JsonLd locale={locale} page={''} />
+      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{t('name')}</h1>
+        <p className="text-accent mt-2 text-xl font-medium sm:text-2xl">{t('role')}</p>
 
-      <p className="mt-6 leading-relaxed">{t('intro')}</p>
-      <p className="text-muted mt-3 text-sm">{t('location')}</p>
+        <p className="mt-6 leading-relaxed">{t('intro')}</p>
+        <p className="text-muted mt-3 text-sm">{t('location')}</p>
 
-      <section aria-labelledby="stack-heading" className="mt-12">
-        <h2 id="stack-heading" className="text-lg font-semibold">
-          {t('stackHeading')}
-        </h2>
-        {/* F-12: plain text, never logo images. Text is indexable and costs
+        <section aria-labelledby="stack-heading" className="mt-12">
+          <h2 id="stack-heading" className="text-lg font-semibold">
+            {t('stackHeading')}
+          </h2>
+          {/* F-12: plain text, never logo images. Text is indexable and costs
             nothing to load; a row of logos is neither. */}
-        <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
-          {stack.map((item) => (
-            <li key={item} className="border-subtle bg-surface rounded-md border px-2 py-1">
-              <span dir="ltr">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+            {stack.map((item) => (
+              <li key={item} className="border-subtle bg-surface rounded-md border px-2 py-1">
+                <span dir="ltr">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <section aria-labelledby="work-heading" className="mt-12">
-        <h2 id="work-heading" className="text-lg font-semibold">
-          {t('workHeading')}
-        </h2>
+        <section aria-labelledby="work-heading" className="mt-12">
+          <h2 id="work-heading" className="text-lg font-semibold">
+            {t('workHeading')}
+          </h2>
 
-        {/* Equal-height cells, and a floor under each card, so a font swap
+          {/* Equal-height cells, and a floor under each card, so a font swap
             cannot resize the grid after first paint (SRS P-02). */}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {projects.map((project) => (
-            <article
-              key={project.name}
-              className="border-subtle bg-surface flex min-h-56 flex-col rounded-lg border p-4"
-            >
-              <h3 className="font-semibold" dir="ltr">
-                {project.name}
-              </h3>
-              <p className="text-muted mt-1 text-xs">{project.status}</p>
-              <p className="mt-3 text-sm leading-relaxed">{project.problem}</p>
-              <ul className="text-muted mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-4 text-xs">
-                {project.stack.slice(0, 4).map((item) => (
-                  <li key={item} dir="ltr">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {projects.map((project) => (
+              <article
+                key={project.name}
+                className="border-subtle bg-surface flex min-h-56 flex-col rounded-lg border p-4"
+              >
+                <h3 className="font-semibold" dir="ltr">
+                  {project.name}
+                </h3>
+                <p className="text-muted mt-1 text-xs">{project.status}</p>
+                <p className="mt-3 text-sm leading-relaxed">{project.problem}</p>
+                <ul className="text-muted mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-4 text-xs">
+                  {project.stack.slice(0, 4).map((item) => (
+                    <li key={item} dir="ltr">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
 
-        {/* Rendered only once /projects exists (T-212). */}
-        {hasRoute('/projects') && (
-          <p className="mt-4">
+          {/* Rendered only once /projects exists (T-212). */}
+          {hasRoute('/projects') && (
+            <p className="mt-4">
+              <Link
+                href={`/${locale}/projects`}
+                className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {t('seeProjects')}
+              </Link>
+            </p>
+          )}
+        </section>
+
+        {/* F-14. Rendered only once /contact exists (T-213). */}
+        {hasRoute('/contact') && (
+          <p className="mt-12">
             <Link
-              href={`/${locale}/projects`}
-              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              href={`/${locale}/contact`}
+              className="bg-accent hover:bg-accent-hover focus-visible:outline-accent inline-block rounded-md px-4 py-2 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
             >
-              {t('seeProjects')}
+              {t('cta')}
             </Link>
           </p>
         )}
-      </section>
-
-      {/* F-14. Rendered only once /contact exists (T-213). */}
-      {hasRoute('/contact') && (
-        <p className="mt-12">
-          <Link
-            href={`/${locale}/contact`}
-            className="bg-accent hover:bg-accent-hover focus-visible:outline-accent inline-block rounded-md px-4 py-2 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            {t('cta')}
-          </Link>
-        </p>
-      )}
-    </main>
+      </main>
+    </>
   )
 }
