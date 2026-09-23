@@ -9,3 +9,4 @@ next-env.d.ts
 # Reformatting them produces large diffs unrelated to the code change.
 docs/
 Word/
+coverage/
