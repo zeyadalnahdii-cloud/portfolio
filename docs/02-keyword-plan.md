@@ -108,32 +108,38 @@ Constraints: title ≤ 60 chars · description ≤ 155 chars · exactly one H1 p
 
 | Route | Primary keyword | Title | Description | H1 |
 |---|---|---|---|---|
-| `/en` | Zeyad Alnahdi | Zeyad Alnahdi — Backend & Desktop Developer | Backend and desktop application developer working in C#, .NET and SQL Server. Based in Turkey, available for freelance and remote work. | Zeyad Alnahdi |
-| `/en/about` | psychology graduate software developer | About Zeyad Alnahdi — Backend Developer | Self-taught backend developer with a psychology degree. How that background shapes the way I design interfaces, handle errors and model data. | About me |
+| `/en` | Zeyad Alnahdi | Zeyad Alnahdi — Backend & Desktop Developer | Backend and desktop application developer working in C#, ASP.NET Core and SQL Server. Based in Aksaray, Turkey. Available for freelance and remote work. | Zeyad Alnahdi |
+| `/en/about` | psychology graduate software developer | About Zeyad Alnahdi — Backend Developer | Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data. | About me |
 | `/en/projects` | ASP.NET Core clean architecture example | Projects — Backend & AI Systems \| Zeyad Alnahdi | An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server. | Projects |
-| `/en/contact` | contact backend developer | Contact Zeyad Alnahdi — Backend Developer | Get in touch about freelance projects, remote roles or collaboration. Email and LinkedIn, with a response within two business days. | Get in touch |
+| `/en/contact` | contact backend developer | Contact Zeyad Alnahdi — Backend Developer | Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days. | Get in touch |
 
 ### Turkish
 
 | Route | Primary keyword | Title | Description | H1 |
 |---|---|---|---|---|
-| `/tr` | Zeyad Alnahdi | Zeyad Alnahdi — Backend ve Masaüstü Geliştirici | C#, .NET ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Türkiye'de yaşıyor, freelance ve uzaktan çalışmaya açık. | Zeyad Alnahdi |
-| `/tr/about` | backend yazılım geliştirici | Hakkımda — Zeyad Alnahdi, Yazılım Geliştirici | Psikoloji mezunu, kendi kendine yetişmiş backend geliştirici. Bu altyapının yazılım tasarımına nasıl katkı sağladığı. | Hakkımda |
-| `/tr/projects` | ASP.NET Core katmanlı mimari | Projeler — Backend ve Yapay Zekâ \| Zeyad Alnahdi | ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan RAG altyapısı; C# ve SQL Server ile katmanlı masaüstü sistemi. | Projeler |
-| `/tr/contact` | yazılım geliştirici iletişim | İletişim — Zeyad Alnahdi, Yazılım Geliştirici | Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve LinkedIn üzerinden ulaşabilirsiniz. | İletişim |
+| `/tr` | Zeyad Alnahdi | Zeyad Alnahdi — Backend ve Masaüstü Geliştirici | C#, ASP.NET Core ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Aksaray'da yaşıyor, freelance ve uzaktan çalışmaya açık. | Zeyad Alnahdi |
+| `/tr/about` | backend yazılım geliştirici | Hakkımda — Zeyad Alnahdi, Yazılım Geliştirici | Psikoloji mezunu, kendi kendine yetişmiş backend geliştirici. Bu altyapının arayüz tasarımına, hata yönetimine ve veri modellemeye katkısı. | Hakkımda |
+| `/tr/projects` | ASP.NET Core katmanlı mimari | Projeler — Backend ve Yapay Zekâ \| Zeyad Alnahdi | ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan RAG altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi. | Projeler |
+| `/tr/contact` | yazılım geliştirici iletişim | İletişim — Zeyad Alnahdi, Yazılım Geliştirici | Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt. | İletişim |
 
 ### Arabic
 
 | Route | Primary keyword | Title | Description | H1 |
 |---|---|---|---|---|
-| `/ar` | زياد النهدي | زياد النهدي — مطور باك اند وتطبيقات سطح المكتب | مطوّر باك اند وتطبيقات سطح المكتب بلغة C# و .NET و SQL Server. مقيم في تركيا، متاح للعمل الحر والعمل عن بُعد. | زياد النهدي |
-| `/ar/about` | مطور باك اند | نبذة عن زياد النهدي — مطوّر باك اند | مطوّر باك اند علّم نفسه بنفسه، خريج علم النفس. كيف تنعكس هذه الخلفية على تصميم الواجهات ومعالجة الأخطاء ونمذجة البيانات. | نبذة عني |
-| `/ar/projects` | نظام RAG عربي | المشاريع — باك اند وذكاء اصطناعي \| زياد النهدي | منصة عمل ذكية بخطّ معالجة RAG ذاتي الاستضافة على ASP.NET Core و FastAPI و Qdrant، ونظام إدارة مطعم بثلاث طبقات. | المشاريع |
-| `/ar/contact` | تواصل مع مبرمج | تواصل مع زياد النهدي — مطوّر باك اند | للتواصل بشأن مشاريع العمل الحر أو الوظائف عن بُعد أو التعاون. عبر البريد الإلكتروني أو LinkedIn. | تواصل معي |
+| `/ar` | زياد النهدي | زياد النهدي — مطوّر باك اند وتطبيقات سطح المكتب | مطوّر باك اند وتطبيقات سطح مكتب بلغة C# و ASP.NET Core و SQL Server. مقيم في أق سراي بتركيا، ومتاح للعمل الحر والعمل عن بُعد. | زياد النهدي |
+| `/ar/about` | مطور باك اند | نبذة عن زياد النهدي — مطوّر باك اند | مطوّر باك اند علّم نفسه بنفسه، وخريج علم النفس. كيف تظهر هذه الخلفية في تصميم الواجهات ومعالجة الأخطاء ونمذجة البيانات. | نبذة عني |
+| `/ar/projects` | نظام RAG عربي | المشاريع — باك اند وذكاء اصطناعي \| زياد النهدي | منصة عمل بخطّ RAG ذاتي الاستضافة على ASP.NET Core و FastAPI و Qdrant، ونظام إدارة مطعم بثلاث طبقات فوق SQL Server. | المشاريع |
+| `/ar/contact` | تواصل مع مبرمج | تواصل مع زياد النهدي — مطوّر باك اند | للتواصل بشأن مشاريع العمل الحر أو الوظائف عن بُعد أو التعاون. عبر البريد الإلكتروني أو غيت هب، والردّ خلال يومَي عمل. | تواصل معي |
 
-> All copy above is **draft**. Arabic is owner-native and needs his review for tone.
-> Turkish requires native review before any `/tr` route is allowed to be indexed
-> (see `04-srs.md`, indexing rule).
+> **Reconciled against what shipped, 2026-09-23 (T-215).** The tables above now
+> carry the copy that is actually served, not the copy first drafted here. Three
+> differences were deliberate and were kept: the location is Aksaray rather than
+> Turkey, since D5 resolved; Contact offers GitHub rather than LinkedIn, whose
+> URL is still unknown and which the page must not name; and Home lists
+> ASP.NET Core, which is what the work is actually in.
+>
+> English and Arabic are reviewed and indexed. Turkish is drafted and stays
+> `noindex` until a native reviewer reads it (D4, T-204).
 
 ## 5. Content outlines
 
