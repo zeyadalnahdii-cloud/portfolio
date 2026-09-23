@@ -6,10 +6,17 @@ const ORIGIN = 'https://zeyadalnahdi.test'
 
 const reviewed = vi.hoisted(() => ({ value: new Set<string>(['en', 'tr', 'ar']) }))
 
-vi.mock('@/lib/i18n/messages', () => ({
-  isReviewed: (locale: string) => reviewed.value.has(locale),
-  reviewedLocales: () => ['en', 'tr', 'ar'].filter((l) => reviewed.value.has(l)),
-}))
+vi.mock('@/lib/i18n/messages', async (importOriginal) => {
+  // Only the review state is mocked. getMessages stays real, because the
+  // breadcrumb names and project descriptions are the copy under test.
+  const actual = await importOriginal<typeof import('@/lib/i18n/messages')>()
+
+  return {
+    ...actual,
+    isReviewed: (locale: string) => reviewed.value.has(locale),
+    reviewedLocales: () => ['en', 'tr', 'ar'].filter((l) => reviewed.value.has(l)),
+  }
+})
 
 const { buildSchema, serialiseSchema, PERSON_ID, WEBSITE_ID } = await import('@/lib/seo/schema')
 
@@ -114,5 +121,99 @@ describe('serialiseSchema', () => {
     expect(serialised).not.toContain('</script>')
     expect(serialised).toContain('\\u003c')
     expect(JSON.parse(serialised)).toBeTruthy()
+  })
+})
+
+describe('per-page entities', () => {
+  function types(page: Parameters<typeof buildSchema>[1]) {
+    return (buildSchema('en', page)['@graph'] as Node[]).map((node) => node['@type'])
+  }
+
+  it('gives the home page the site entities and nothing more', () => {
+    expect(types('')).toEqual(['Person', 'WebSite'])
+  })
+
+  it('adds a breadcrumb trail to every page below home (S-03)', () => {
+    for (const page of ['/about', '/projects', '/contact'] as const) {
+      expect(types(page)).toContain('BreadcrumbList')
+    }
+  })
+
+  it('names breadcrumb steps with the labels the visitor clicked', () => {
+    const graph = buildSchema('en', '/about')['@graph'] as Node[]
+    const trail = graph.find((node) => node['@type'] === 'BreadcrumbList')
+
+    expect(trail?.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${ORIGIN}/en` },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${ORIGIN}/en/about` },
+    ])
+  })
+
+  it('translates the trail with the page', () => {
+    const graph = buildSchema('ar', '/contact')['@graph'] as Node[]
+    const trail = graph.find((node) => node['@type'] === 'BreadcrumbList') as Node
+    const steps = trail.itemListElement as { name: string }[]
+
+    expect(steps[1]?.name).toBe('تواصل معي')
+  })
+
+  describe('projects (S-04)', () => {
+    it('emits one SoftwareSourceCode per project, and only on the projects page', () => {
+      expect(types('/projects').filter((type) => type === 'SoftwareSourceCode')).toHaveLength(2)
+      expect(types('/about')).not.toContain('SoftwareSourceCode')
+    })
+
+    it('credits the author by @id rather than repeating the person', () => {
+      const graph = buildSchema('en', '/projects')['@graph'] as Node[]
+
+      for (const project of graph.filter((node) => node['@type'] === 'SoftwareSourceCode')) {
+        expect(project.author).toEqual({ '@id': PERSON_ID })
+      }
+    })
+
+    it('states the languages each project is written in', () => {
+      const graph = buildSchema('en', '/projects')['@graph'] as Node[]
+      const projects = graph.filter((node) => node['@type'] === 'SoftwareSourceCode')
+
+      expect(projects[0]?.programmingLanguage).toEqual(['C#', 'Python', 'TypeScript'])
+      expect(projects[1]?.programmingLanguage).toEqual(['C#', 'T-SQL'])
+    })
+  })
+
+  it('marks the contact page and points it at the person by reference (S-05)', () => {
+    const graph = buildSchema('en', '/contact')['@graph'] as Node[]
+    const page = graph.find((node) => node['@type'] === 'ContactPage')
+
+    expect(page?.['@id']).toBe(`${ORIGIN}/en/contact#contact`)
+    expect(page?.about).toEqual({ '@id': PERSON_ID })
+    expect(page?.mainEntity).toEqual({ '@id': PERSON_ID })
+  })
+
+  /**
+   * S-07, and the reason this file has an honesty section at all. Structured
+   * data claiming something the page cannot back up is a manual-action risk,
+   * and a codeRepository nobody can open is exactly that. D2/D3 resolved on
+   * 2026-09-23: both repositories stay private.
+   */
+  it('claims no repository on any page, in any locale', () => {
+    for (const locale of LOCALES) {
+      for (const page of ['', '/about', '/projects', '/contact'] as const) {
+        const serialised = JSON.stringify(buildSchema(locale, page))
+
+        expect(serialised, `${locale}${page}`).not.toContain('codeRepository')
+        expect(serialised, `${locale}${page}`).not.toContain(
+          'github.com/zeyadalnahdii-cloud/portfolio',
+        )
+      }
+    }
+  })
+
+  it('never repeats an entity that another one references', () => {
+    for (const page of ['', '/about', '/projects', '/contact'] as const) {
+      const graph = buildSchema('en', page)['@graph'] as Node[]
+      const ids = graph.map((node) => node['@id'])
+
+      expect(new Set(ids).size, page).toBe(ids.length)
+    }
   })
 })
