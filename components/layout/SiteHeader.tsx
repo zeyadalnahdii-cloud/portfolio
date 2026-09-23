@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import type { Locale } from '@/lib/i18n/config'
 
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { SiteNav } from './SiteNav'
 
 interface SiteHeaderProps {
@@ -25,8 +26,10 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
         <SiteNav locale={locale} />
 
-        {/* Slots filled by T-121 (language switcher) and T-122 (theme toggle). */}
-        <div className="flex items-center gap-2" data-slot="controls" />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher locale={locale} />
+          {/* Slot filled by T-122 (theme toggle). */}
+        </div>
       </div>
     </header>
   )
