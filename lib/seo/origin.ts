@@ -15,13 +15,10 @@
  * the browser bundle.
  */
 
+import { IS_PRODUCTION_DEPLOY } from './environment'
+
 const VAR = 'NEXT_PUBLIC_SITE_URL'
 const RAW = process.env.NEXT_PUBLIC_SITE_URL
-
-/** Vercel sets this to 'production' only for production deploys. Preview
- *  builds are production builds as far as NODE_ENV is concerned, so NODE_ENV
- *  cannot tell the two apart (docs/09-cicd.md §3). */
-const IS_PRODUCTION_DEPLOY = process.env.VERCEL_ENV === 'production'
 
 function fail(problem: string): never {
   throw new Error(
