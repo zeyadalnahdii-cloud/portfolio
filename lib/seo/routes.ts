@@ -24,3 +24,15 @@ export type Route = (typeof ROUTES)[number]
 export const ROUTE_LABEL: Record<Route, 'home' | 'about' | 'projects' | 'contact'> = {
   '': 'home',
 }
+
+/**
+ * Whether a page exists yet.
+ *
+ * Lets a component link to a route only once it is real. The alternative is a
+ * call to action that 404s until the page it points at is built, which is
+ * worse than no call to action: it costs the visitor a click and the crawler a
+ * dead end. The links appear on their own as T-212 and T-213 land.
+ */
+export function hasRoute(route: string): boolean {
+  return (ROUTES as readonly string[]).includes(route)
+}

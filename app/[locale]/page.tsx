@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { isLocale } from '@/lib/i18n/config'
+import { getMessages } from '@/lib/i18n/messages'
 import { buildMetadata } from '@/lib/seo/metadata'
+import { hasRoute } from '@/lib/seo/routes'
 
 export async function generateMetadata({ params }: PageProps<'/[locale]'>): Promise<Metadata> {
   const { locale } = await params
@@ -14,9 +17,9 @@ export async function generateMetadata({ params }: PageProps<'/[locale]'>): Prom
   setRequestLocale(locale)
   const t = await getTranslations('meta.home')
 
-  // Everything else — canonical, hreflang, Open Graph, Twitter, robots — is
-  // composed by buildMetadata. Routes pass copy and nothing more; a route that
-  // writes its own canonical or alternates is how the set drifts.
+  // Copy and nothing else. Canonical, hreflang, Open Graph, Twitter and robots
+  // are all composed by buildMetadata; a route that writes its own is how the
+  // set drifts.
   return buildMetadata({
     locale,
     pathname: '',
@@ -26,8 +29,11 @@ export async function generateMetadata({ params }: PageProps<'/[locale]'>): Prom
 }
 
 /**
- * Placeholder. The real Home page is built in T-210 against
- * docs/06-mockups.md §2.2.
+ * Home (F-10 … F-14, docs/06-mockups.md §2.2).
+ *
+ * No hero image, carousel or background video. Each is a direct LCP cost and
+ * LCP is a gate (SRS P-01), so the largest element on this page is the h1 —
+ * text, which paints as soon as the HTML does.
  */
 export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   const { locale } = await params
@@ -37,10 +43,90 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   }
 
   setRequestLocale(locale)
+  const t = await getTranslations('home')
+
+  // Arrays come from the typed registry rather than t.raw(), which returns
+  // unknown and would need a cast at every call site.
+  const messages = getMessages(locale)
+  const { stack } = messages.home
+  const projects = [messages.projects.aiWorkspace, messages.projects.restaurant]
 
   return (
-    <main id="content" className="mx-auto max-w-3xl px-4 py-16 text-start">
-      <h1 className="text-3xl font-bold">{locale}</h1>
+    <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
+      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{t('name')}</h1>
+      <p className="text-accent mt-2 text-xl font-medium sm:text-2xl">{t('role')}</p>
+
+      <p className="mt-6 leading-relaxed">{t('intro')}</p>
+      <p className="text-muted mt-3 text-sm">{t('location')}</p>
+
+      <section aria-labelledby="stack-heading" className="mt-12">
+        <h2 id="stack-heading" className="text-lg font-semibold">
+          {t('stackHeading')}
+        </h2>
+        {/* F-12: plain text, never logo images. Text is indexable and costs
+            nothing to load; a row of logos is neither. */}
+        <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+          {stack.map((item) => (
+            <li key={item} className="border-subtle bg-surface rounded-md border px-2 py-1">
+              <span dir="ltr">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="work-heading" className="mt-12">
+        <h2 id="work-heading" className="text-lg font-semibold">
+          {t('workHeading')}
+        </h2>
+
+        {/* Equal-height cells, and a floor under each card, so a font swap
+            cannot resize the grid after first paint (SRS P-02). */}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {projects.map((project) => (
+            <article
+              key={project.name}
+              className="border-subtle bg-surface flex min-h-56 flex-col rounded-lg border p-4"
+            >
+              <h3 className="font-semibold" dir="ltr">
+                {project.name}
+              </h3>
+              <p className="text-muted mt-1 text-xs">{project.status}</p>
+              <p className="mt-3 text-sm leading-relaxed">{project.problem}</p>
+              <ul className="text-muted mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-4 text-xs">
+                {project.stack.slice(0, 4).map((item) => (
+                  <li key={item} dir="ltr">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        {/* Rendered only once /projects exists (T-212). */}
+        {hasRoute('/projects') && (
+          <p className="mt-4">
+            <Link
+              href={`/${locale}/projects`}
+              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {t('seeProjects')}
+            </Link>
+          </p>
+        )}
+      </section>
+
+      {/* F-14. Rendered only once /contact exists (T-213). */}
+      {hasRoute('/contact') && (
+        <p className="mt-12">
+          <Link
+            href={`/${locale}/contact`}
+            className="bg-accent hover:bg-accent-hover focus-visible:outline-accent inline-block rounded-md px-4 py-2 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {t('cta')}
+          </Link>
+        </p>
+      )}
     </main>
   )
 }
