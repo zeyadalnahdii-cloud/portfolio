@@ -51,11 +51,14 @@
   --color-muted: var(--fg-muted);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Defined by whichever face the locale layout applied. The names differ
+     from the tokens so the reference is not circular. */
+  --font-sans: var(--font-app-sans);
+  --font-mono: var(--font-app-mono);
 }
 
 body {
+  font-family: var(--font-app-sans), system-ui, sans-serif;
   background: var(--bg);
   color: var(--fg);
   /* Arabic script needs more leading than Latin at the same size
