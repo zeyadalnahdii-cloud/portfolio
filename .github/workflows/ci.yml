@@ -56,6 +56,9 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      - name: Unit tests
+        run: npm test
+
       - name: Commit messages
         if: github.event_name == 'pull_request'
         run: >-
