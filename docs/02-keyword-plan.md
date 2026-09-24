@@ -6,17 +6,52 @@
 
 ---
 
-## 1. Method and a caveat
+## 1. Method, and what is actually measured
 
-Keywords below are derived from audience intent, competition reasoning and the
-owner's actual stack — **not** from measured search-volume data. No keyword tool was
-run. Treat every term here as a **hypothesis to validate**, not a finding.
+**Updated by T-205, 2026-09-25.** The identity and head terms below are measured.
+The rest are not, and the difference is marked term by term — `[measured]`
+carries a figure, a market and a source; everything else is reasoned from
+audience intent, competition and the owner's actual stack.
 
-Validate before Sprint 2 closes, using:
-- Google Keyword Planner (free with any Ads account) for volume and competition.
-- Google autocomplete + "People also ask" for each locale, searched from the target
-  region and language.
-- Search Console *Performance → Queries* after 30 days live — the only real data.
+### Measured
+
+| Term | Volume/mo | Market | Source |
+|---|---|---|---|
+| `software engineer` | 90,500 | US | WordStream |
+| `software developer` | 27,100 | US | WordStream |
+| `yazılımcı` | 14,800 | TR | Keyword Planner |
+| `full stack developer` | 12,100 | US | WordStream |
+| `مبرمج` | 2,400 | SA | Keyword Planner |
+| `yazılım geliştirici` | 1,900 | TR | Keyword Planner |
+| `مطور برمجيات` | 50 | SA | Keyword Planner |
+
+Two findings changed the plan rather than confirming it:
+
+- **The literal translation is the wrong term in two of three languages.**
+  `مبرمج` outperforms `مطور برمجيات` 48×, and `yazılımcı` outperforms
+  `yazılım geliştirici` 7.8×. Translating the English head term would have
+  targeted the words neither market searches.
+- **Volume is not the selector.** `software engineer` is the largest number in
+  the table and is deliberately *not* targeted: it describes a role this
+  portfolio does not claim. `software developer` was likewise not adopted as the
+  site identity merely for being 2.2× `full stack developer`.
+
+### Not measured, and deliberately so
+
+Autocomplete and "People also ask" were **not pursued — an explicit owner
+decision**, not an oversight. The measured set above was sufficient for the
+site-level decisions, and the remaining questions are ranking questions rather
+than term-selection questions. Nothing in this document should be read as
+validated by them.
+
+The **long-tail tier in §3 is unvalidated and is not claimed otherwise.** It is
+retained as evidence and as supporting terms, never promoted to any route's
+primary keyword. Its volumes are expected to be near zero; that was never the
+argument for it. T-205 closed with these terms still hypotheses, by decision.
+
+**The next real data is Search Console *Performance → Queries* after 30 days
+live** — which §1 has always said is the only real data, and which no keyword
+tool substitutes for.
 
 For a 12-route personal site, keyword strategy is a minor lever. The dominant ranking
 factors here are: an exact-match domain, correct structured data, a clean name entity,
@@ -60,17 +95,21 @@ of the English set — they reflect how each market actually searches.
 | Tier | Terms | Notes |
 |---|---|---|
 | Primary | `Zeyad Alnahdi` | Name entity — owns G1 |
-| Secondary | `backend developer portfolio`, `C# .NET developer`, `SQL Server developer` | High competition; realistic only as long-tail combinations |
-| Long-tail *(best odds)* | `ASP.NET Core clean architecture example`, `RAG pipeline ASP.NET Core FastAPI`, `self-hosted RAG Qdrant Ollama`, `C# WinForms SQL Server project`, `Arabic RAG retrieval` | Low volume, low competition, high intent — the winnable set. The self-hosted RAG and Arabic-retrieval terms are unusually uncontested and map to real, verifiable work. |
-| Differentiator | `psychology graduate software developer`, `developer with psychology background` | Very low volume, near-zero competition, memorable. Worth one page section. |
+| Identity | `full stack developer` **[measured 12,100 US]** | The canonical professional descriptor site-wide. Does **not** displace the name entity on Home. |
+| Secondary | `software developer` **[measured 27,100 US]**, `AI developer`, `AI development` | `software developer` is the `/en/about` primary. AI is a positioning dimension — **not** AI Engineer or ML Engineer. |
+| Technical | `C#`, `.NET`, `ASP.NET Core`, `SQL Server`, `Next.js` | Supporting terms, placed where the page content already earns them |
+| Long-tail *(unvalidated, evidence only)* | `ASP.NET Core clean architecture example`, `RAG pipeline ASP.NET Core FastAPI`, `self-hosted RAG Qdrant Ollama`, `C# WinForms SQL Server project`, `Arabic RAG retrieval` | Reasoned, not measured. Retained as in-page evidence inside the relevant project, **not promoted to any route's primary keyword** (T-205). |
+| ~~Differentiator~~ | ~~`psychology graduate software developer`~~ | **Withdrawn (T-205).** Psychology stays in the About narrative as story; it is not an SEO target. |
 
 ### 3.2 Turkish (`/tr`) — local employers, Aksaray (remote / Ankara available)
 
 | Tier | Terms | Notes |
 |---|---|---|
 | Primary | `Zeyad Alnahdi` | Latin script; Turkish users search names in Latin |
-| Secondary | `backend yazılım geliştirici`, `C# .NET geliştirici`, `masaüstü uygulama geliştirici` | `yazılım geliştirici` is the standard local term — not `programcı` |
-| Geo | `Aksaray yazılım geliştirici`, `Aksaray backend geliştirici` | **D5 resolved: Aksaray.** Lower volume than Ankara but truthful and far less contested — a realistic win. Ankara may appear as availability ("Ankara'daki pozisyonlara açık"), never as location. |
+| Identity | `full stack developer` | English technical terminology is retained where the market uses it. |
+| Secondary | `yazılımcı` **[measured 14,800 TR]**, `AI developer`, `AI development` | `yazılımcı` is the `/tr/about` primary and an **approved keyword decision**. It beats `yazılım geliştirici` **[1,900]** 7.8×. |
+| Technical | `C#`, `.NET`, `ASP.NET Core`, `SQL Server` | |
+| Geo | ~~`Aksaray yazılım geliştirici`~~ | **Demoted (T-205).** Aksaray is factual location information, not a primary SEO target. It appears in copy because it is true, not to rank. |
 | Long-tail | `C# SQL Server proje örneği`,  `uzaktan freelance yazılım geliştirici` | |
 
 **Language notes for whoever writes the Turkish copy:**
@@ -86,8 +125,10 @@ of the English set — they reflect how each market actually searches.
 | Tier | Terms | Notes |
 |---|---|---|
 | Primary | `زياد النهدي` | |
-| Secondary | `مطور باك اند`, `مبرمج C#`, `تطوير تطبيقات سطح المكتب` | |
-| Long-tail | `نظام RAG عربي`, `بحث دلالي بالعربية`, `نظام إدارة مطعم C#`, `مبرمج سي شارب` | Arabic-language RAG is a near-empty niche and the owner has real work in it (`arabic_query_expansion`, `text_quality_service`) — the single strongest Arabic opportunity |
+| Identity | `Full Stack Developer` | Kept in Latin — the canonical title in this market too. |
+| Secondary | `مبرمج` **[measured 2,400 SA]**, `AI developer`, `AI development` | `مبرمج` is the `/ar/about` primary. `مطور برمجيات` **[50]** is dropped: 48× weaker and the literal translation trap. |
+| Technical | `C#`, `.NET`, `ASP.NET Core`, `SQL Server`, `RAG` | Latin technical terms retained where Arabic prose uses them naturally |
+| Long-tail *(unvalidated)* | `نظام RAG عربي`, `بحث دلالي بالعربية`, `نظام إدارة مطعم C#`, `مبرمج سي شارب` | **The "single strongest Arabic opportunity" claim is withdrawn (T-205)** — it was never measured. These stay as in-page evidence, not as primary targets. |
 | Service intent | `مبرمج فري لانس عربي`, `تصميم أنظمة إدارة` | |
 
 **Language notes:**
@@ -104,42 +145,51 @@ target the same primary term.
 
 Constraints: title ≤ 60 chars · description ≤ 155 chars · exactly one H1 per page.
 
+> **Generated from the shipped message files, T-205, 2026-09-25.** The character
+> counts are measured, not estimated. `scripts/verify-metadata.mjs` enforces the
+> limits and the within-locale uniqueness on every pull request, so this table
+> cannot drift from what is served without CI failing.
+
 ### English
 
-| Route | Primary keyword | Title | Description | H1 |
-|---|---|---|---|---|
-| `/en` | Zeyad Alnahdi | Zeyad Alnahdi — Backend & Desktop Developer | Backend and desktop application developer working in C#, ASP.NET Core and SQL Server. Based in Aksaray, Turkey. Available for freelance and remote work. | Zeyad Alnahdi |
-| `/en/about` | psychology graduate software developer | About Zeyad Alnahdi — Backend Developer | Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data. | About me |
-| `/en/projects` | ASP.NET Core clean architecture example | Projects — Backend & AI Systems \| Zeyad Alnahdi | An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server. | Projects |
-| `/en/contact` | contact backend developer | Contact Zeyad Alnahdi — Backend Developer | Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days. | Get in touch |
+| Route | Primary | Secondary | Title | Description | H1 |
+|---|---|---|---|---|---|
+| `/en` | `Zeyad Alnahdi` *(name entity)* | full stack developer, AI-powered applications, C#, ASP.NET Core | Zeyad Alnahdi — Full Stack Developer · **36** | Full stack developer building web and desktop applications in C#, ASP.NET Core and Next.js, including AI-powered systems. Based in Aksaray, Turkey. · **147** | Zeyad Alnahdi |
+| `/en/about` | `software developer` **[27,100 US]** | full stack developer, self-taught developer, C#, .NET, SQL Server | About Zeyad Alnahdi — Full Stack Developer · **42** | Self-taught software developer working in C#, ASP.NET Core, SQL Server and Next.js. How I learned, what I build, and the thinking behind it. · **140** | About me |
+| `/en/projects` | `AI developer` | AI development, ASP.NET Core, C#, SQL Server, Next.js *(RAG, Qdrant, FastAPI as evidence)* | Projects — AI and Full Stack Development \| Zeyad Alnahdi · **56** | An AI-powered workspace built on ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server. · **118** | Projects |
+| `/en/contact` | `full stack developer` **[12,100 US]** | freelance, remote | Contact Zeyad Alnahdi — Full Stack Developer · **44** | Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days. · **126** | Get in touch |
 
 ### Turkish
 
-| Route | Primary keyword | Title | Description | H1 |
-|---|---|---|---|---|
-| `/tr` | Zeyad Alnahdi | Zeyad Alnahdi — Backend ve Masaüstü Geliştirici | C#, ASP.NET Core ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Aksaray'da yaşıyor, freelance ve uzaktan çalışmaya açık. | Zeyad Alnahdi |
-| `/tr/about` | backend yazılım geliştirici | Hakkımda — Zeyad Alnahdi, Yazılım Geliştirici | Psikoloji mezunu, kendi kendine yetişmiş backend geliştirici. Bu altyapının arayüz tasarımına, hata yönetimine ve veri modellemeye katkısı. | Hakkımda |
-| `/tr/projects` | ASP.NET Core katmanlı mimari | Projeler — Backend ve Yapay Zekâ \| Zeyad Alnahdi | ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan RAG altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi. | Projeler |
-| `/tr/contact` | yazılım geliştirici iletişim | İletişim — Zeyad Alnahdi, Yazılım Geliştirici | Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt. | İletişim |
+| Route | Primary | Secondary | Title | Description | H1 |
+|---|---|---|---|---|---|
+| `/tr` | `Zeyad Alnahdi` *(name entity)* | full stack developer, yapay zekâ destekli sistemler, C#, ASP.NET Core | Zeyad Alnahdi — Full Stack Developer · **36** | C#, ASP.NET Core ve Next.js ile web ve masaüstü uygulamaları ve yapay zekâ destekli sistemler geliştiriyorum. Aksaray'da yaşıyorum. · **131** | Zeyad Alnahdi |
+| `/tr/about` | `yazılımcı` **[14,800 TR]** | full stack developer, C#, .NET, masaüstü uygulama | Hakkımda — Zeyad Alnahdi, Full Stack Developer · **46** | Kendi kendine yetişmiş bir yazılımcı. Nasıl öğrendiğim, ne inşa ettiğim ve tasarım kararlarının arkasındaki düşünce. · **116** | Hakkımda |
+| `/tr/projects` | `AI developer` | AI development, ASP.NET Core, C#, SQL Server | Projeler — AI ve Full Stack Geliştirme \| Zeyad Alnahdi · **54** | ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan yapay zekâ altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi. · **135** | Projeler |
+| `/tr/contact` | `full stack developer` | uzaktan, freelance | İletişim — Zeyad Alnahdi, Full Stack Developer · **46** | Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt. · **132** | İletişime geçin |
 
 ### Arabic
 
-| Route | Primary keyword | Title | Description | H1 |
-|---|---|---|---|---|
-| `/ar` | زياد النهدي | زياد النهدي — مطوّر باك اند وتطبيقات سطح المكتب | مطوّر باك اند وتطبيقات سطح مكتب بلغة C# و ASP.NET Core و SQL Server. مقيم في أق سراي بتركيا، ومتاح للعمل الحر والعمل عن بُعد. | زياد النهدي |
-| `/ar/about` | مطور باك اند | نبذة عن زياد النهدي — مطوّر باك اند | مطوّر باك اند علّم نفسه بنفسه، وخريج علم النفس. كيف تظهر هذه الخلفية في تصميم الواجهات ومعالجة الأخطاء ونمذجة البيانات. | نبذة عني |
-| `/ar/projects` | نظام RAG عربي | المشاريع — باك اند وذكاء اصطناعي \| زياد النهدي | منصة عمل بخطّ RAG ذاتي الاستضافة على ASP.NET Core و FastAPI و Qdrant، ونظام إدارة مطعم بثلاث طبقات فوق SQL Server. | المشاريع |
-| `/ar/contact` | تواصل مع مبرمج | تواصل مع زياد النهدي — مطوّر باك اند | للتواصل بشأن مشاريع العمل الحر أو الوظائف عن بُعد أو التعاون. عبر البريد الإلكتروني أو غيت هب، والردّ خلال يومَي عمل. | تواصل معي |
+| Route | Primary | Secondary | Title | Description | H1 |
+|---|---|---|---|---|---|
+| `/ar` | `زياد النهدي` *(name entity)* | Full Stack Developer, مبرمج, الذكاء الاصطناعي, C#, ASP.NET Core | زياد النهدي — Full Stack Developer · **34** | مبرمج Full Stack يبني تطبيقات ويب وسطح مكتب بلغة C# و ASP.NET Core و Next.js، وأنظمة مدعومة بالذكاء الاصطناعي. مقيم في أق سراي بتركيا. · **134** | زياد النهدي |
+| `/ar/about` | `مبرمج` **[2,400 SA]** | Full Stack Developer, C#, .NET, SQL Server | نبذة عن زياد النهدي — Full Stack Developer · **42** | مبرمج علّم نفسه بنفسه، يعمل بلغة C# و ASP.NET Core و SQL Server و Next.js. كيف تعلّمت، وما الذي أبنيه، والتفكير وراء قراراتي. · **125** | نبذة عني |
+| `/ar/projects` | `AI developer` / `AI development` | ASP.NET Core, C#, SQL Server *(RAG, Qdrant, FastAPI as evidence)* | المشاريع — AI و Full Stack \| زياد النهدي · **40** | منصة عمل مدعومة بالذكاء الاصطناعي على ASP.NET Core و FastAPI و Qdrant، ونظام إدارة مطعم بثلاث طبقات فوق SQL Server. · **115** | المشاريع |
+| `/ar/contact` | `تواصل مع مبرمج` | مبرمج, فري لانس, عن بُعد | تواصل مع زياد النهدي — Full Stack Developer · **43** | للتواصل بشأن مشاريع العمل الحر أو الوظائف عن بُعد أو التعاون. عبر البريد الإلكتروني أو غيت هب، والردّ خلال يومَي عمل. · **117** | تواصل معي |
 
-> **Reconciled against what shipped, 2026-09-23 (T-215).** The tables above now
-> carry the copy that is actually served, not the copy first drafted here. Three
-> differences were deliberate and were kept: the location is Aksaray rather than
-> Turkey, since D5 resolved; Contact offers GitHub rather than LinkedIn, whose
-> URL is still unknown and which the page must not name; and Home lists
-> ASP.NET Core, which is what the work is actually in.
->
-> English and Arabic are reviewed and indexed. Turkish is drafted and stays
-> `noindex` until a native reviewer reads it (D4, T-204).
+**Notes on the primaries.**
+
+- **The name entity stays Home's primary in all three locales** (`02` §2). `Full
+  Stack Developer` is the professional descriptor and a Home secondary; it does
+  not displace the name, which is the target G1 is measured against.
+- `/ar/contact` is `تواصل مع مبرمج` rather than bare `مبرمج`, which would have
+  collided with `/ar/about` and put two of the four Arabic pages in competition
+  for one result. The measured term is retained inside the phrase.
+- `/en/projects`, `/tr/projects` and `/ar/projects` carry `AI developer`.
+  **AI is a positioning dimension, not a job title** — the site does not claim
+  AI Engineer or ML Engineer anywhere.
+- Psychology no longer appears in any title or description. It remains in the
+  About narrative as story (`01` §2).
 
 ## 5. Content outlines
 

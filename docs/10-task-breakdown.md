@@ -684,6 +684,53 @@ rather than reasoned.
 **Watch out:** every term in `02` is explicitly a hypothesis. Some will be
 wrong. Changing them is the point of this task, not a sign the plan failed.
 
+
+**Status — CLOSED 2026-09-26. Not open for further keyword research.**
+
+**Step 1** measured the identity and head terms across three markets. Seven
+terms carry a figure, a market and a source, recorded in `02` §1. Two findings
+changed the plan rather than confirming it: the literal translation is the wrong
+term in two of three languages (`مبرمج` beats `مطور برمجيات` 48×; `yazılımcı`
+beats `yazılım geliştirici` 7.8×), and volume is not the selector — the largest
+number in the table, `software engineer` at 90,500, is deliberately not
+targeted because it describes a role this portfolio does not claim.
+
+**Step 2 was deliberately not pursued.** Autocomplete and "People also ask" were
+judged unnecessary once the measured set settled the decisions. `02` §1 says so
+explicitly; nothing in the document is presented as validated by them.
+
+**Step 3** rewrote `02` §3 and §4 and the shipped copy. The canonical identity is
+now `Full Stack Developer` in all three locales, with each locale's measured term
+alongside it.
+
+**The original completion criterion was intentionally narrowed, by owner
+decision.** As written it said the `02` §1 caveat could be *removed*, because
+every term would be measured. It is not removed; it is scoped.
+
+The owner's decision, recorded verbatim in substance: sufficient measured
+head, identity and AI data was collected to make the site-level decisions, and
+**the remaining long-tail hypotheses are not claimed as validated**. Autocomplete
+and "People also ask" were intentionally not pursued. **Post-launch Search
+Console query data is the next validation source** — which `02` §1 always called
+the only real data.
+
+This is recorded as a narrowing of the criterion, not as the criterion having
+been met, and not as the criterion having been reworded to fit. The distinction
+matters: a future reader must be able to see that the long-tail tier in `02` §3
+carries no measurement behind it.
+
+**T-205 is closed.** It does not reopen for more keyword work. The next keyword
+input to this project arrives from Search Console after launch (`08`,
+post-launch verification window, +30 days).
+
+Withdrawn as SEO targets (all reasoned, never measured): the psychology
+differentiator terms, the Aksaray geo terms, and the claim that Arabic RAG was
+"the single strongest Arabic opportunity". Psychology stays in the About
+narrative; Aksaray stays as factual location; RAG stays as project evidence.
+
+`yazılımcı` is settled as a keyword. **D4 still gates publication of `/tr`** —
+native review of the Turkish prose — but no longer gates this keyword choice.
+
 ---
 
 ### T-206 · CV, three locales — M
