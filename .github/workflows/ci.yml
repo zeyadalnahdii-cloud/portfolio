@@ -101,3 +101,76 @@ jobs:
       # it. This reads the same HTML that ships (T-218, docs/05 §4.2).
       - name: Verify the internal link graph
         run: npm run verify:links
+
+  # docs/09-cicd.md §2.6 — promoted to blocking in T-220 (§6, Sprint 2).
+  #
+  # Everything this job checks is invisible in a browser, absent from the build
+  # output, and expensive to discover from Search Console six weeks later. The
+  # reciprocity check is the reason it exists: a one-directional hreflang set
+  # renders perfectly and cannot be seen by eye.
+  metadata:
+    name: metadata
+    runs-on: ubuntu-latest
+    env:
+      # Build the artifact that actually ships. Without this the deployment is
+      # treated as a preview and served with a blanket X-Robots-Tag: noindex,
+      # so the job would be checking a page nobody will ever be served.
+      VERCEL_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start server
+        run: |
+          npm run start -- --port 3000 &
+          until curl -sf -o /dev/null http://localhost:3000/en; do sleep 1; done
+
+      # The fetch base and the expected origin are deliberately different: the
+      # server listens on localhost while the canonicals must name the public
+      # origin. Comparing a canonical against the host it was fetched from
+      # would pass in every environment and prove nothing.
+      - name: Verify metadata
+        run: npm run verify:metadata -- http://localhost:3000 "$NEXT_PUBLIC_SITE_URL"
+
+  # docs/09-cicd.md §2.5 — zero violations on all 12 routes (SRS A-01).
+  axe:
+    name: axe
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - name: Start server
+        run: |
+          npm run start -- --port 3000 &
+          until curl -sf -o /dev/null http://localhost:3000/en; do sleep 1; done
+
+      # Both themes. T-219 found two contrast failures that existed only in
+      # dark mode, on every button on the site; a light-only run was green.
+      - name: Run axe
+        run: npm run verify:axe -- http://localhost:3000

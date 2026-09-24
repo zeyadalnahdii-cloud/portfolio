@@ -195,10 +195,23 @@ are a proxy for them, not the goal.
 | Sprint | State |
 |---|---|
 | S1 | `validate`, `build`, `test` enforcing. `lighthouse`, `axe`, `metadata` running in report-only mode |
-| S2 | `metadata` and `axe` promoted to blocking |
+| S2 | `metadata` and `axe` promoted to blocking — **done, T-220** |
 | S3 | `lighthouse` promoted to blocking; preview `noindex` assertion added; full pipeline enforcing |
 
 Gates start report-only and are promoted once the codebase can actually pass them.
 A gate introduced as blocking before the code can satisfy it gets disabled within a
 week — and a disabled gate is worse than no gate, because everyone assumes it is
 still running.
+
+**T-220 note.** Promotion needed two things, not one. The jobs were added to the
+workflow *and* made required status checks — a job that merely runs is advisory,
+and a red advisory check is something people learn to merge past. `dev` had no
+branch protection at all, so the gates are now required on `dev` as well as
+`main`; requiring them only on `main` would have left every pull request we
+actually open unguarded.
+
+The `metadata` and `axe` jobs build with `VERCEL_ENV=production`. Without it the
+deployment is treated as a preview and served with a blanket
+`X-Robots-Tag: noindex`, so the jobs would be inspecting a page nobody will be
+served. The Sprint 3 preview-`noindex` assertion in §6 is the other half of
+this and is deliberately not implemented here.

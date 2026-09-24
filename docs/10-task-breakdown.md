@@ -1115,6 +1115,63 @@ within a week (`09` §6) — and the reciprocity check in particular earns its
 place, because a one-directional `hreflang` set renders perfectly and is
 undetectable by eye.
 
+
+**Status — complete.**
+
+**Step 1.** `scripts/verify-metadata.mjs` already covered M-01…M-04, M-09 and
+M-10. Extended with the rest of the §2.6 table: `lang`/`dir` (I-05, I-06),
+hreflang reciprocity (I-07), `x-default` (`05` §3), JSON-LD validity
+(S-01…S-07) and sitemap agreement (X-01, X-02).
+
+Two design points carry the weight:
+
+- **Nothing is derived from the code it checks.** Locales and pages are written
+  out in the script, and *indexability is read from each page's own robots meta
+  tag* rather than from `lib/i18n`. A check importing the same source as the
+  page would agree with it while both were wrong.
+- **Reciprocity is checked page-to-page over what was served**, not recomputed
+  from the function that emitted it. For every pair of indexable translations,
+  A must declare B *and* B must declare A. A locale held back by the indexing
+  gate must not be advertised by anyone, including itself.
+
+**Step 2.** `scripts/verify-axe.mjs` — `@axe-core/playwright`, WCAG 2.1 A + AA,
+all 12 routes in **both themes** (24 scans). Two themes rather than one because
+T-219 found two contrast failures that existed only in dark mode, on every
+button on the site; a light-only run was green while the primary CTA was
+unreadable.
+
+**Step 3.** Both jobs added to `.github/workflows/ci.yml` and made **required
+status checks**. This was two things, not one: a job that merely runs is
+advisory, and a red advisory check is something people learn to merge past.
+`dev` had **no branch protection at all**, so requiring them only on `main`
+would have left every pull request we actually open unguarded. `validate`,
+`build`, `metadata` and `axe` are now required on both branches.
+
+Both jobs build with `VERCEL_ENV=production`; otherwise the deployment is
+treated as a preview and served with a blanket `X-Robots-Tag: noindex`, and the
+jobs would be inspecting a page nobody will be served. The preview-`noindex`
+assertion itself is Sprint 3 (`09` §6) and is deliberately not implemented here.
+
+**Every check was fault-injected before being trusted**, against a fixture
+serving mutated copies of the real pages:
+
+| Injected defect | Caught as |
+|---|---|
+| `/en/about` stops declaring `ar` (one-directional) | `hreflang "ar" is (absent)` |
+| `ar` declared but pointing at the wrong page | reported from **both** sides of the pair |
+| `x-default` → `/ar` instead of `/en` | `x-default is …/ar, expected …/en` |
+| noindex `tr` advertised as an alternate | `declares hreflang "tr", which is noindex` |
+| sitemap entry removed | `does not list indexable route …` |
+| sitemap entry added for a noindex route | `lists …, which is not an indexable route` |
+| `dir="ltr"` on the Arabic page | `html dir is ltr, expected rtl` |
+| `lang="en"` on the Turkish page | `html lang is en, expected tr` |
+| JSON-LD `@id` reference broken | `references undefined @id` |
+| JSON-LD made unparseable | `JSON-LD does not parse` |
+| T-219's dark contrast defect reintroduced | axe: 5 violations, **all tagged `[dark]`** |
+
+The unmutated baseline passes, so none of these is a check that fails on
+everything.
+
 ---
 
 ### T-221 · Sprint 2 gate — M

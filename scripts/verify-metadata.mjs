@@ -17,8 +17,14 @@
  * while claiming another. Comparing a canonical against the host it was
  * fetched from would pass everywhere and prove nothing.
  *
- * T-220 promotes this into CI and extends it with hreflang reciprocity,
- * JSON-LD validity and sitemap agreement (docs/09-cicd.md §2.6).
+ * T-220 promoted this into CI and extended it with `lang`/`dir`, hreflang
+ * reciprocity, x-default, JSON-LD validity and sitemap agreement
+ * (docs/09-cicd.md §2.6).
+ *
+ * Nothing here is derived from the code it checks. The locale and page lists
+ * are written out below, and indexability is read from each page's own robots
+ * meta tag rather than from lib/i18n — a check that imported the same source
+ * as the page would agree with it while both were wrong.
  */
 const FETCH_BASE = process.argv[2] ?? 'http://localhost:3000'
 const ORIGIN = process.argv[3] ?? process.env.NEXT_PUBLIC_SITE_URL ?? FETCH_BASE
@@ -95,7 +101,110 @@ for (const locale of LOCALES) {
       previous = level
     }
 
-    rows.push({ locale, path, title: decode(title ?? ''), description: decode(description ?? '') })
+    // I-05, I-06: the attributes a screen reader and a search engine both
+    // read. Wrong here, and the Arabic page is announced as English prose.
+    const htmlTag = html.match(/<html[^>]*>/)?.[0] ?? ''
+    const lang = attr(htmlTag, /\slang="([^"]*)"/i)
+    const dir = attr(htmlTag, /\sdir="([^"]*)"/i)
+    const expectedDir = locale === 'ar' ? 'rtl' : 'ltr'
+
+    if (lang !== locale) fail(path, `html lang is ${lang ?? '(absent)'}, expected ${locale}`)
+    if (dir !== expectedDir) fail(path, `html dir is ${dir ?? '(absent)'}, expected ${expectedDir}`)
+
+    // The indexing gate (SRS I-14). Read from the page, not from the module
+    // that wrote it.
+    const robots = attr(html, /<meta name="robots" content="([^"]*)"/i) ?? ''
+    const indexable = !/noindex/i.test(robots)
+
+    // I-07. React emits the attribute as `hrefLang`; HTML attribute names are
+    // case-insensitive, so the match has to be too.
+    const alternates = new Map()
+    for (const match of html.matchAll(
+      /<link rel="alternate" hreflang="([^"]*)" href="([^"]*)"/gi,
+    )) {
+      const [, hreflang, href] = match
+      if (alternates.has(hreflang)) fail(path, `duplicate hreflang "${hreflang}"`)
+      alternates.set(hreflang, href)
+    }
+
+    for (const [hreflang, href] of alternates) {
+      if (!href.startsWith(`${ORIGIN}/`)) {
+        fail(path, `hreflang "${hreflang}" href is not under ${ORIGIN}: ${href}`)
+      }
+    }
+
+    // S-01..S-07: structured data that parses is not the same as structured
+    // data that is correct. An unresolvable @id reference is silently dropped
+    // by consumers, which is the failure worth catching.
+    const blocks = [
+      ...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g),
+    ]
+
+    if (blocks.length !== 1) {
+      fail(path, `${blocks.length} JSON-LD blocks, expected exactly 1`)
+    }
+
+    for (const [, raw] of blocks) {
+      let graph
+      try {
+        graph = JSON.parse(raw)
+      } catch (error) {
+        fail(path, `JSON-LD does not parse: ${error.message}`)
+        continue
+      }
+
+      if (graph['@context'] !== 'https://schema.org') {
+        fail(path, `JSON-LD @context is ${JSON.stringify(graph['@context'])}`)
+      }
+
+      const nodes = graph['@graph']
+      if (!Array.isArray(nodes) || nodes.length === 0) {
+        fail(path, 'JSON-LD has no @graph nodes')
+        continue
+      }
+
+      const defined = new Set()
+      for (const node of nodes) {
+        if (!node['@type'])
+          fail(path, `JSON-LD node without @type: ${JSON.stringify(node).slice(0, 80)}`)
+        if (node['@id']) defined.add(node['@id'])
+      }
+
+      // A reference is an object whose only key is @id. Anything it names must
+      // be a node in this same graph.
+      const walk = (value) => {
+        if (Array.isArray(value)) return value.forEach(walk)
+        if (value === null || typeof value !== 'object') return
+        const keys = Object.keys(value)
+        if (keys.length === 1 && keys[0] === '@id') {
+          if (!defined.has(value['@id'])) {
+            fail(path, `JSON-LD references undefined @id ${value['@id']}`)
+          }
+          return
+        }
+        for (const key of keys) if (key !== '@id') walk(value[key])
+      }
+      nodes.forEach(walk)
+
+      const crumbs = nodes.find((node) => node['@type'] === 'BreadcrumbList')
+      if (crumbs) {
+        const positions = (crumbs.itemListElement ?? []).map((item) => item.position)
+        const expectedPositions = positions.map((_, index) => index + 1)
+        if (JSON.stringify(positions) !== JSON.stringify(expectedPositions)) {
+          fail(path, `breadcrumb positions are ${positions.join(',')}, expected sequential from 1`)
+        }
+      }
+    }
+
+    rows.push({
+      locale,
+      page,
+      path,
+      indexable,
+      alternates,
+      title: decode(title ?? ''),
+      description: decode(description ?? ''),
+    })
   }
 }
 
@@ -115,14 +224,125 @@ for (const locale of LOCALES) {
   }
 }
 
+/**
+ * I-07 and docs/05-ia-url-map.md §3 — the hreflang graph.
+ *
+ * This is the check the whole script exists for. A one-directional set is the
+ * most common trilingual SEO defect there is: the page renders perfectly, the
+ * links all work, every locale looks correct in a browser, and search engines
+ * quietly refuse to cluster the pages because the declaration is not mutual.
+ * There is no way to see it by eye, and no way to see it in the build output.
+ *
+ * Reciprocity is checked page-to-page over what was actually served — not
+ * recomputed from the function that emitted it, which would agree with itself.
+ */
+const byPath = new Map(rows.map((row) => [row.path, row]))
+
+for (const page of PAGES) {
+  const group = rows.filter((row) => row.page === page)
+  const indexable = group.filter((row) => row.indexable)
+  const excluded = group.filter((row) => !row.indexable)
+
+  for (const row of indexable) {
+    // Self-reference: an indexable page must name itself in its own set.
+    const own = row.alternates.get(row.locale)
+    if (own !== `${ORIGIN}${row.path}`) {
+      fail(row.path, `does not declare itself: hreflang "${row.locale}" is ${own ?? '(absent)'}`)
+    }
+
+    // Every other indexable translation must be declared...
+    for (const other of indexable) {
+      const declared = row.alternates.get(other.locale)
+      if (declared !== `${ORIGIN}${other.path}`) {
+        fail(
+          row.path,
+          `hreflang "${other.locale}" is ${declared ?? '(absent)'}, expected ${ORIGIN}${other.path}`,
+        )
+        continue
+      }
+
+      // ...and must declare this page back. This is the reciprocity itself.
+      const back = other.alternates.get(row.locale)
+      if (back !== `${ORIGIN}${row.path}`) {
+        fail(
+          row.path,
+          `hreflang to ${other.path} is not reciprocal: that page's "${row.locale}" is ` +
+            `${back ?? '(absent)'}, expected ${ORIGIN}${row.path}`,
+        )
+      }
+    }
+
+    // A locale held back by the indexing gate must not be advertised anywhere
+    // (SRS I-14). Advertising a noindex page as an alternate asks a crawler to
+    // cluster a page it has been told to ignore.
+    for (const held of excluded) {
+      if (row.alternates.has(held.locale)) {
+        fail(row.path, `declares hreflang "${held.locale}", which is noindex`)
+      }
+    }
+
+    // docs/05 §3: x-default resolves to the English equivalent of this page.
+    const xDefault = row.alternates.get('x-default')
+    const english = group.find((candidate) => candidate.locale === 'en')
+    if (!english) fail(row.path, 'no en page in this group to anchor x-default')
+    else if (xDefault !== `${ORIGIN}${english.path}`) {
+      fail(row.path, `x-default is ${xDefault ?? '(absent)'}, expected ${ORIGIN}${english.path}`)
+    }
+  }
+
+  // Every alternate must point at a route this run actually fetched.
+  for (const row of group) {
+    for (const [hreflang, href] of row.alternates) {
+      const target = href.startsWith(ORIGIN) ? href.slice(ORIGIN.length) : null
+      if (target !== null && !byPath.has(target)) {
+        fail(row.path, `hreflang "${hreflang}" points at ${href}, which is not a known route`)
+      }
+    }
+  }
+}
+
+/**
+ * X-01, X-02 — the sitemap lists exactly the indexable routes.
+ *
+ * Both directions matter and they fail differently. A missing entry is a page
+ * nobody is told about; an extra entry submits a noindex page for indexing,
+ * which is a contradiction Search Console reports as an error against the
+ * whole sitemap.
+ */
+const sitemapResponse = await fetch(`${FETCH_BASE}/sitemap.xml`)
+
+if (!sitemapResponse.ok) {
+  fail('/sitemap.xml', `responded ${sitemapResponse.status}`)
+} else {
+  const xml = await sitemapResponse.text()
+  const listed = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc.trim()))
+  const expected = rows.filter((row) => row.indexable).map((row) => `${ORIGIN}${row.path}`)
+
+  for (const duplicate of listed.filter((loc, index) => listed.indexOf(loc) !== index)) {
+    fail('/sitemap.xml', `lists ${duplicate} more than once`)
+  }
+  for (const missing of expected.filter((loc) => !listed.includes(loc))) {
+    fail('/sitemap.xml', `does not list indexable route ${missing}`)
+  }
+  for (const extra of listed.filter((loc) => !expected.includes(loc))) {
+    fail('/sitemap.xml', `lists ${extra}, which is not an indexable route`)
+  }
+  console.log(
+    `verify-metadata: sitemap lists ${listed.length} of ${expected.length} indexable routes`,
+  )
+}
+
 console.log(`verify-metadata: ${rows.length} routes fetched from ${FETCH_BASE}`)
 console.log(`verify-metadata: canonicals expected under ${ORIGIN}\n`)
-console.log('  route'.padEnd(20) + 'title'.padStart(6) + 'desc'.padStart(7))
+console.log('  route'.padEnd(20) + 'title'.padStart(6) + 'desc'.padStart(7) + '  indexed  hreflang')
 for (const row of rows) {
   console.log(
     `  ${row.path}`.padEnd(20) +
       String(row.title.length).padStart(6) +
-      String(row.description.length).padStart(7),
+      String(row.description.length).padStart(7) +
+      (row.indexable ? '      yes' : '       no') +
+      '  ' +
+      [...row.alternates.keys()].join(','),
   )
 }
 
