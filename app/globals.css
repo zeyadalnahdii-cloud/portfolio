@@ -19,6 +19,15 @@
   --fg-muted: #59636e;
   --accent: #0969da;
   --accent-hover: #0550ae;
+  /* Text drawn ON an accent fill. White works here but not in dark, where the
+     accent is light — T-219 measured white-on-accent at 3.10:1. */
+  --accent-fg: #ffffff;
+  /* Error text and invalid field borders. */
+  --danger: #cf222e;
+  /* Form control boundaries. --border-subtle is decorative (card edges,
+     dividers) and exempt from 1.4.11; an empty input is identifiable only by
+     its border, so that one must reach 3:1. */
+  --border-control: #818b98;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,6 +39,9 @@
     --fg-muted: #9198a1;
     --accent: #4493f8;
     --accent-hover: #6cb6ff;
+    --accent-fg: #0d1117;
+    --danger: #ff7b72;
+    --border-control: #6e7681;
   }
 }
 
@@ -41,6 +53,9 @@
   --fg-muted: #9198a1;
   --accent: #4493f8;
   --accent-hover: #6cb6ff;
+  --accent-fg: #0d1117;
+  --danger: #ff7b72;
+  --border-control: #6e7681;
 }
 
 @theme inline {
@@ -51,6 +66,9 @@
   --color-muted: var(--fg-muted);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger);
+  --color-control: var(--border-control);
   /* Defined by whichever face the locale layout applied. The names differ
      from the tokens so the reference is not circular. */
   --font-sans: var(--font-app-sans);

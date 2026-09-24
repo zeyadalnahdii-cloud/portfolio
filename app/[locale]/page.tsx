@@ -138,7 +138,7 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
           <p className="mt-12">
             <Link
               href={`/${locale}/contact`}
-              className="bg-accent hover:bg-accent-hover focus-visible:outline-accent inline-block rounded-md px-4 py-2 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="bg-accent hover:bg-accent-hover focus-visible:outline-accent inline-block rounded-md px-4 py-2 font-medium text-accent-fg focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               {t('cta')}
             </Link>

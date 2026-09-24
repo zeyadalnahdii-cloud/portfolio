@@ -153,7 +153,7 @@ export function ContactForm() {
         type="submit"
         disabled={status === 'sending'}
         aria-busy={status === 'sending'}
-        className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-6 rounded-md px-4 py-2 font-medium text-white disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-6 rounded-md px-4 py-2 font-medium text-accent-fg disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {status === 'sending' ? t('sending') : t('send')}
       </button>
@@ -215,7 +215,7 @@ function Field({
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? errorId : undefined,
     className:
-      'border-subtle bg-bg focus-visible:outline-accent mt-1 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 aria-[invalid=true]:border-red-600',
+      'border-control bg-bg focus-visible:outline-accent mt-1 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 aria-[invalid=true]:border-danger',
   }
 
   return (
@@ -225,7 +225,7 @@ function Field({
       </label>
       {multiline ? <textarea {...shared} rows={6} /> : <input {...shared} type={type} />}
       {/* Reserved so an error appearing does not push the next field down. */}
-      <p id={errorId} className="min-h-5 text-sm text-red-600">
+      <p id={errorId} className="text-danger min-h-5 text-sm">
         {error}
       </p>
     </div>

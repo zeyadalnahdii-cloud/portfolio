@@ -95,7 +95,7 @@ export function SiteNav({ locale }: SiteNavProps) {
       <ul
         id={menuId}
         hidden={!open}
-        className="border-subtle bg-surface absolute inset-inline-0 mt-2 flex flex-col gap-1 border-b p-4 text-sm sm:hidden"
+        className="border-subtle bg-surface absolute start-0 end-0 z-10 mt-2 flex flex-col gap-1 border-b p-4 text-sm sm:hidden"
       >
         {items.map((item) => (
           <li key={item.href}>

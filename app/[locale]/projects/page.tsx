@@ -93,8 +93,13 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
             aria-labelledby={projectAnchor(project.name)}
             className="border-subtle mt-12 border-t pt-8"
           >
-            <h2 id={projectAnchor(project.name)} className="text-xl font-semibold" dir="ltr">
-              {project.name}
+            {/* dir="ltr" on the heading itself would left-align it on the
+              Arabic page: on a block element the attribute sets alignment, not
+              just character order, and the title would detach from its
+              right-aligned section. <bdi> isolates the Latin run's direction
+              and leaves the block following the page (docs/06-mockups.md §3). */}
+            <h2 id={projectAnchor(project.name)} className="text-xl font-semibold">
+              <bdi>{project.name}</bdi>
             </h2>
             <p className="text-muted mt-1 text-sm">{project.status}</p>
 

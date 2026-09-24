@@ -1024,6 +1024,73 @@ lead each produce a red run.
 an RTL layout hides every bidi bug the real copy exposes, and dark-mode contrast
 is the regression that reliably gets missed.
 
+
+**Status — complete for 12 of the 13 screens; the 404 is blocked.**
+
+Reviewed by capturing all 12 routes in every combination — light/dark x
+desktop/mobile — plus the mobile navigation opened, and the contact form with
+every field invalid at once. 60 states, each screenshotted and scanned with
+axe-core (WCAG 2.1 A + AA). Real Arabic and Turkish copy throughout; no filler.
+
+**Verified across all 60 states:** `lang` and `dir` correct per locale
+(`ar` = `rtl`), Arabic served IBM Plex Sans Arabic at 1.8 line-height and Latin
+locales Inter at 1.6 (`06` §1.2), and **zero horizontal overflow** anywhere.
+Final axe result: **zero violations**.
+
+**Three defects found and fixed.**
+
+1. **A-03 / A-01 — `text-white` on the accent fill measured 3.10:1 in dark**
+   (hover 2.15:1), on both buttons on the site: the Home CTA and the contact
+   submit. Cause: `06` §1.1 had no token for text drawn *on* the accent, so both
+   call sites hardcoded white — correct in light, failing in dark.
+2. **A-03 / A-01 — error text at 3.96:1 in dark.** The form hardcoded Tailwind
+   `red-600` for both the message and the invalid border, in both themes.
+3. **RTL layout — the mobile navigation drawer was broken in all three
+   locales.** It carried `inset-inline-0`, which **is not a Tailwind utility**
+   and compiled to no CSS at all; the `absolute` panel shrink-wrapped to its
+   content and floated over the `h1`. Replaced with `start-0 end-0` (real
+   `inset-inline-start`/`-end`) plus `z-10`. Verified present in the generated
+   stylesheet, not merely in the markup.
+
+Fixes 1 and 2 added three tokens — `--accent-fg`, `--danger`,
+`--border-control` — to all three theme blocks, documented in `06` §1.1.
+`--border-control` also raises the form-input boundary from 1.36:1 to 3.45:1
+(light) and 1.55:1 to 4.12:1 (dark), for WCAG 1.4.11; `--border-subtle` is
+unchanged and stays decorative.
+
+**One bidi defect found and fixed:** the `/projects` headings carried
+`dir="ltr"` on the `<h2>` itself. On a block element that sets alignment as well
+as character order, so both Latin project titles left-aligned on the Arabic page
+while every other element was right-aligned. Replaced with `<bdi>`. This is the
+defect the watch-out predicts: it is invisible in English and Turkish, and axe
+never sees it.
+
+**Step 4 — no physical direction properties.** All 21 files under `app/` and
+`components/` scanned for physical Tailwind utilities (`ml-`, `pr-`, `left-`,
+`border-l`, `rounded-r`, `text-left`, `float-*`, `space-x-`) and physical CSS
+(`margin-left`, `left:`, `text-align: left|right`). **Zero found.** The scan was
+validated against 20 known-bad and 17 known-good strings before being trusted.
+Note that this check would *not* have caught defect 3, which was neither
+physical nor real — a reminder that the absence of physical properties is not
+the same as correct logical ones.
+
+**Blocked — the 404 page (step 2).** It cannot be reviewed in four combinations
+because it has neither a locale nor a theme: a missing route still returns
+Next.js's built-in page, `<html>` with no `lang` and no `dir`, English-only
+"This page could not be found.", and its own hardcoded colours that ignore the
+site palette. Reviewing it is part of **T-320**, with the page itself.
+
+**Regression guard:** `tests/contrast.test.ts` parses the tokens out of
+`app/globals.css` and asserts every pair in both themes, and asserts the
+media-query dark block and the explicit `[data-theme='dark']` block stay
+identical — a value fixed in one and not the other gives a site accessible only
+to whoever toggled the theme by hand. It restates no hex values of its own; a
+test holding its own copy of the palette passes while the site fails. Confirmed
+to fail when the original defect is reintroduced.
+
+**Sign-off: 12 of 12 routes in all four combinations. The 404 is not signed off
+and carries to T-320.**
+
 ---
 
 ### T-220 · Promote the CI gates — M
