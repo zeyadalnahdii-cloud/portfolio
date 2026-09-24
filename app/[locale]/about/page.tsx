@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { cvPath, hasCv } from '@/lib/cv'
 import { LOCALES, isLocale } from '@/lib/i18n/config'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
+import { hasRoute } from '@/lib/seo/routes'
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }))
@@ -75,6 +77,20 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
           </h2>
           <p className="mt-3 leading-relaxed">{t('looking')}</p>
         </section>
+
+        {/* docs/05-ia-url-map.md §4.2. About is where a reader decides
+          whether to keep going; the only thing worth offering them next is
+          the work itself. */}
+        {hasRoute('/projects') && (
+          <p className="mt-10">
+            <Link
+              href={`/${locale}/projects`}
+              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {t('seeProjects')}
+            </Link>
+          </p>
+        )}
 
         {/* Rendered only once the file exists (T-206). */}
         {hasCv(locale) && (

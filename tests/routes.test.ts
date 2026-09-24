@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ROUTES, ROUTE_LABEL, hasRoute } from '@/lib/seo/routes'
+import { ROUTES, ROUTE_LABEL, hasRoute, projectAnchor } from '@/lib/seo/routes'
 
 describe('ROUTES', () => {
   it('always includes the locale root', () => {
@@ -32,5 +32,22 @@ describe('hasRoute', () => {
    */
   it('reports routes that do not exist yet as absent', () => {
     expect(hasRoute('/nowhere')).toBe(false)
+  })
+})
+
+describe('projectAnchor', () => {
+  it('slugifies a project name into a fragment id', () => {
+    expect(projectAnchor('AI Autonomous Workspace')).toBe('ai-autonomous-workspace-heading')
+    expect(projectAnchor('Restaurant Management')).toBe('restaurant-management-heading')
+  })
+
+  /**
+   * Home links to these fragments and /projects renders them. If the two ever
+   * computed the id separately, the links would point at nothing and every
+   * page would still render (docs/05-ia-url-map.md §4.2).
+   */
+  it('collapses runs of whitespace so the id is a single slug', () => {
+    expect(projectAnchor('  Two   Words ')).toBe('-two-words--heading')
+    expect(projectAnchor('One')).toBe('one-heading')
   })
 })

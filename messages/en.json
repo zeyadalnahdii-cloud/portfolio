@@ -76,11 +76,14 @@
     "lookingHeading": "What I'm looking for",
     "looking": "Freelance projects, remote roles, or local work. I live in Aksaray and I am open to positions in Ankara.",
     "cvHeading": "Curriculum vitae",
-    "cvDownload": "Download CV (PDF)"
+    "cvDownload": "Download CV (PDF)",
+    "seeProjects": "See what I've built"
   },
   "projects": {
     "heading": "Projects",
     "intro": "Two systems, both built end to end. One is a distributed AI workspace; the other is a desktop application over SQL Server. Together they are most of what I do.",
+    "ctaLead": "Interested in working together?",
+    "cta": "Get in touch",
     "labels": {
       "problem": "Problem",
       "architecture": "Architecture",

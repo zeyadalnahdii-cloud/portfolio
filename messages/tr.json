@@ -76,11 +76,14 @@
     "lookingHeading": "Ne arıyorum",
     "looking": "Freelance projeler, uzaktan pozisyonlar veya yerel işler. Aksaray'da yaşıyorum ve Ankara'daki pozisyonlara açığım.",
     "cvHeading": "Özgeçmiş",
-    "cvDownload": "Özgeçmişi indir (PDF)"
+    "cvDownload": "Özgeçmişi indir (PDF)",
+    "seeProjects": "Neler yaptığıma bakın"
   },
   "projects": {
     "heading": "Projeler",
     "intro": "İki sistem, ikisi de baştan sona kuruldu. Biri dağıtık bir yapay zekâ çalışma alanı, diğeri SQL Server üzerinde bir masaüstü uygulaması. İkisi birlikte yaptığım işin büyük bölümü.",
+    "ctaLead": "Birlikte çalışmak ister misiniz?",
+    "cta": "İletişime geçin",
     "labels": {
       "problem": "Problem",
       "architecture": "Mimari",

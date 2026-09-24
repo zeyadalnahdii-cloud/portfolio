@@ -14,7 +14,8 @@
     "assert:routes": "node scripts/assert-routes.mjs",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "verify:metadata": "node scripts/verify-metadata.mjs"
+    "verify:metadata": "node scripts/verify-metadata.mjs",
+    "verify:links": "node scripts/verify-links.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
