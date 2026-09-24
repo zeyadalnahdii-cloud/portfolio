@@ -685,7 +685,7 @@ rather than reasoned.
 wrong. Changing them is the point of this task, not a sign the plan failed.
 
 
-**Status — complete, with the acceptance condition narrowed deliberately.**
+**Status — CLOSED 2026-09-26. Not open for further keyword research.**
 
 **Step 1** measured the identity and head terms across three markets. Seven
 terms carry a figure, a market and a source, recorded in `02` §1. Two findings
@@ -703,14 +703,25 @@ explicitly; nothing in the document is presented as validated by them.
 now `Full Stack Developer` in all three locales, with each locale's measured term
 alongside it.
 
-**The "Done when" was narrowed, not met as written.** It said the `02` §1 caveat
-could be *removed*, because the terms would be measured. The long-tail tier is
-**not** measured and was not pursued, so removing the caveat outright would have
-made the document claim more than was done. It is replaced with a scoped
-statement: measured terms listed with source and market, everything else marked
-reasoned, and Search Console at +30 days named as the next real data — which
-`02` §1 always called the only real data. **This is a deliberate narrowing of the
-criterion, recorded rather than reworded into a pass.**
+**The original completion criterion was intentionally narrowed, by owner
+decision.** As written it said the `02` §1 caveat could be *removed*, because
+every term would be measured. It is not removed; it is scoped.
+
+The owner's decision, recorded verbatim in substance: sufficient measured
+head, identity and AI data was collected to make the site-level decisions, and
+**the remaining long-tail hypotheses are not claimed as validated**. Autocomplete
+and "People also ask" were intentionally not pursued. **Post-launch Search
+Console query data is the next validation source** — which `02` §1 always called
+the only real data.
+
+This is recorded as a narrowing of the criterion, not as the criterion having
+been met, and not as the criterion having been reworded to fit. The distinction
+matters: a future reader must be able to see that the long-tail tier in `02` §3
+carries no measurement behind it.
+
+**T-205 is closed.** It does not reopen for more keyword work. The next keyword
+input to this project arrives from Search Console after launch (`08`,
+post-launch verification window, +30 days).
 
 Withdrawn as SEO targets (all reasoned, never measured): the psychology
 differentiator terms, the Aksaray geo terms, and the claim that Arabic RAG was

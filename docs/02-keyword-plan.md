@@ -38,14 +38,16 @@ Two findings changed the plan rather than confirming it:
 
 ### Not measured, and deliberately so
 
-Autocomplete and "People also ask" were **not pursued**. The measured set above
-was sufficient for the decisions that had to be made, and the remaining
-questions are ranking questions rather than term-selection questions. Nothing in
-this document should be read as validated by them.
+Autocomplete and "People also ask" were **not pursued — an explicit owner
+decision**, not an oversight. The measured set above was sufficient for the
+site-level decisions, and the remaining questions are ranking questions rather
+than term-selection questions. Nothing in this document should be read as
+validated by them.
 
-The **long-tail tier in §3 is unvalidated**. It is retained as evidence and as
-supporting terms, not promoted to any route's primary keyword. Its volumes are
-expected to be near zero; that was never the argument for it.
+The **long-tail tier in §3 is unvalidated and is not claimed otherwise.** It is
+retained as evidence and as supporting terms, never promoted to any route's
+primary keyword. Its volumes are expected to be near zero; that was never the
+argument for it. T-205 closed with these terms still hypotheses, by decision.
 
 **The next real data is Search Console *Performance → Queries* after 30 days
 live** — which §1 has always said is the only real data, and which no keyword
