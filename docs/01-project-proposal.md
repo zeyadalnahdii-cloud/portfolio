@@ -80,7 +80,7 @@ G1–G4 are gates. G5 is observed, not targeted, until there is baseline data.
 **In scope**
 - Four pages — Home, About, Projects, Contact — in three locales = 12 routes.
 - Two project entries presented as cards on the Projects page (no per-project routes in v1; see §7).
-- Contact form, downloadable CV per locale, dark mode, full RTL for Arabic.
+- Contact form, downloadable CV (one English PDF on all three locales — T-206), dark mode, full RTL for Arabic.
 - Complete technical SEO layer, implemented from Sprint 1 (not retrofitted).
 
 **Out of scope for v1** — requires explicit scope change

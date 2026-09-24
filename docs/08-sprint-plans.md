@@ -85,7 +85,7 @@ absolute canonicals and `hreflang` cannot be verified against a placeholder orig
 - [ ] English copy for all four pages (`02` §5 outlines)
 - [ ] Arabic copy — owner-native, written not translated
 - [ ] Turkish copy — drafted, then **native review (D4)**
-- [ ] CV in three locales, canonical name spelling in filenames (F-34)
+- [x] CV — one English PDF served on all three locales, canonical name spelling in the filename (F-34, T-206)
 - [ ] Keyword validation against real tool data (`02` §1) — adjust titles if warranted
 
 Content is the critical path in this sprint, not the code. Four pages × three
