@@ -1224,44 +1224,544 @@ this gate does.
 | Contact form goes dynamic | The performance budget goes with it | Keep the handler at the edge; `assert:routes` catches the rest |
 
 ---
-
 # Sprint 3 — Hardening & launch
 
-Enumerated only. Expanded when Sprint 2 closes.
+**Goal:** meet the performance and accessibility budgets, deploy, verify indexing.
 
-| ID | Task | Size | Depends on |
+## What changed since these tasks were enumerated
+
+Sprint 2 overtook four of them. Writing them up as fresh work would mean doing
+it twice and reporting it as progress.
+
+| Task | Enumerated as | Actual state |
+|---|---|---|
+| T-307 | axe, zero violations, all 12 | **Largely done.** T-220 runs axe on all 12 routes in **both themes** on every pull request, and it is a required check. What remains is running it against the deployed site. Rescoped to **S**. |
+| T-308 | Contrast audit, both themes | **Largely done.** T-219 audited every pair in both themes and fixed two dark-mode failures; `tests/contrast.test.ts` guards them. What remains is the handful of states axe cannot see. Rescoped to **S**. |
+| T-313 | Full CI pipeline enforcing | **Half done.** T-220 promoted `metadata` and `axe` and made all four checks required on `main` and `dev`. What remains is `lighthouse` (§2.4) and `links` (§2.7). |
+| T-318 | Repository READMEs in English | **Justification removed.** See the task. |
+
+Two facts from Sprint 2 constrain this sprint and are easy to plan around
+wrongly:
+
+- **Only 8 of the 12 routes are indexable.** `tr` is `reviewed: false` pending
+  **D4**, so the four Turkish routes carry `noindex` and are absent from the
+  sitemap. This is the indexing gate working as designed, not a defect — but
+  **G2 ("12/12 indexed") cannot be met until D4 resolves**, and T-314…T-316
+  must be planned against 8, not 12.
+- **D1 (domain) blocks everything from T-311 onward** — half the sprint.
+  T-301…T-310 and T-320 need no domain and should run first.
+
+---
+
+## Days 1–5 — Performance & accessibility
+
+### T-301 · Lighthouse baseline — M
+
+**Depends on:** T-221
+**Requirements:** P-01…P-05, A-02, G3, `09` §2.4
+
+**Steps**
+
+1. Run Lighthouse against a production build of all 12 routes, **mobile preset,
+   throttled**.
+2. Build with `VERCEL_ENV=production`. Without it the build is treated as a
+   preview and served with a blanket `X-Robots-Tag: noindex`.
+3. Record all four category scores **per route** in a table, with the Chrome
+   version and throttling settings.
+4. Fix nothing. This is the baseline T-302…T-305 work against.
+
+**Done when:** 48 numbers recorded (12 routes × 4 categories), reproducible.
+
+**Watch out:** do not average across routes — an average hides the one route
+that fails. And building without `VERCEL_ENV=production` has already produced
+false SEO readings of 66 on this project **twice**; the noindex is invisible in
+the page and shows only in the response header.
+
+---
+
+### T-302 · LCP — M
+
+**Depends on:** T-301
+**Requirements:** P-01 (< 2.5s), `06` §2.2
+
+**Steps**
+
+1. Identify the actual LCP element on each route from the Lighthouse trace —
+   read it, do not assume it.
+2. Confirm it is text. The design has no hero image, carousel or background
+   video specifically so that it would be (`06` §2.2).
+3. If a font swap delays it, check `font-display` and whether the face is
+   preloaded.
+4. Re-measure the slowest route after each change.
+
+**Done when:** LCP < 2.5s on all 12 routes at mobile throttling, and the LCP
+element is text on every one.
+
+**Watch out:** Arabic loads a different font file from Latin. `/ar` can have a
+text LCP and still be late because the Arabic face blocks paint. Measure `/ar`
+separately; never extrapolate from `/en`.
+
+---
+
+### T-303 · CLS — M
+
+**Depends on:** T-301
+**Requirements:** P-02 (< 0.1)
+
+**Steps**
+
+1. Audit every element whose size is not reserved before paint.
+2. Confirm the known reservations still hold: the form error slot (`min-h-5`,
+   so an appearing error does not push the next field down) and the Home
+   project cards (`min-h-56`).
+3. Measure with a **cold font cache**, not a warm one.
+4. Include the mobile navigation opening, which overlays rather than reflows —
+   confirm that is still true after T-219's `z-10`.
+
+**Done when:** CLS < 0.1 on all 12 routes on a cold load.
+
+**Watch out:** CLS is frequently 0.00 on a warm cache and non-zero on a first
+visit, which is the only visit that matters for a stranger arriving from search.
+A warm-cache pass proves nothing.
+
+---
+
+### T-304 · INP — M
+
+**Depends on:** T-301
+**Requirements:** P-03 (< 200ms)
+
+**Steps**
+
+1. Measure the four real interactions: theme toggle, mobile menu open/close,
+   language switch, form submit.
+2. Measure on a throttled CPU, not a desktop.
+3. Measure the language switcher on `/ar` — it is a navigation, so it carries
+   the cost of a document load.
+
+**Done when:** INP < 200ms for every interaction on every locale.
+
+**Watch out:** a mostly static site has very few interactions, so field data may
+never accumulate enough samples to report INP at all. That is not a pass — it
+means the lab measurement is the only evidence there will be, so take it
+deliberately rather than assuming a static site is safe.
+
+---
+
+### T-305 · Bundle analysis — M
+
+**Depends on:** T-301
+**Requirements:** P-05 (< 150KB gzipped per route)
+
+**Steps**
+
+1. Read per-route JS from the build output.
+2. Identify the largest contributor on the heaviest route.
+3. Confirm the client bundle does **not** contain all three locales' messages.
+
+**Done when:** every route under 150KB gzipped, with the figure recorded per
+route.
+
+**Watch out:** step 3 is the specific regression to hunt. `lib/i18n/messages`
+holds all three locales in one typed registry; it is imported by server
+components, which is free. The moment any **client** component imports
+`getMessages`, the entire trilingual payload — including two locales the visitor
+will never read — lands in the browser bundle. It will still build, still render
+correctly, and still pass every other gate.
+
+---
+
+### T-306 · Font subset isolation — S
+
+**Depends on:** T-123
+**Requirements:** P-09
+
+**Steps**
+
+1. Load `/en` and `/tr` with a clean cache and record **every font request** off
+   the network panel.
+2. Confirm no Arabic subset is among them.
+3. Load `/ar` and confirm the Arabic face **is** requested — the check must fail
+   in both directions.
+
+**Done when:** measured from network requests on all three locales.
+
+**Watch out:** verify by measurement, never by reading the layout code. This
+project has already shipped a circular Tailwind token
+(`--font-sans: var(--font-sans)`) that resolved to nothing: the build passed,
+the pages rendered, and **zero fonts were requested at all**. Reading the config
+would have confirmed the fonts were configured correctly. Only the network panel
+showed the truth.
+
+---
+
+### T-307 · axe against the deployed site — S
+
+**Depends on:** T-311
+**Requirements:** A-01
+
+**Rescoped.** T-220 already runs axe over all 12 routes in both themes on every
+pull request, as a required check, and it is green.
+
+**Steps**
+
+1. Run `npm run verify:axe -- https://<domain>` against production.
+2. Confirm zero violations.
+
+**Done when:** the deployed origin returns zero violations.
+
+**Watch out:** do not redo T-219. The value here is only that CI tests a local
+build, and a CDN, a redirect or an injected analytics tag can differ from it.
+
+---
+
+### T-308 · The states axe cannot see — S
+
+**Depends on:** T-307
+**Requirements:** A-03, A-05
+
+**Rescoped.** T-219 audited every token pair in both themes, fixed two
+dark-mode failures, and `tests/contrast.test.ts` now guards all of them.
+
+**Steps**
+
+1. Check what automated contrast checking structurally cannot: the **disabled**
+   submit button (`disabled:opacity-60` — opacity composites, so the effective
+   ratio is not the token ratio), placeholder text if any is added, and the
+   focus ring where it falls on `--surface` rather than `--bg`.
+2. Check both themes.
+
+**Done when:** each state measured and recorded, or confirmed absent.
+
+**Watch out:** axe skips elements it considers non-text or indeterminate, and
+reports nothing rather than a failure. Silence from axe is not a pass for these.
+
+---
+
+### T-309 · Keyboard walkthrough — M
+
+**Depends on:** T-307
+**Requirements:** A-04, A-05
+
+**Steps**
+
+1. Tab through all 12 routes. The skip link must be the first stop.
+2. Open the mobile menu by keyboard, confirm focus behaviour and that focus
+   returns to the toggle on close.
+3. Language switcher, theme toggle, every form field and the submit.
+4. Confirm a visible focus indicator at every stop (A-05).
+5. Repeat on `/ar`.
+
+**Done when:** every interactive element reachable, no trap, visible focus
+throughout, in all three locales.
+
+**Watch out:** **RTL does not reorder the DOM.** Focus follows DOM order, so on
+an Arabic page the visual right-to-left order and the tab order can disagree —
+the eye moves right-to-left while focus moves in source order. Nothing reports
+this; it has to be watched. Check the header especially, where the nav is
+`ms-auto` and the switcher and toggle sit beside it.
+
+---
+
+### T-310 · Screen reader pass on the form — M
+
+**Depends on:** T-307
+**Requirements:** A-07, A-08
+
+**Steps**
+
+1. With Orca or NVDA, submit the form empty and confirm each error is announced
+   and tied to its field via `aria-describedby`.
+2. Confirm the status region announces success and failure (`aria-live`).
+3. Confirm `aria-busy` during submission is not announced as a loop.
+4. Repeat on `/ar` with an Arabic voice if one is available; otherwise record
+   that the Arabic pass is unverified rather than claiming it.
+
+**Done when:** every error and status change is announced, in at least `en`.
+
+**Watch out:** the error slot is always present (`min-h-5`, reserved for CLS),
+so the announcement depends on a **text change inside an existing node**, not on
+a node being inserted. Those behave differently across screen readers, and the
+CLS fix is what makes this the harder case. Do not assume `aria-live` works
+because the markup looks right.
+
+---
+
+## Days 6–10 — Deploy & verify
+
+### T-311 · Production deploy — M
+
+**Depends on:** **D1**
+**Requirements:** X-07, `01` §6
+
+**Steps**
+
+1. Purchase the domain. `zeyadalnahdi.com` is the recommendation in `01` §6.
+2. Set `NEXT_PUBLIC_SITE_URL` in the Vercel project to the exact origin.
+3. Attach the custom domain, confirm HTTPS, redirect `www` → apex.
+4. Re-run `verify:metadata`, `verify:links` and `verify:axe` **against the live
+   host**.
+
+**Done when:** all 12 routes reachable over HTTPS at the canonical host, and all
+three scripts pass against it.
+
+**Watch out:** `lib/seo/origin.ts` throws at module load — and therefore fails
+the build — on a trailing slash, an `http` scheme, a path, or a loopback host.
+That is deliberate; set the variable exactly. Separately: **the email handle
+carries a doubled `i` (`zeyadalnahdii@`) that must not propagate to the domain**
+(`01` §6).
+
+---
+
+### T-312 · Preview isolation — S
+
+**Depends on:** T-311
+**Requirements:** X-06
+
+**Steps**
+
+1. `curl -I` a real `*.vercel.app` preview URL and confirm
+   `X-Robots-Tag: noindex`.
+2. `curl -I` the production host and confirm the header is **absent**.
+
+**Done when:** both directions confirmed by response header.
+
+**Watch out:** verify by request, never by reading the config — the requirement
+says so explicitly. Step 2 matters as much as step 1: a single switch
+(`VERCEL_ENV === 'production'`) controls both, so a mistake that noindexes
+previews correctly can just as easily noindex production, and that failure is
+silent, invisible in the page, and costs the launch.
+
+---
+
+### T-313 · Full pipeline enforcing — M
+
+**Depends on:** T-311
+**Requirements:** `09` §2.4, §2.7, §6
+
+**Half done.** T-220 promoted `metadata` and `axe`, and `validate`, `build`,
+`metadata` and `axe` are required on `main` and `dev`.
+
+**Steps**
+
+1. Add the `lighthouse` job (§2.4) against the deployed preview, with the
+   budgets as thresholds.
+2. Add the `links` job (§2.7) — broken internal links and redirect chains
+   against the deployment. External links warn only.
+3. Add both to the required contexts on `main` and `dev`.
+
+**Done when:** all six checks required, and a pull request breaking any of them
+cannot merge.
+
+**Watch out:** a required context name that never reports **blocks every pull
+request forever**, and one that does not match a job name requires nothing at
+all — both fail silently and in opposite directions. Verify the names against
+what CI actually reports, as T-220 did, rather than against the workflow file.
+
+---
+
+### T-314 · Search Console — S
+
+**Depends on:** T-311
+**Requirements:** G2, G6
+
+**Steps**
+
+1. Verify the domain by DNS TXT record.
+2. Submit `/sitemap.xml`.
+3. Confirm it is accepted and read.
+
+**Done when:** the property is verified and the sitemap is accepted.
+
+**Watch out:** the sitemap lists **8 URLs, not 12**, because `tr` is
+`reviewed: false`. That is correct and must not be "fixed" by adding the Turkish
+routes — submitting a `noindex` URL is a contradiction Search Console reports as
+an error against the whole sitemap.
+
+---
+
+### T-315 · Request indexing — S
+
+**Depends on:** T-314
+**Requirements:** G2
+
+**Steps**
+
+1. Request indexing for the **8 indexable routes**.
+2. Record that the 4 Turkish routes are deliberately excluded, blocked on D4.
+
+**Done when:** 8 of 8 indexable routes submitted.
+
+**Watch out:** the enumerated version of this task said "all 12 routes". That
+is now wrong and would inject 4 errors. **G2's "12/12" target cannot be met
+until D4 resolves** — treat 8/8 as the Sprint 3 criterion and G2 as carried.
+
+---
+
+### T-316 · hreflang confirmation — S
+
+**Depends on:** T-314
+**Requirements:** G6, I-07
+
+**Steps**
+
+1. Check the International Targeting report for `hreflang` errors.
+2. Confirm zero.
+
+**Done when:** zero errors reported, or the report confirmed as not yet
+populated.
+
+**Watch out:** T-220's `metadata` job already proves reciprocity structurally on
+every pull request, so errors here would mean Google disagrees with our reading
+of the spec — worth taking seriously rather than dismissing. Also, the report
+lags crawling by days: **zero errors immediately after launch most likely means
+"not yet crawled", not "correct"**. Do not sign this off early.
+
+---
+
+### T-317 · Profile back-links — S
+
+**Depends on:** T-311
+**Requirements:** `02` §2, G1
+
+**Steps**
+
+1. Set the canonical name spelling on GitHub and LinkedIn.
+2. Add the domain to both profiles.
+
+**Done when:** both profiles link to the domain.
+
+**Watch out:** this is one of only two tasks that do work **outside** this
+repository, and it carries more weight for G1 than anything on-page. The
+`rel="me"` links the site already ships only consolidate the name entity **if
+the profiles link back** — a one-directional `rel="me"` is the same failure
+class as a one-directional `hreflang`, and just as invisible.
+
+---
+
+### T-318 · Repository READMEs — descoped, owner's call
+
+**Depends on:** ~~D2/D3~~ — **resolved**
+**Requirements:** `07` §8, `01` §7.2
+
+**The justification for this task no longer holds.** It existed because the
+README is the first thing a visitor arriving from the Projects page reads
+(`01` §7.1). **D2/D3 resolved that both repositories stay private**, so the
+Projects page carries no repository links and no portfolio visitor will ever
+reach either README.
+
+**Recommendation: drop it from Sprint 3.** It is real work with no remaining
+portfolio value. It becomes worth doing again only if the repositories are ever
+made public — and `01` §7.1 still records that `ai-autonomous-workspace`'s README
+is stale by seven sprints, so the note stays there against that possibility.
+
+**Decision needed from the owner:** drop, or keep as unrelated housekeeping.
+
+---
+
+### T-319 · Sprint 3 gate — M
+
+**Depends on:** all of the above
+**Requirements:** `08` Sprint 3 gate
+
+**Steps**
+
+1. Run every check in the `08` gate table against production.
+2. Record each as pass, fail or blocked, with the measurement.
+3. Do not reword a criterion to make it pass.
+
+**Done when:** every row has a verdict and the exceptions are named.
+
+**Watch out:** two rows cannot pass as written. **G2 (12/12 indexed)** is capped
+at 8/12 by D4. **G1 (ranking)** cannot be evaluated at launch at all — it has a
+60-day horizon and belongs to the post-launch verification window. Record both
+as carried, with the reason, rather than as failures or as passes.
+
+---
+
+### T-320 · Localised 404 — M
+
+**Depends on:** nothing
+**Requirements:** F-08, `05` §4.2
+
+Carries the open half of **T-214**. X-04 is met; F-08 is not.
+
+**Start from the T-214 findings, not from the beginning.** Three hypotheses were
+tested against running production builds and two restructures were built,
+measured and reverted:
+
+| Hypothesis | Result |
+|---|---|
+| The component throws | **Disproved** — a trivial hardcoded component behaves identically |
+| `dynamicParams = false` blocks the catch-all | **Confirmed blocker**, and it cannot be overridden per segment |
+| No root layout for the not-found boundary | **Confirmed root cause** — the component renders, but Next wraps it in `<html id="__next_error__">` |
+
+| Restructure | Build | `lang`/`dir` on 12 routes | Localised 404 |
 |---|---|---|---|
-| T-301 | Lighthouse pass, all 12 routes, mobile throttled | M | T-221 |
-| T-302 | LCP work — confirm the LCP element is text | M | T-301 |
-| T-303 | CLS work — reserved space audit | M | T-301 |
-| T-304 | INP work | M | T-301 |
-| T-305 | Bundle analysis — under 150KB gzipped per route | M | T-301 |
-| T-306 | Verify Arabic subset absent on `/en` and `/tr` | S | T-123 |
-| T-307 | axe — zero violations, all 12 | M | T-301 |
-| T-308 | Contrast audit, both themes | M | T-307 |
-| T-309 | Keyboard walkthrough per locale, RTL focus order | M | T-307 |
-| T-310 | Screen reader pass on the form | M | T-307 |
-| T-311 | Production deploy, domain, HTTPS, `www` → apex | M | **D1** |
-| T-312 | Verify preview `noindex` by request | S | T-311 |
-| T-313 | Full CI pipeline enforcing | M | T-311 |
-| T-314 | Search Console: verify, submit sitemap | S | T-311 |
-| T-315 | Request indexing, all 12 routes | S | T-314 |
-| T-316 | Confirm zero `hreflang` errors | S | T-314 |
-| T-317 | GitHub + LinkedIn: canonical name, link to domain | S | T-311 |
-| T-318 | Repository READMEs in English | M | **D2/D3** |
-| T-319 | Sprint 3 gate | M | all |
-| T-320 | Localised 404 (F-08), deferred from T-214 | M | — |
+| Pass-through root (`return children`) | passes | preserved | **no** |
+| Root with `<html>`, locale layout without | passes | **lost entirely** | **no** |
 
-> **T-320** carries the open half of T-214. X-04 is already met; F-08 is not.
-> The investigation is written up under T-214 above — three hypotheses tested,
-> two restructure shapes built and measured, all reverted. Start from those
-> findings rather than from the beginning: what is left to try is a newer
-> Next.js release, or the middleware rewrite that T-102 ruled out and that
-> would cost the site its fully static build.
+Both shapes pay a cost and collect nothing.
 
-> T-317 and T-318 are the only tasks that do work **outside** this repository, and they
-> carry more weight for G1 than anything on-page. The `rel="me"` links only consolidate
-> the name entity if the profiles link back.
+**Steps**
+
+1. Re-test on the current Next.js release — the blocker is a framework
+   behaviour, and this is the cheapest thing that could have changed.
+2. If it still fails, decide explicitly between: accepting Next's default 404,
+   or the middleware rewrite T-102 ruled out.
+3. If a page ships, add the **404 → Home** link (T-218 step 1, the one link that
+   could not be built) and review it in all four combinations (T-219 step 2, the
+   one screen that could not be reviewed). The copy `notFound.backHome` is
+   already written in all three locales.
+
+**Done when:** either a localised 404 ships with its link and review, or the
+decision to keep Next's default is recorded with its cost.
+
+**Watch out:** the middleware option is not a small change — it costs the site
+its fully static build, which is the foundation of the entire performance
+budget. It is a trade against P-01…P-05, not a fix. Do not take it to close a
+task.
+
+---
+
+## Carried from Sprint 2
+
+Open, and some of it gates Sprint 3.
+
+| Item | Blocks | State |
+|---|---|---|
+| **T-204** Turkish native review | **G2**, T-315 | Blocked on **D4** — no reviewer found |
+| **T-205** keyword validation | — | Pending |
+| **T-206** CVs per locale | F-20 | Pending — the About CV section renders only once the files exist |
+| **T-213** real email delivery | C-04 | Unverified — needs a domain, so effectively **D1** |
+| **T-221** Sprint 2 gate | T-301 | Not yet run |
+
+---
+
+## Sequencing
+
+**Start with T-320.** It depends on nothing, needs no decision, and closes the
+two loose ends the last two tasks left open — T-218's missing link and T-219's
+unreviewable screen.
+
+Then **T-301 → T-306** and **T-309, T-310**: all of the performance and
+accessibility work needs neither the domain nor a reviewer.
+
+**D1 gates the second half entirely** — T-311 and everything after it. It has
+been open since Sprint 1 and is now the single largest risk to the sprint.
+**D4 caps G2** regardless of anything done here.
+
+---
+
+## Risks specific to this sprint
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| **D1 still unresolved** | Half the sprint cannot start; there is no launch | Resolve before day 5 — T-301…T-310 and T-320 buy exactly that much runway |
+| D4 still unresolved | `/tr` ships `noindex`; G2 capped at 8/12 | Controlled degradation by design (I-14); record it, do not paper over it |
+| T-320 blocked again by the framework | F-08 ships unmet for a second sprint | Decide explicitly (step 2) rather than re-investigating a third time |
+| Lighthouse measured on a non-production build | False SEO scores near 66; wrong work prioritised | Already bitten twice — `VERCEL_ENV=production` is in T-301 step 2 for that reason |
+| Indexing verified too early | A green sign-off that means "not yet crawled" | The post-launch window in `08` exists for this; do not pull its checks into T-319 |
 
 ---
 
