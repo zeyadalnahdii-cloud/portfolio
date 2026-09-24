@@ -195,10 +195,47 @@ are a proxy for them, not the goal.
 | Sprint | State |
 |---|---|
 | S1 | `validate`, `build`, `test` enforcing. `lighthouse`, `axe`, `metadata` running in report-only mode |
-| S2 | `metadata` and `axe` promoted to blocking |
+| S2 | `metadata` and `axe` promoted to blocking — **done, T-220** |
 | S3 | `lighthouse` promoted to blocking; preview `noindex` assertion added; full pipeline enforcing |
 
 Gates start report-only and are promoted once the codebase can actually pass them.
 A gate introduced as blocking before the code can satisfy it gets disabled within a
 week — and a disabled gate is worse than no gate, because everyone assumes it is
 still running.
+
+**T-220 note.** Promotion needs two things, not one. The jobs must be in the
+workflow *and* be required status checks — a job that merely runs is advisory,
+and a red advisory check is something people learn to merge past.
+
+Both halves are done. `validate`, `build`, `metadata` and `axe` are required
+status checks on **`main` and `dev`**, with `strict` on so a branch must be up
+to date before it merges.
+
+`dev` previously had no protection at all, which meant even `validate` and
+`build` were unenforced on the branch every pull request in this project
+actually targets. Requiring the gates only on `main` would have left that gap
+open.
+
+The protection was applied with, for `BR` in `main` and `dev`:
+
+```sh
+gh api -X PUT repos/:owner/:repo/branches/$BR/protection --input - <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["validate", "build", "metadata", "axe"]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": null,
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+JSON
+```
+
+The `metadata` and `axe` jobs build with `VERCEL_ENV=production`. Without it the
+deployment is treated as a preview and served with a blanket
+`X-Robots-Tag: noindex`, so the jobs would be inspecting a page nobody will be
+served. The Sprint 3 preview-`noindex` assertion in §6 is the other half of
+this and is deliberately not implemented here.
