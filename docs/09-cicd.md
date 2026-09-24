@@ -207,14 +207,16 @@ still running.
 workflow *and* be required status checks — a job that merely runs is advisory,
 and a red advisory check is something people learn to merge past.
 
-The jobs are in the workflow and passing. **The branch-protection half is
-outstanding and is the owner's to apply**; it is a repository setting, not a
-change to this repository's contents. Current state: `main` requires `validate`
-and `build`; **`dev` has no protection at all**. Since every pull request in
-this project targets `dev`, requiring the gates only on `main` would leave them
-unenforced where it matters.
+Both halves are done. `validate`, `build`, `metadata` and `axe` are required
+status checks on **`main` and `dev`**, with `strict` on so a branch must be up
+to date before it merges.
 
-To finish the promotion, for `BR` in `main` and `dev`:
+`dev` previously had no protection at all, which meant even `validate` and
+`build` were unenforced on the branch every pull request in this project
+actually targets. Requiring the gates only on `main` would have left that gap
+open.
+
+The protection was applied with, for `BR` in `main` and `dev`:
 
 ```sh
 gh api -X PUT repos/:owner/:repo/branches/$BR/protection --input - <<'JSON'
