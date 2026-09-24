@@ -1116,7 +1116,10 @@ place, because a one-directional `hreflang` set renders perfectly and is
 undetectable by eye.
 
 
-**Status — complete.**
+**Status — steps 1 and 2 complete; step 3 half done.** Both jobs exist, run on
+every pull request and pass. Making them *required* is a repository setting the
+owner must apply — see `09` §6 for the exact command. Until then the gates are
+advisory, and the done-when is not yet true.
 
 **Step 1.** `scripts/verify-metadata.mjs` already covered M-01…M-04, M-09 and
 M-10. Extended with the rest of the §2.6 table: `lang`/`dir` (I-05, I-06),
@@ -1140,12 +1143,18 @@ T-219 found two contrast failures that existed only in dark mode, on every
 button on the site; a light-only run was green while the primary CTA was
 unreadable.
 
-**Step 3.** Both jobs added to `.github/workflows/ci.yml` and made **required
-status checks**. This was two things, not one: a job that merely runs is
-advisory, and a red advisory check is something people learn to merge past.
-`dev` had **no branch protection at all**, so requiring them only on `main`
-would have left every pull request we actually open unguarded. `validate`,
-`build`, `metadata` and `axe` are now required on both branches.
+**Step 3 — partially blocked.** Both jobs are in
+`.github/workflows/ci.yml` and green. They are **not yet required status
+checks**, so a pull request that breaks them can still be merged today.
+
+This is two things, not one: a job that merely runs is advisory, and a red
+advisory check is something people learn to merge past. Current protection:
+`main` requires `validate` and `build`; **`dev` has none at all**. Every pull
+request in this project targets `dev`, so protecting only `main` would leave the
+gates unenforced where they are actually used.
+
+Applying protection is a repository setting rather than a change to the
+repository's contents, and it is the owner's to make. The command is in `09` §6.
 
 Both jobs build with `VERCEL_ENV=production`; otherwise the deployment is
 treated as a preview and served with a blanket `X-Robots-Tag: noindex`, and the

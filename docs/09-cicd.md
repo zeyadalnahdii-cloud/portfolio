@@ -203,12 +203,34 @@ A gate introduced as blocking before the code can satisfy it gets disabled withi
 week — and a disabled gate is worse than no gate, because everyone assumes it is
 still running.
 
-**T-220 note.** Promotion needed two things, not one. The jobs were added to the
-workflow *and* made required status checks — a job that merely runs is advisory,
-and a red advisory check is something people learn to merge past. `dev` had no
-branch protection at all, so the gates are now required on `dev` as well as
-`main`; requiring them only on `main` would have left every pull request we
-actually open unguarded.
+**T-220 note.** Promotion needs two things, not one. The jobs must be in the
+workflow *and* be required status checks — a job that merely runs is advisory,
+and a red advisory check is something people learn to merge past.
+
+The jobs are in the workflow and passing. **The branch-protection half is
+outstanding and is the owner's to apply**; it is a repository setting, not a
+change to this repository's contents. Current state: `main` requires `validate`
+and `build`; **`dev` has no protection at all**. Since every pull request in
+this project targets `dev`, requiring the gates only on `main` would leave them
+unenforced where it matters.
+
+To finish the promotion, for `BR` in `main` and `dev`:
+
+```sh
+gh api -X PUT repos/:owner/:repo/branches/$BR/protection --input - <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["validate", "build", "metadata", "axe"]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": null,
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+JSON
+```
 
 The `metadata` and `axe` jobs build with `VERCEL_ENV=production`. Without it the
 deployment is treated as a preview and served with a blanket
