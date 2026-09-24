@@ -733,19 +733,51 @@ native review of the Turkish prose — but no longer gates this keyword choice.
 
 ---
 
-### T-206 · CV, three locales — M
+### T-206 · CV download — M
 
 **Depends on:** T-201
 **Requirements:** F-34
 
-**Steps**
+**Steps** *(step 1 revised by owner decision, 2026-09-26)*
 
-1. One PDF per locale in `public/`.
-2. Filenames carry the canonical name spelling — `Zeyad-Alnahdi-CV-en.pdf` —
+1. ~~One PDF per locale in `public/`.~~ **One English PDF, served on all three
+   locales.** The CV is deliberately not translated and there are not three
+   files. The UI around the download stays localised; the document is English.
+2. Filenames carry the canonical name spelling — `Zeyad-Alnahdi-CV.pdf` —
    because the filename is visible in the URL and in the reader's downloads.
+   (No `-en` / `-tr` / `-ar` suffix, since there is one file.)
 3. Link from About with the file size and format in the link text.
 
-**Done when:** each locale's About page offers its own CV and the links resolve.
+**Done when:** every locale's About page offers the CV and the link resolves.
+
+**Status — complete, 2026-09-26.**
+
+`public/cv/Zeyad-Alnahdi-CV.pdf` (71,148 bytes). `lib/cv.ts` serves one path
+for every locale and measures the size from the file rather than hardcoding
+it — a written-down number is wrong the first time the CV is replaced, and
+nothing would report it. The link carries `hreflang="en"` and
+`type="application/pdf"`, so the document's language is stated to a machine
+even though the label is localised. Size renders in Western numerals in
+Arabic (`06` §3).
+
+`tests/cv.test.ts` pins the single-file decision, so a later change back to
+one-per-locale is deliberate rather than drift, and asserts the file really
+is a PDF rather than a placeholder.
+
+> **Open, and the owner's to resolve: the name on the CV does not match the
+> name on the site.** The document reads *Zeyad Saeed Sulaiman Bin Huwail*;
+> the site, `schema.ts` `name`, the `alternateName` list and **G1** are all
+> built on *Zeyad Alnahdi* / *زياد النهدي*. The filename follows step 2 and
+> uses the site's canonical spelling, which means the filename and the
+> document's own heading disagree. This is exactly the entity-consolidation
+> problem `02` §2 exists to prevent, and no code change fixes it — see the
+> watch-out below, which anticipated it.
+
+> Two smaller consistency notes: the CV publishes a phone number
+> (+90 534 293 28 92) that `01` §6 deliberately keeps off the site, and it
+> states *English: Elementary (A2)* while `01` §3 makes English-language
+> recruiters the priority-1 audience. Both are facts about the document, not
+> defects in the implementation.
 
 **Watch out:** the canonical spelling matters here as much as on the page. A CV
 filed as `cv-final-2.pdf` in someone's downloads folder is not findable later

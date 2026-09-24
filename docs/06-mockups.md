@@ -178,7 +178,7 @@ h2   Psychology, applied
 h2   What I'm looking for
      Freelance · remote · Aksaray-based, open to Ankara roles.
 
-     [ Download CV (PDF) ]                             ← F-34, per locale
+     [ Download CV (PDF) · 69 KB ]                     ← F-34, one English PDF
 ```
 
 ### 2.5 Contact

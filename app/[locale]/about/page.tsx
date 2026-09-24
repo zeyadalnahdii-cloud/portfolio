@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { cvPath, hasCv } from '@/lib/cv'
+import { CV_LANGUAGE, cvPath, cvSizeKb, hasCv } from '@/lib/cv'
 import { LOCALES, isLocale } from '@/lib/i18n/config'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
@@ -93,18 +93,29 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
         )}
 
         {/* Rendered only once the file exists (T-206). */}
-        {hasCv(locale) && (
+        {hasCv() && (
           <section aria-labelledby="cv-heading" className="mt-10">
             <h2 id="cv-heading" className="text-lg font-semibold">
               {t('cvHeading')}
             </h2>
             <p className="mt-3">
+              {/* F-34 wants the format and size in the link text, so nobody
+                clicks a download blind. The format is in the localised label;
+                the size is measured from the file at build time.
+
+                hreflang says the document is English whatever the page
+                language is — one CV serves all three locales by decision
+                (T-206), and this is where that is stated to a machine. The
+                size stays in Western numerals even in Arabic
+                (docs/06-mockups.md §3). */}
               <a
-                href={cvPath(locale)}
+                href={cvPath()}
                 download
+                hrefLang={CV_LANGUAGE}
+                type="application/pdf"
                 className="border-subtle hover:border-accent hover:text-accent focus-visible:outline-accent inline-block rounded-md border px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
               >
-                {t('cvDownload')}
+                {t('cvDownload')} · <span dir="ltr">{cvSizeKb()} KB</span>
               </a>
             </p>
           </section>
