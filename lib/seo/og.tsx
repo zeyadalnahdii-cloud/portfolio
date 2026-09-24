@@ -46,16 +46,61 @@ async function loadFont(pkg: string, file: string): Promise<ArrayBuffer> {
  * This is the dangerous failure of the three. A card with the words reversed
  * looks polished to anyone who does not read Arabic — the script is beautiful
  * and correctly joined, and only the order is wrong.
+ *
+ * T-205 made the line mixed-direction: the canonical job title is
+ * `Full Stack Developer`, in Latin, inside Arabic copy. Reversing per word
+ * would render it `Developer Stack Full` — correct letters, correct script for
+ * the Arabic half, and the English phrase backwards. So a run of consecutive
+ * non-Arabic tokens is kept together as ONE flex item and reverses as a unit,
+ * which is what the bidi algorithm would do with it.
  */
-function Line({ text, rtl, style }: { text: string; rtl: boolean; style: React.CSSProperties }) {
+const ARABIC = /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/
+
+/**
+ * Splits a line into flex items: one per Arabic word, one per *run* of
+ * adjacent non-Arabic tokens. Neutral tokens (punctuation, digits) attach to
+ * the run they sit beside rather than becoming items of their own.
+ */
+export function bidiRuns(text: string): string[] {
+  const runs: string[] = []
+  let latin: string[] = []
+
+  const flush = () => {
+    if (latin.length > 0) {
+      runs.push(latin.join(' '))
+      latin = []
+    }
+  }
+
+  for (const token of text.split(' ').filter((t) => t.length > 0)) {
+    if (ARABIC.test(token)) {
+      flush()
+      runs.push(token)
+    } else {
+      latin.push(token)
+    }
+  }
+
+  flush()
+  return runs
+}
+export function Line({
+  text,
+  rtl,
+  style,
+}: {
+  text: string
+  rtl: boolean
+  style: React.CSSProperties
+}) {
   if (!rtl) {
     return <div style={style}>{text}</div>
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row-reverse', gap: '0.28em', ...style }}>
-      {text.split(' ').map((word, index) => (
-        <span key={index}>{word}</span>
+      {bidiRuns(text).map((run, index) => (
+        <span key={index}>{run}</span>
       ))}
     </div>
   )

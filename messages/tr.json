@@ -27,26 +27,26 @@
   },
   "meta": {
     "home": {
-      "title": "Zeyad Alnahdi — Backend ve Masaüstü Geliştirici",
-      "description": "C#, ASP.NET Core ve SQL Server ile backend ve masaüstü uygulama geliştiricisi. Aksaray'da yaşıyor, freelance ve uzaktan çalışmaya açık."
+      "title": "Zeyad Alnahdi — Full Stack Developer",
+      "description": "C#, ASP.NET Core ve Next.js ile web ve masaüstü uygulamaları ve yapay zekâ destekli sistemler geliştiriyorum. Aksaray'da yaşıyorum."
     },
     "about": {
-      "title": "Hakkımda — Zeyad Alnahdi, Yazılım Geliştirici",
-      "description": "Psikoloji mezunu, kendi kendine yetişmiş backend geliştirici. Bu altyapının arayüz tasarımına, hata yönetimine ve veri modellemeye katkısı."
+      "title": "Hakkımda — Zeyad Alnahdi, Full Stack Developer",
+      "description": "Kendi kendine yetişmiş bir yazılımcı. Nasıl öğrendiğim, ne inşa ettiğim ve tasarım kararlarının arkasındaki düşünce."
     },
     "projects": {
-      "title": "Projeler — Backend ve Yapay Zekâ | Zeyad Alnahdi",
-      "description": "ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan RAG altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi."
+      "title": "Projeler — AI ve Full Stack Geliştirme | Zeyad Alnahdi",
+      "description": "ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan yapay zekâ altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi."
     },
     "contact": {
-      "title": "İletişim — Zeyad Alnahdi, Yazılım Geliştirici",
+      "title": "İletişim — Zeyad Alnahdi, Full Stack Developer",
       "description": "Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt."
     }
   },
   "home": {
     "name": "Zeyad Alnahdi",
-    "role": "Backend ve Masaüstü Uygulama Geliştirici",
-    "intro": "C#, ASP.NET Core ve SQL Server ile backend sistemleri ve masaüstü uygulamaları geliştiriyorum. İşimin çoğu kimsenin görmediği kısımda: biçimini koruyan veri modelleri, birbirine karışmayan katmanlar ve sessizce başarısız olmak yerine ne yaptığını söyleyen sistemler.",
+    "role": "Full Stack Developer",
+    "intro": "C#, ASP.NET Core ve Next.js ile web ve masaüstü uygulamaları, ayrıca yapay zekâ destekli sistemler geliştiriyorum. İşimin çoğu kimsenin görmediği kısımda: biçimini koruyan veri modelleri, birbirine karışmayan katmanlar ve sessizce başarısız olmak yerine ne yaptığını söyleyen sistemler.",
     "location": "Aksaray'da yaşıyorum. Freelance işlere ve uzaktan pozisyonlara açığım.",
     "stackHeading": "Kullandığım teknolojiler",
     "stack": [

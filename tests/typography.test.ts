@@ -80,7 +80,18 @@ describe('the review flag against untranslated copy', () => {
    * failure this guard exists to catch is a file left mirroring English
    * wholesale — and a loose rule would let that through.
    */
-  const ALLOWED_VALUES = new Set(['GitHub', 'LinkedIn', 'Zeyad Alnahdi', 'Problem'])
+  const ALLOWED_VALUES = new Set([
+    'GitHub',
+    'LinkedIn',
+    'Zeyad Alnahdi',
+    'Problem',
+    // The canonical professional title, deliberately identical in all three
+    // locales (T-205, docs/02-keyword-plan.md §3). Without this allowance the
+    // guard reads the Arabic role as untranslated and forces ar to
+    // reviewed: false, which would de-index all four Arabic routes over a
+    // string that is correct.
+    'Full Stack Developer',
+  ])
 
   const isAllowed = (key: string, value: string) =>
     ALLOWED_KEYS.test(key) || ALLOWED_VALUES.has(value)

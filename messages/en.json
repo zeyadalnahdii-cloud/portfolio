@@ -27,26 +27,26 @@
   },
   "meta": {
     "home": {
-      "title": "Zeyad Alnahdi — Backend & Desktop Developer",
-      "description": "Backend and desktop application developer working in C#, ASP.NET Core and SQL Server. Based in Aksaray, Turkey. Available for freelance and remote work."
+      "title": "Zeyad Alnahdi — Full Stack Developer",
+      "description": "Full stack developer building web and desktop applications in C#, ASP.NET Core and Next.js, including AI-powered systems. Based in Aksaray, Turkey."
     },
     "about": {
-      "title": "About Zeyad Alnahdi — Backend Developer",
-      "description": "Self-taught backend developer with a psychology degree. How that background shows up in the way I design interfaces, handle errors and model data."
+      "title": "About Zeyad Alnahdi — Full Stack Developer",
+      "description": "Self-taught software developer working in C#, ASP.NET Core, SQL Server and Next.js. How I learned, what I build, and the thinking behind it."
     },
     "projects": {
-      "title": "Projects — Backend & AI Systems | Zeyad Alnahdi",
-      "description": "An AI workspace with a self-hosted RAG pipeline in ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
+      "title": "Projects — AI and Full Stack Development | Zeyad Alnahdi",
+      "description": "An AI-powered workspace built on ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
     },
     "contact": {
-      "title": "Contact Zeyad Alnahdi — Backend Developer",
+      "title": "Contact Zeyad Alnahdi — Full Stack Developer",
       "description": "Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days."
     }
   },
   "home": {
     "name": "Zeyad Alnahdi",
-    "role": "Backend & Desktop Application Developer",
-    "intro": "I build backend systems and desktop applications in C#, ASP.NET Core and SQL Server. Most of my work is the part nobody sees: data models that hold their shape, layers that stay separate, and systems that say what they are doing instead of failing quietly.",
+    "role": "Full Stack Developer",
+    "intro": "I build web and desktop applications in C#, ASP.NET Core and Next.js, including AI-powered systems. Most of my work is the part nobody sees: data models that hold their shape, layers that stay separate, and systems that say what they are doing instead of failing quietly.",
     "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
     "stackHeading": "What I work with",
     "stack": [

@@ -20,7 +20,15 @@ the site is itself a work sample.
 
 ## 2. Positioning
 
-**Primary identity:** Backend & Desktop Application Developer
+**Primary identity:** Full Stack Developer
+
+> **Revised by T-205, 2026-09-25.** Previously "Backend & Desktop Application
+> Developer". `full stack developer` measures 12,100/mo in the US and matches what
+> the portfolio actually evidences — a four-layer ASP.NET Core system with a
+> Next.js frontend, and a desktop application over SQL Server. **AI is a secondary
+> positioning dimension**: the site says Zeyad builds AI-powered applications, and
+> never claims AI Engineer or ML Engineer. RAG, Qdrant, FastAPI and Ollama stay
+> inside the project case study as evidence, not as the search identity.
 **Core stack:** C# · ASP.NET Core · .NET · SQL Server / PostgreSQL · Clean Architecture ·
 Python/FastAPI · TypeScript/Next.js · Docker
 
