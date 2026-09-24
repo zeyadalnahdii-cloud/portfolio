@@ -37,15 +37,15 @@ ASP.NET Core system with a verified RAG pipeline (§7.1) and a three-tier deskto
 application over 37 stored procedures (§7.2). The site's job is to make that legible
 quickly, not to claim more than it.
 
-**Differentiator:** A psychology degree used as an *added capability*, not a career
-change narrative. Positioned as:
+**Differentiator:** measured engineering practice rather than a personal narrative
+— layered architecture, tests and CI on every change, and results recorded from real
+runs rather than estimated (`docs/runtime-verification.md`). The site shows the work,
+not a story about the work.
 
-> Builds software with a trained understanding of how people actually behave —
-> applied to interface clarity, error handling, and data modelling that matches
-> how users think rather than how databases are shaped.
-
-This is stated once, concretely, on About. It is not the headline on Home, and it
-is never framed as "I switched careers". The headline is the engineering.
+> **Revised 2026-09-26.** The previous differentiator was a psychology degree framed
+> as an added capability. **Psychology is now removed from the site entirely** — the
+> About section, the intro framing and this positioning. It remains in the
+> downloadable CV. `03` F-31 is withdrawn accordingly.
 
 ## 3. Audiences and language strategy
 
