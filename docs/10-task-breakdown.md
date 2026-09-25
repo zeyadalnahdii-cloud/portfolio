@@ -1400,6 +1400,47 @@ Execution order, respecting dependencies:
   verified custom domain. A candidate, not a promise — and an unavailable or
   failed test is recorded as such, never converted into a pass.
 
+#### Outcome 2026-09-27, once the interim host existed
+
+**Rich Results Test — still cannot run, and now for a sharper reason.** The
+missing public URL is solved. The blocker is now our own deliberate
+configuration: `robots.txt` serves `Disallow: /` and every response carries
+`X-Robots-Tag: noindex, nofollow`. Google's Rich Results Test fetches as
+Googlebot and honours `robots.txt`, so it reports the URL as blocked rather than
+validating the markup. Confirmed that the host does not exempt a Googlebot user
+agent — it answers `200` but still sends the `noindex` header, and `robots.txt`
+denies the crawl.
+
+**Disabling the block to run the test was not done.** Keeping the interim host
+non-indexable is an explicit owner constraint, and turning it off to make a check
+pass is exactly the kind of trade this project does not make. **Sprint 2 check 3
+moves to Phase 2**, to be run against the canonical domain once indexing is on.
+
+What *was* run instead, and labelled as what it is: a structural validation of
+the live JSON-LD on all 12 routes — `@context`, required properties per type,
+every `@id` reference resolving inside its graph, and sequential
+`BreadcrumbList` positions. **No problems.** `/ar/projects` serves
+`Person, WebSite, BreadcrumbList, SoftwareSourceCode ×2` with
+`jobTitle: ["Full Stack Developer", "مبرمج"]`. **This is not the Rich Results
+Test and does not substitute for it** — it checks the shape, not what Google
+makes of it.
+
+**T-213 — verified. The message arrived.** A real submission to the live
+endpoint returned `200 {"ok":true}`, and **the owner confirmed on 2026-09-27
+that it reached the inbox.** The boundary still holds — an empty payload is
+`400`, and the honeypot returns `200` without sending.
+
+**T-213's Done-when — "twelve routes prerender, a submission arrives, and the
+form is usable by keyboard with errors announced" — is now met on its first two
+clauses by measurement and its third by T-309.** The task is complete.
+
+Worth correcting in the record: T-213 was carried as blocked on **D1**, on the
+assumption that delivery needed a verified custom domain. It did not. Resend's
+`onboarding@resend.dev` sender delivers to the account owner's own address,
+which is exactly the case here — `.env.example` had said so since T-213 was
+written, and the dependency was never re-examined until the interim host made it
+cheap to test. **D1 was never the blocker; nobody had tried.**
+
 ## Days 1–5 — Performance & accessibility
 
 ### T-301 · Lighthouse baseline — M
@@ -1728,6 +1769,17 @@ pull request, as a required check, and it is green.
 
 **Watch out:** do not redo T-219. The value here is only that CI tests a local
 build, and a CDN, a redirect or an injected analytics tag can differ from it.
+
+#### Status 2026-09-27: **complete. Zero violations on the deployed origin.**
+
+`verify:axe` against `https://zeyad-alnahdi.vercel.app` — **24 scans**, 12 routes
+× light and dark, WCAG 2.1 A + AA. **Zero violations.**
+
+Lighthouse on the live host reports **accessibility 100 on all twelve routes**,
+independently of axe.
+
+So the deployment introduces nothing the local build did not already have: no
+CDN rewrite, no injected tag, no redirect that changes the rendered page.
 
 ---
 
@@ -2186,6 +2238,33 @@ of them changes when the real domain lands. That is safe **only** because the
 host is `noindex` — if indexing were ever enabled here, the site would publish a
 full set of canonicals pointing at a URL it is about to abandon.
 
+#### Status 2026-09-27: **complete.** `https://zeyad-alnahdi.vercel.app`
+
+Deployed by the owner from `main`. Verified against the live host, not assumed.
+
+| Step | Result |
+|---|---|
+| 12 routes over HTTPS | ✅ all `200`, no redirects |
+| `http` → `https` | ✅ `308` |
+| `/` → `/en` | ✅ `308` |
+| `X-Robots-Tag` | ✅ `noindex, nofollow` on pages **and on `/sitemap.xml`** |
+| `robots.txt` | ✅ `User-Agent: * / Disallow: /` |
+| Per-locale gate still independent | ✅ `/tr` keeps `<meta name="robots" content="noindex, follow">` |
+| Canonicals | ✅ absolute, under the `.vercel.app` origin |
+| `verify:metadata` | ✅ OK against the live origin — 12 routes, all within limits, unique per locale |
+| `verify:axe` | ✅ OK — 24 scans, zero violations |
+| Link graph | ✅ no locale leaks, full reachability, `/projects` most inbound (10/9/8/6 in each locale) |
+| Contact flow | ✅ `200 {"ok":true}`; empty payload `400`; honeypot silently `200` |
+
+**A gap in step 6 worth naming:** `verify:links` reads the local build output by
+design (T-218 — "no port, no flake, and it sees exactly the HTML that ships"), so
+it cannot be pointed at a URL. The equivalent check was run against the live HTML
+instead and matches the build exactly. The script was **not** rewritten to take a
+URL; that would be scope this task does not carry.
+
+**The host is confirmed non-canonical and non-indexable.** It satisfies none of
+D1b, T-311, X-07, G1 or G2, and nothing here should be read as satisfying them.
+
 ---
 
 ### T-320 · Localised 404 — M
@@ -2293,7 +2372,7 @@ Open, and some of it gates Sprint 3.
 | **T-204** Turkish native review | **G2**, T-315 | Blocked on **D4** — no reviewer found |
 | **T-205** keyword validation | — | Pending |
 | **T-206** CVs per locale | F-20 | Pending — the About CV section renders only once the files exist |
-| **T-213** real email delivery | C-04 | Unverified — needs a domain, so effectively **D1** |
+| ~~**T-213** real email delivery~~ | C-04 | **Verified 2026-09-27.** Delivery confirmed by the owner from the interim host. It never needed a domain — Resend's `onboarding@resend.dev` sender was enough, so the earlier D1 attribution was wrong |
 | **T-221** Sprint 2 gate | T-301 | Not yet run |
 
 ---
