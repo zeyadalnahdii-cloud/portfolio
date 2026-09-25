@@ -1889,6 +1889,27 @@ costs nothing but a delay; a host wrongly indexable is a full duplicate of the
 site competing with the canonical domain, and nothing reports it. Default to
 the cheap failure.
 
+#### Status 2026-09-27: **complete.**
+
+`IS_INDEXABLE` in `lib/seo/environment.ts`, opt-in on `SITE_INDEXABLE === 'true'`
+and off for anything else. `robots.ts` and the `X-Robots-Tag` header in
+`next.config.ts` read it; `origin.ts` keeps `IS_PRODUCTION_DEPLOY`, which is the
+question it actually asks.
+
+Measured on real builds, both with `VERCEL_ENV=production`:
+
+| `SITE_INDEXABLE` | `X-Robots-Tag` | `robots.txt` |
+|---|---|---|
+| unset | `noindex, nofollow` | `Disallow: /`, no sitemap |
+| `true` | absent | `Allow: /` + sitemap |
+
+The first row is the regression this task exists to prevent: Vercel marks the
+interim host `production`, so before the split it would have served
+`Allow: /` and a live sitemap. Tests pin the exact-match opt-in — `TRUE`, `1`,
+`yes` and `''` all leave indexing off — and the CI `metadata` and `axe` jobs now
+set `SITE_INDEXABLE: 'true'` so they keep checking the artifact the canonical
+domain will serve.
+
 ---
 
 ### T-322 · Interim Vercel deployment — M
