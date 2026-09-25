@@ -1448,6 +1448,39 @@ element is text on every one.
 text LCP and still be late because the Arabic face blocks paint. Measure `/ar`
 separately; never extrapolate from `/en`.
 
+#### Status 2026-09-27: **step 2 passes. The measurement method decides step 1.**
+
+**The LCP element is a `<p>` — text — on every route measured.** Read from a
+`PerformanceObserver` trace, not assumed. The no-hero-image design in `06` §2.2
+is doing exactly what it was for.
+
+**The two throttling methods disagree, and the difference is the finding.**
+
+| Route | Lighthouse *simulated* | Lighthouse *devtools* (real) |
+|---|---|---|
+| `/en` | 2.00s | **1.48s** |
+| `/ar/projects` | 3.25s | **1.66s** |
+
+Under real throttling every route is comfortably inside P-01's 2.5s and the
+Arabic gap collapses from 1.4s to 0.18s. `FCP == LCP` in both runs: the text
+paints once, in the fallback face, and is the largest element — `display: swap`
+working as intended.
+
+**So the Arabic penalty in T-301's table is the simulation modelling a longer
+request chain, not a face blocking paint.** The chain is real: `/ar` fetches
+**six** font files where `/en` fetches one, because IBM Plex Sans Arabic is a
+static face declared at three weights and the Arabic pages need both its Arabic
+and Latin ranges. Worth reducing, but it is not what paints the page.
+
+**Not claimed as a clean pass.** P-01 is met under real throttling and missed
+under simulated on seven routes. The tiebreaker is a measurement over a real
+network — the interim host in T-322, and the canonical host in Phase 2.
+
+**Flagged for the owner, not changed:** `font-medium` (500) is used ten times in
+the markup, and 500 is **not** among the Arabic font's declared weights, so
+Arabic renders it synthesised or snapped to a neighbour. A fidelity gap, and
+fixing it by declaring 500 would add two more font files.
+
 ---
 
 ### T-303 · CLS — M
@@ -1471,6 +1504,26 @@ separately; never extrapolate from `/en`.
 visit, which is the only visit that matters for a stranger arriving from search.
 A warm-cache pass proves nothing.
 
+#### Status 2026-09-27: **passes, measured cold.**
+
+Cache disabled per request, 4× CPU throttling, mobile viewport.
+
+| Locale | CLS (cold) |
+|---|---|
+| `/en/*` | **0.000** on all four |
+| `/tr/*` | 0.000, except `/tr/about` at 0.009 |
+| `/ar/*` | 0.017 – **0.052** |
+
+All well inside P-02's 0.1. The reserved slots hold: the form error slot
+(`min-h-5`) and the Home cards (`min-h-56`) contribute nothing, and the mobile
+menu overlays rather than reflows.
+
+**The Arabic routes are not at zero, and that is the font swap** — the fallback
+and IBM Plex Sans Arabic have different metrics, so the swap moves text
+slightly. Inside budget with room, but it is the one number here that would grow
+if more Arabic copy were added, so it is worth knowing rather than rounding to
+"passes".
+
 ---
 
 ### T-304 · INP — M
@@ -1492,6 +1545,22 @@ A warm-cache pass proves nothing.
 never accumulate enough samples to report INP at all. That is not a pass — it
 means the lab measurement is the only evidence there will be, so take it
 deliberately rather than assuming a static site is safe.
+
+#### Status 2026-09-27: **passes in the lab.**
+
+Measured on `/ar` at 4× CPU throttling, click to two painted frames:
+
+| Interaction | Latency |
+|---|---|
+| Theme toggle | **44 ms** |
+| Mobile menu open | **24 ms** |
+
+Both far inside P-03's 200 ms. Measured on the Arabic page deliberately, since
+it carries the heavier font and the RTL layout.
+
+**Lab only.** As the watch-out predicts, a site this static may never accumulate
+enough field samples for INP to be reported at all, so this is likely to remain
+the only evidence. It is not a substitute for field data; it is what exists.
 
 ---
 
@@ -1516,6 +1585,34 @@ components, which is free. The moment any **client** component imports
 will never read — lands in the browser bundle. It will still build, still render
 correctly, and still pass every other gate.
 
+#### Status 2026-09-27: **FAILS. 186–188 KB gzipped against a 150 KB budget.**
+
+Measured by fetching every script a route loads with `Accept-Encoding: gzip` and
+summing the transferred bytes.
+
+| Route | Gzipped JS | P-05 |
+|---|---|---|
+| `/en` | **186 KB** | 150 KB ❌ |
+| `/ar/projects` | **186 KB** | 150 KB ❌ |
+| `/en/contact` | **188 KB** | 150 KB ❌ |
+
+**Step 3's regression is not present.** The four client components are
+`ThemeToggle`, `LanguageSwitcher`, `SiteNav` and `ContactForm`; none imports
+`getMessages`, and the trilingual payload is not in the browser bundle.
+next-intl's client runtime totals about 15 KB.
+
+**The overage is the framework floor, not this project's code.** Three chunks —
+69 KB, 44 KB and 38 KB gzipped — account for 151 KB of the 186 KB, and they are
+the Next 16 and React 19 runtime. Everything this repository wrote fits in the
+remaining ~35 KB.
+
+**Owner decision needed. P-05 is not changed here.** The budget as written is
+not reachable on this stack without an architectural change, and a requirement
+is not something to quietly relax because it turned out to be inconvenient. The
+options are to accept the overage with the reason recorded, to revisit the
+number against what Next 16 actually costs, or to change the stack — and none of
+those is mine to choose.
+
 ---
 
 ### T-306 · Font subset isolation — S
@@ -1539,6 +1636,24 @@ project has already shipped a circular Tailwind token
 the pages rendered, and **zero fonts were requested at all**. Reading the config
 would have confirmed the fonts were configured correctly. Only the network panel
 showed the truth.
+
+#### Status 2026-09-27: **passes, in both directions.**
+
+Measured from network requests on a cold cache, never from the config.
+
+The stylesheet declares **three** Arabic-range `@font-face` files
+(`5ad8fdb5…`, `c9a0d344…`, `ceec3e50…`). Requests actually made:
+
+| Route | Font files | Any Arabic-range file? |
+|---|---|---|
+| `/en` | 1 — `83afe278…` | **No** |
+| `/tr` | 2 — `83afe278…`, `1bffadaa…` | **No** |
+| `/ar` | 6, including all three Arabic-range files | Yes, as intended |
+
+P-09 holds: the Arabic subset is absent from the Latin locales, and present on
+the Arabic one. The check fails in both directions, so a build that requested
+nothing at all — the failure this project has already shipped once — would be
+caught.
 
 ---
 
