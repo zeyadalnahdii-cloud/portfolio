@@ -82,11 +82,11 @@ absolute canonicals and `hreflang` cannot be verified against a placeholder orig
 
 ### Content track (parallel, starts day 1)
 
-- [ ] English copy for all four pages (`02` §5 outlines)
-- [ ] Arabic copy — owner-native, written not translated
-- [ ] Turkish copy — drafted, then **native review (D4)**
+- [x] English copy for all four pages — rewritten and approved 2026-09-26
+- [x] Arabic copy — owner-reviewed, written not translated
+- [ ] Turkish copy — **drafted**; native review still outstanding (**D4**), so `/tr` stays `noindex`
 - [x] CV — one English PDF served on all three locales, canonical name spelling in the filename (F-34, T-206)
-- [ ] Keyword validation against real tool data (`02` §1) — adjust titles if warranted
+- [x] Keyword validation against real tool data (`02` §1) — T-205, closed with a narrowed criterion
 
 Content is the critical path in this sprint, not the code. Four pages × three
 languages is more writing than it sounds like, and the Turkish review is an external
@@ -94,16 +94,16 @@ dependency with its own latency. Start it on day 1.
 
 ### Build track
 
-- [ ] Home (F-10..F-14)
-- [ ] About (F-30..F-34)
-- [ ] Projects (F-20..F-23)
-- [ ] Contact (F-40..F-45) + form handler (C-01..C-08)
-- [ ] 404 (F-08)
-- [ ] Per-route metadata from `02` §4
-- [ ] `BreadcrumbList`, `SoftwareSourceCode`, `ContactPage` schema (S-03..S-05)
-- [ ] OG images, per route per locale (M-08, 06 §4)
-- [ ] Internal linking per 05 §4.2; `rel="me"` on profiles (F-43)
-- [ ] RTL review of all screens (06 §3.2)
+- [x] Home (F-10..F-14) — T-210, expanded in the 2026-09-26 content pass
+- [x] About (F-30..F-34) — T-211; **F-31 withdrawn**, psychology removed from the site
+- [x] Projects (F-20..F-23) — T-212
+- [x] Contact (F-40..F-45) + form handler (C-01..C-08) — T-213; **real delivery still unverified (D1)**
+- [ ] 404 (F-08) — **not built**; blocked by a Next.js constraint, deferred to **T-320**
+- [x] Per-route metadata from `02` §4 — T-215, revised by T-205
+- [x] `BreadcrumbList`, `SoftwareSourceCode`, `ContactPage` schema (S-03..S-05) — T-216
+- [x] OG images, per route per locale (M-08, 06 §4) — T-217
+- [x] Internal linking per 05 §4.2; `rel="me"` on profiles (F-43) — T-218; the 404 → Home link ships with T-320
+- [x] RTL review of all screens (06 §3.2) — T-219; the 404 screen carries to T-320
 
 ### Sprint 2 gate
 
