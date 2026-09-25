@@ -1943,6 +1943,27 @@ costs nothing but a delay; a host wrongly indexable is a full duplicate of the
 site competing with the canonical domain, and nothing reports it. Default to
 the cheap failure.
 
+#### Status 2026-09-27: **complete.**
+
+`IS_INDEXABLE` in `lib/seo/environment.ts`, opt-in on `SITE_INDEXABLE === 'true'`
+and off for anything else. `robots.ts` and the `X-Robots-Tag` header in
+`next.config.ts` read it; `origin.ts` keeps `IS_PRODUCTION_DEPLOY`, which is the
+question it actually asks.
+
+Measured on real builds, both with `VERCEL_ENV=production`:
+
+| `SITE_INDEXABLE` | `X-Robots-Tag` | `robots.txt` |
+|---|---|---|
+| unset | `noindex, nofollow` | `Disallow: /`, no sitemap |
+| `true` | absent | `Allow: /` + sitemap |
+
+The first row is the regression this task exists to prevent: Vercel marks the
+interim host `production`, so before the split it would have served
+`Allow: /` and a live sitemap. Tests pin the exact-match opt-in — `TRUE`, `1`,
+`yes` and `''` all leave indexing off — and the CI `metadata` and `axe` jobs now
+set `SITE_INDEXABLE: 'true'` so they keep checking the artifact the canonical
+domain will serve.
+
 ---
 
 ### T-322 · Interim Vercel deployment — M
@@ -2018,6 +2039,57 @@ decision to keep Next's default is recorded with its cost.
 its fully static build, which is the foundation of the entire performance
 budget. It is a trade against P-01…P-05, not a fix. Do not take it to close a
 task.
+
+#### Status 2026-09-27: **decision recorded — Next's default 404 is kept.**
+
+**Step 1 done.** Re-tested on Next **16.3.6**, the current stable release
+(the project was on 16.3.5). `app/[locale]/not-found.tsx` is still never
+reached: `dynamicParams = false` blocks it, exactly as T-214 found.
+
+**A third shape was tried, which T-214 had not.** Next's documented pattern for
+this problem is **multiple root layouts via route groups** — `app/(site)/[locale]`
+for the real routes and `app/(fallback)/[...slug]` for everything else, each
+group carrying its own `<html>`. It builds, and it gets closer than either shape
+T-214 measured:
+
+| Shape | Status | Markup | `lang`/`dir` on the 12 routes |
+|---|---|---|---|
+| Route-group catch-all **page** | **200** ❌ | **ours, fully localised** ✅ | **preserved** ✅ |
+| `notFound()` → group-root `not-found.tsx` | **404** ✅ | `<html id="__next_error__">` ❌ | preserved ✅ |
+| `notFound()` → **nested** `[...slug]/not-found.tsx` | **404** ✅ | `<html id="__next_error__">` ❌ | preserved ✅ |
+
+**The blocker is now precisely located, and it is narrower than T-214 thought.**
+It is not that a localised 404 cannot be rendered — it renders perfectly, with
+the right layout, fonts, theme and direction. It is that **the status code and
+the markup cannot both be correct at once.** A page that renders our own HTML
+returns 200; anything that returns 404 goes through `notFound()`, and
+`notFound()` is rendered outside every layout.
+
+**Decision: keep Next's default 404** (step 2). The alternatives and their costs:
+
+- **Accept the 200.** Rejected. **X-04 is currently met**, and a soft 404 on
+  every unknown URL is a real SEO defect — search engines index the
+  "not found" page as a thin duplicate. Trading a met requirement for an unmet
+  one is a regression, not progress.
+- **Middleware rewrite.** Rejected, per this task's own watch-out. It trades
+  against P-01…P-05, and taking it to close a task is exactly what the warning
+  forbids.
+
+**The cost of the decision, recorded plainly:** an unknown URL returns Next's
+built-in page — `<html>` with no `lang` and no `dir`, English-only "This page
+could not be found.", and hardcoded colours that ignore the site palette. In
+Arabic and Turkish it is an English dead end. **F-08 stays unmet.** X-04 stays
+met.
+
+**What stays blocked behind it:** T-218's 404 → Home link (the copy
+`notFound.backHome` is written in all three locales and unused) and T-219's
+404-screen review. Both are cheap the moment the framework allows a localised
+404 with a 404 status.
+
+**Revisit when** Next supports a `not-found` boundary that renders inside a root
+layout, or allows a page to set its own status. The route-group scaffold above
+is the shape to reuse; nothing else needs rediscovering.
+
 
 ---
 

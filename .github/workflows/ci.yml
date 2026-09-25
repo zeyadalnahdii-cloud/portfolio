@@ -112,10 +112,13 @@ jobs:
     name: metadata
     runs-on: ubuntu-latest
     env:
-      # Build the artifact that actually ships. Without this the deployment is
-      # treated as a preview and served with a blanket X-Robots-Tag: noindex,
-      # so the job would be checking a page nobody will ever be served.
+      # Build the artifact that eventually ships at the canonical domain.
+      # VERCEL_ENV alone no longer controls indexing — T-321 split the two
+      # questions — so indexing is opted into explicitly here. Without it the
+      # job would be checking a noindexed page, which is not what the canonical
+      # host serves.
       VERCEL_ENV: production
+      SITE_INDEXABLE: 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -148,6 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERCEL_ENV: production
+      SITE_INDEXABLE: 'true'
     steps:
       - uses: actions/checkout@v4
 
