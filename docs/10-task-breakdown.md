@@ -1424,6 +1424,60 @@ that fails. And building without `VERCEL_ENV=production` has already produced
 false SEO readings of 66 on this project **twice**; the noindex is invisible in
 the page and shows only in the response header.
 
+#### Status 2026-09-27: **complete. Baseline recorded; nothing fixed.**
+
+Lighthouse 13.5.0, mobile preset, simulated throttling, against a **local
+production build with `SITE_INDEXABLE=true`** — the measurement constraint the
+owner approved, so the SEO category is read from an indexable artifact.
+
+| Route | Perf | A11y | BP | SEO | LCP s | CLS | TBT ms |
+|---|---|---|---|---|---|---|---|
+| `/en` | 93 | 100 | 100 | 100 | 2.00 | 0.000 | 289 |
+| `/en/about` | 93 | 100 | 100 | 100 | 2.66 | 0.000 | 200 |
+| `/en/projects` | 95 | 100 | 100 | 100 | 2.62 | 0.000 | 159 |
+| `/en/contact` | 97 | 100 | 100 | 100 | 1.86 | 0.000 | 183 |
+| `/tr` | 93 | 100 | 100 | **66** | 2.26 | 0.000 | 253 |
+| `/tr/about` | 97 | 100 | 100 | **66** | 2.26 | 0.000 | 119 |
+| `/tr/projects` | **80** | 100 | 100 | **66** | 3.43 | 0.000 | 388 |
+| `/tr/contact` | 96 | 100 | 100 | **66** | 2.41 | 0.000 | 143 |
+| `/ar` | 91 | 100 | 100 | 100 | 3.03 | 0.089 | 60 |
+| `/ar/about` | 93 | 100 | 100 | 100 | 3.04 | 0.036 | 64 |
+| `/ar/projects` | **86** | 100 | 100 | 100 | 3.25 | 0.091 | 188 |
+| `/ar/contact` | **83** | 100 | 100 | 100 | 3.42 | 0.065 | 293 |
+
+**Accessibility is 100 on all twelve** — A-02 asks for ≥ 95.
+
+**CLS is 0.000 on every Latin route and ≤ 0.091 on every Arabic one** — P-02
+asks for < 0.1, so it passes, but the Arabic pages are not at zero and T-303
+should find out why before that margin erodes.
+
+**Three routes miss the performance floor of 90:** `/tr/projects` 80,
+`/ar/contact` 83, `/ar/projects` 86. The failing audits on the worst route are
+render-blocking requests, unused and legacy JavaScript, and main-thread work —
+not images, of which the site has none.
+
+**Seven of twelve miss LCP < 2.5s (P-01).** The pattern is unmistakable: every
+Arabic route is 3.0–3.4s while the English routes are 1.9–2.7s. That is T-302's
+Arabic-font hypothesis showing up in the numbers on the first run.
+
+#### The SEO 66 on `/tr` is not a defect, and it changes what T-319 can claim
+
+All four Turkish routes score **66 on SEO because they are `noindex`** — the
+indexing gate working exactly as designed while **D4** is open. The build was
+indexable; the pages are not.
+
+**Consequence: `08`'s Sprint 3 gate row "SEO — Lighthouse 100 on all 12 routes"
+cannot pass until D4 resolves**, no matter what happens to the code. It is
+capped at 8 of 12 for the same reason G2 is. T-319 must record that as a blocked
+row, not as a failure of this sprint's work.
+
+#### Caveat on where this was measured
+
+Localhost, so network latency is synthetic rather than real. These numbers are
+the **baseline T-302…T-305 work against**, not a verdict on the deployed site.
+The deployed figures come from the interim host in T-322 and from the canonical
+host in Phase 2.
+
 ---
 
 ### T-302 · LCP — M
@@ -1448,6 +1502,39 @@ element is text on every one.
 text LCP and still be late because the Arabic face blocks paint. Measure `/ar`
 separately; never extrapolate from `/en`.
 
+#### Status 2026-09-27: **step 2 passes. The measurement method decides step 1.**
+
+**The LCP element is a `<p>` — text — on every route measured.** Read from a
+`PerformanceObserver` trace, not assumed. The no-hero-image design in `06` §2.2
+is doing exactly what it was for.
+
+**The two throttling methods disagree, and the difference is the finding.**
+
+| Route | Lighthouse *simulated* | Lighthouse *devtools* (real) |
+|---|---|---|
+| `/en` | 2.00s | **1.48s** |
+| `/ar/projects` | 3.25s | **1.66s** |
+
+Under real throttling every route is comfortably inside P-01's 2.5s and the
+Arabic gap collapses from 1.4s to 0.18s. `FCP == LCP` in both runs: the text
+paints once, in the fallback face, and is the largest element — `display: swap`
+working as intended.
+
+**So the Arabic penalty in T-301's table is the simulation modelling a longer
+request chain, not a face blocking paint.** The chain is real: `/ar` fetches
+**six** font files where `/en` fetches one, because IBM Plex Sans Arabic is a
+static face declared at three weights and the Arabic pages need both its Arabic
+and Latin ranges. Worth reducing, but it is not what paints the page.
+
+**Not claimed as a clean pass.** P-01 is met under real throttling and missed
+under simulated on seven routes. The tiebreaker is a measurement over a real
+network — the interim host in T-322, and the canonical host in Phase 2.
+
+**Flagged for the owner, not changed:** `font-medium` (500) is used ten times in
+the markup, and 500 is **not** among the Arabic font's declared weights, so
+Arabic renders it synthesised or snapped to a neighbour. A fidelity gap, and
+fixing it by declaring 500 would add two more font files.
+
 ---
 
 ### T-303 · CLS — M
@@ -1471,6 +1558,26 @@ separately; never extrapolate from `/en`.
 visit, which is the only visit that matters for a stranger arriving from search.
 A warm-cache pass proves nothing.
 
+#### Status 2026-09-27: **passes, measured cold.**
+
+Cache disabled per request, 4× CPU throttling, mobile viewport.
+
+| Locale | CLS (cold) |
+|---|---|
+| `/en/*` | **0.000** on all four |
+| `/tr/*` | 0.000, except `/tr/about` at 0.009 |
+| `/ar/*` | 0.017 – **0.052** |
+
+All well inside P-02's 0.1. The reserved slots hold: the form error slot
+(`min-h-5`) and the Home cards (`min-h-56`) contribute nothing, and the mobile
+menu overlays rather than reflows.
+
+**The Arabic routes are not at zero, and that is the font swap** — the fallback
+and IBM Plex Sans Arabic have different metrics, so the swap moves text
+slightly. Inside budget with room, but it is the one number here that would grow
+if more Arabic copy were added, so it is worth knowing rather than rounding to
+"passes".
+
 ---
 
 ### T-304 · INP — M
@@ -1492,6 +1599,22 @@ A warm-cache pass proves nothing.
 never accumulate enough samples to report INP at all. That is not a pass — it
 means the lab measurement is the only evidence there will be, so take it
 deliberately rather than assuming a static site is safe.
+
+#### Status 2026-09-27: **passes in the lab.**
+
+Measured on `/ar` at 4× CPU throttling, click to two painted frames:
+
+| Interaction | Latency |
+|---|---|
+| Theme toggle | **44 ms** |
+| Mobile menu open | **24 ms** |
+
+Both far inside P-03's 200 ms. Measured on the Arabic page deliberately, since
+it carries the heavier font and the RTL layout.
+
+**Lab only.** As the watch-out predicts, a site this static may never accumulate
+enough field samples for INP to be reported at all, so this is likely to remain
+the only evidence. It is not a substitute for field data; it is what exists.
 
 ---
 
@@ -1516,6 +1639,34 @@ components, which is free. The moment any **client** component imports
 will never read — lands in the browser bundle. It will still build, still render
 correctly, and still pass every other gate.
 
+#### Status 2026-09-27: **FAILS. 186–188 KB gzipped against a 150 KB budget.**
+
+Measured by fetching every script a route loads with `Accept-Encoding: gzip` and
+summing the transferred bytes.
+
+| Route | Gzipped JS | P-05 |
+|---|---|---|
+| `/en` | **186 KB** | 150 KB ❌ |
+| `/ar/projects` | **186 KB** | 150 KB ❌ |
+| `/en/contact` | **188 KB** | 150 KB ❌ |
+
+**Step 3's regression is not present.** The four client components are
+`ThemeToggle`, `LanguageSwitcher`, `SiteNav` and `ContactForm`; none imports
+`getMessages`, and the trilingual payload is not in the browser bundle.
+next-intl's client runtime totals about 15 KB.
+
+**The overage is the framework floor, not this project's code.** Three chunks —
+69 KB, 44 KB and 38 KB gzipped — account for 151 KB of the 186 KB, and they are
+the Next 16 and React 19 runtime. Everything this repository wrote fits in the
+remaining ~35 KB.
+
+**Owner decision needed. P-05 is not changed here.** The budget as written is
+not reachable on this stack without an architectural change, and a requirement
+is not something to quietly relax because it turned out to be inconvenient. The
+options are to accept the overage with the reason recorded, to revisit the
+number against what Next 16 actually costs, or to change the stack — and none of
+those is mine to choose.
+
 ---
 
 ### T-306 · Font subset isolation — S
@@ -1539,6 +1690,24 @@ project has already shipped a circular Tailwind token
 the pages rendered, and **zero fonts were requested at all**. Reading the config
 would have confirmed the fonts were configured correctly. Only the network panel
 showed the truth.
+
+#### Status 2026-09-27: **passes, in both directions.**
+
+Measured from network requests on a cold cache, never from the config.
+
+The stylesheet declares **three** Arabic-range `@font-face` files
+(`5ad8fdb5…`, `c9a0d344…`, `ceec3e50…`). Requests actually made:
+
+| Route | Font files | Any Arabic-range file? |
+|---|---|---|
+| `/en` | 1 — `83afe278…` | **No** |
+| `/tr` | 2 — `83afe278…`, `1bffadaa…` | **No** |
+| `/ar` | 6, including all three Arabic-range files | Yes, as intended |
+
+P-09 holds: the Arabic subset is absent from the Latin locales, and present on
+the Arabic one. The check fails in both directions, so a build that requested
+nothing at all — the failure this project has already shipped once — would be
+caught.
 
 ---
 
@@ -1965,6 +2134,27 @@ costs nothing but a delay; a host wrongly indexable is a full duplicate of the
 site competing with the canonical domain, and nothing reports it. Default to
 the cheap failure.
 
+#### Status 2026-09-27: **complete.**
+
+`IS_INDEXABLE` in `lib/seo/environment.ts`, opt-in on `SITE_INDEXABLE === 'true'`
+and off for anything else. `robots.ts` and the `X-Robots-Tag` header in
+`next.config.ts` read it; `origin.ts` keeps `IS_PRODUCTION_DEPLOY`, which is the
+question it actually asks.
+
+Measured on real builds, both with `VERCEL_ENV=production`:
+
+| `SITE_INDEXABLE` | `X-Robots-Tag` | `robots.txt` |
+|---|---|---|
+| unset | `noindex, nofollow` | `Disallow: /`, no sitemap |
+| `true` | absent | `Allow: /` + sitemap |
+
+The first row is the regression this task exists to prevent: Vercel marks the
+interim host `production`, so before the split it would have served
+`Allow: /` and a live sitemap. Tests pin the exact-match opt-in — `TRUE`, `1`,
+`yes` and `''` all leave indexing off — and the CI `metadata` and `axe` jobs now
+set `SITE_INDEXABLE: 'true'` so they keep checking the artifact the canonical
+domain will serve.
+
 ---
 
 ### T-322 · Interim Vercel deployment — M
@@ -2040,6 +2230,57 @@ decision to keep Next's default is recorded with its cost.
 its fully static build, which is the foundation of the entire performance
 budget. It is a trade against P-01…P-05, not a fix. Do not take it to close a
 task.
+
+#### Status 2026-09-27: **decision recorded — Next's default 404 is kept.**
+
+**Step 1 done.** Re-tested on Next **16.3.6**, the current stable release
+(the project was on 16.3.5). `app/[locale]/not-found.tsx` is still never
+reached: `dynamicParams = false` blocks it, exactly as T-214 found.
+
+**A third shape was tried, which T-214 had not.** Next's documented pattern for
+this problem is **multiple root layouts via route groups** — `app/(site)/[locale]`
+for the real routes and `app/(fallback)/[...slug]` for everything else, each
+group carrying its own `<html>`. It builds, and it gets closer than either shape
+T-214 measured:
+
+| Shape | Status | Markup | `lang`/`dir` on the 12 routes |
+|---|---|---|---|
+| Route-group catch-all **page** | **200** ❌ | **ours, fully localised** ✅ | **preserved** ✅ |
+| `notFound()` → group-root `not-found.tsx` | **404** ✅ | `<html id="__next_error__">` ❌ | preserved ✅ |
+| `notFound()` → **nested** `[...slug]/not-found.tsx` | **404** ✅ | `<html id="__next_error__">` ❌ | preserved ✅ |
+
+**The blocker is now precisely located, and it is narrower than T-214 thought.**
+It is not that a localised 404 cannot be rendered — it renders perfectly, with
+the right layout, fonts, theme and direction. It is that **the status code and
+the markup cannot both be correct at once.** A page that renders our own HTML
+returns 200; anything that returns 404 goes through `notFound()`, and
+`notFound()` is rendered outside every layout.
+
+**Decision: keep Next's default 404** (step 2). The alternatives and their costs:
+
+- **Accept the 200.** Rejected. **X-04 is currently met**, and a soft 404 on
+  every unknown URL is a real SEO defect — search engines index the
+  "not found" page as a thin duplicate. Trading a met requirement for an unmet
+  one is a regression, not progress.
+- **Middleware rewrite.** Rejected, per this task's own watch-out. It trades
+  against P-01…P-05, and taking it to close a task is exactly what the warning
+  forbids.
+
+**The cost of the decision, recorded plainly:** an unknown URL returns Next's
+built-in page — `<html>` with no `lang` and no `dir`, English-only "This page
+could not be found.", and hardcoded colours that ignore the site palette. In
+Arabic and Turkish it is an English dead end. **F-08 stays unmet.** X-04 stays
+met.
+
+**What stays blocked behind it:** T-218's 404 → Home link (the copy
+`notFound.backHome` is written in all three locales and unused) and T-219's
+404-screen review. Both are cheap the moment the framework allows a localised
+404 with a 404 status.
+
+**Revisit when** Next supports a `not-found` boundary that renders inside a root
+layout, or allows a page to set its own status. The route-group scaffold above
+is the shape to reuse; nothing else needs rediscovering.
+
 
 ---
 
