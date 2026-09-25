@@ -145,7 +145,19 @@ project's gate).
 | Environment | Trigger | Domain | Indexable |
 |---|---|---|---|
 | Preview | Every PR | `*.vercel.app` | **No** — `X-Robots-Tag: noindex` |
-| Production | Merge to `main` | `{ORIGIN}` | Yes |
+| **Interim** (T-322) | Merge to `main`, until D1b | `*.vercel.app` | **No** — opted out via `SITE_INDEXABLE` |
+| Canonical production | Merge to `main`, after D1b | `{ORIGIN}` | Yes — `SITE_INDEXABLE=true` |
+
+> **A third environment exists from 2026-09-27.** The owner deferred the custom
+> domain (D1b) and the site is published on a free `*.vercel.app` host in the
+> meantime. That host is a **public but non-canonical** deployment: it is not
+> `{ORIGIN}`, it does not satisfy X-07, and it stays `noindex`.
+>
+> Indexability is therefore **no longer inferable from `VERCEL_ENV`** — Vercel
+> marks the interim deployment `production`. `SITE_INDEXABLE` decides it
+> instead, opt-in and defaulting to off (T-321). `VERCEL_ENV` still answers the
+> question it actually asks, and `origin.ts` still reads it for https
+> enforcement.
 
 **X-06 verification is a CI assertion, not a config review.** The pipeline issues a
 request against the preview URL and asserts the header is present. A `noindex` that
@@ -153,8 +165,9 @@ was configured but is not actually being served is indistinguishable from a work
 one until the previews appear in search results — as a full duplicate of the site,
 competing with the canonical domain.
 
-`robots.ts` branches on `VERCEL_ENV === 'production'`, never `NODE_ENV`: preview
-builds are production builds.
+`robots.ts` and the `X-Robots-Tag` header branch on `SITE_INDEXABLE`, never
+`NODE_ENV` and — since T-321 — no longer on `VERCEL_ENV` either: preview builds
+are production builds, and so is the interim host.
 
 ---
 

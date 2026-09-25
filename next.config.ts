@@ -2,7 +2,7 @@ import createNextIntlPlugin from 'next-intl/plugin'
 import type { NextConfig } from 'next'
 
 import { DEFAULT_LOCALE } from './lib/i18n/config'
-import { IS_PRODUCTION_DEPLOY } from './lib/seo/environment'
+import { IS_INDEXABLE } from './lib/seo/environment'
 import { ROUTES } from './lib/seo/routes'
 // Imported for its side effect: the module validates NEXT_PUBLIC_SITE_URL at
 // load and throws if it is missing or malformed. next.config is evaluated
@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
     // link from being indexed unfetched. Only noindex does that — and it has to
     // be a header rather than a meta tag, so it covers the sitemap and every
     // other non-HTML response too.
-    if (IS_PRODUCTION_DEPLOY) {
+    if (IS_INDEXABLE) {
       return Promise.resolve([])
     }
 
