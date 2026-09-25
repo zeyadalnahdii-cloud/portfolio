@@ -1347,6 +1347,59 @@ wrongly:
 
 ---
 
+## The two-phase split
+
+**Approved by the owner, 2026-09-27.** A custom domain is deferred (**D1b**);
+deployment proceeds on a free `*.vercel.app` host so that everything verifiable
+without a domain can be finished now.
+
+**What the interim host is, recorded plainly:**
+
+- It is an **interim public deployment**, not the canonical production host.
+- It is **non-canonical** and **must remain `noindex`**.
+- It **does not satisfy D1b, T-311, X-07, G1 or G2.** Nothing in Phase 1 may be
+  read as satisfying any of them.
+- **Search Console, sitemap submission, indexing requests and indexing
+  validation stay in Phase 2.**
+- **Lighthouse scores SEO ≈ 66 on a `noindex` response.** A score taken against
+  the interim host is *not* a valid SEO-100 measurement. Performance and
+  accessibility are measured on the deployment; the **SEO category is measured
+  on a local indexable production build**, and where it was measured is recorded
+  with the number.
+
+No existing task's scope or acceptance criteria changed to make this split
+work. A task whose criteria need the domain stays in Phase 2 and stays
+incomplete, even where part of it could be done earlier — that part is recorded
+as preparatory work, not as progress against the criterion.
+
+Two genuinely new tasks exist **because** of this decision and are numbered as
+new work rather than folded into T-311: **T-321** and **T-322**.
+
+---
+
+# Phase 1 — before the custom domain
+
+Execution order, respecting dependencies:
+
+| # | Task | Depends on |
+|---|---|---|
+| 1 | **T-320** Localised 404 | — |
+| 2 | **T-321** Indexability switch | — |
+| 3 | **T-322** Interim Vercel deployment | T-321 |
+| 4 | **T-307** axe against the deployed site | T-322 |
+| 5 | **T-301** Lighthouse baseline | T-221 |
+| 6 | **T-302** LCP · **T-303** CLS · **T-304** INP · **T-305** Bundle | T-301 |
+| 7 | **T-306** Font subset isolation | — |
+| 8 | **T-308** States axe cannot see · **T-309** Keyboard · **T-310** Screen reader | T-307 |
+
+**Also unblocked by the interim URL, both carried from Sprint 2:**
+
+- The **Rich Results Test** (Sprint 2 gate check 3), which needs a publicly
+  reachable URL and could not be run at the gate.
+- **T-213's delivery verification**, *if* Resend can send honestly without a
+  verified custom domain. A candidate, not a promise — and an unavailable or
+  failed test is recorded as such, never converted into a pass.
+
 ## Days 1–5 — Performance & accessibility
 
 ### T-301 · Lighthouse baseline — M
@@ -1581,6 +1634,26 @@ because the markup looks right.
 
 ---
 
+# Phase 2 — after the custom domain is purchased
+
+**Blocked on D1b.** Every task below has an acceptance criterion that names the
+canonical host, Search Console, or an indexable production deployment. None is
+reworded to fit the interim host.
+
+| # | Task | Why it cannot move to Phase 1 |
+|---|---|---|
+| 1 | **T-311** Production deploy | Step 1 *is* "purchase the domain"; done when 12 routes resolve **at the canonical host** |
+| 2 | **T-312** Preview isolation | Step 2 requires production **not** to carry `noindex` — inverted while the interim host is deliberately noindexed. Step 1 is preparable |
+| 3 | **T-313** Full pipeline enforcing | Done when **all six** checks are required; a `lighthouse` job asserting SEO 100 against a noindexed host fails permanently. The `links` job is preparable |
+| 4 | **T-314** Search Console | Needs the canonical property |
+| 5 | **T-315** Request indexing | Depends on T-314 |
+| 6 | **T-316** hreflang confirmation | Depends on T-314 |
+| 7 | **T-317** Profile back-links | **Owner decision:** the permanent links point at the eventual canonical domain, never at a temporary URL |
+| 8 | **T-319** Sprint 3 gate | Evaluates the canonical host, the SEO row and Search Console |
+
+**T-318 is unphased** — its descope recommendation is open and has nothing to do
+with the domain.
+
 ## Days 6–10 — Deploy & verify
 
 ### T-311 · Production deploy — M
@@ -1773,6 +1846,82 @@ as carried, with the reason, rather than as failures or as passes.
 
 ---
 
+### T-321 · Indexability switch — S
+
+**Depends on:** nothing
+**Requirements:** X-06, and the owner decision of 2026-09-27
+
+**New task.** It exists only because deployment now happens on an interim host,
+and it deliberately does not modify T-311.
+
+Today one flag decides two different questions:
+
+```
+IS_PRODUCTION_DEPLOY = process.env.VERCEL_ENV === 'production'
+```
+
+It is read in three places — the `X-Robots-Tag` header in `next.config.ts`,
+`app/robots.ts`, and the https enforcement in `lib/seo/origin.ts`. A Vercel
+deployment from the production branch gets `VERCEL_ENV=production` **even on a
+`*.vercel.app` URL**, so it would serve `robots: allow`, no `noindex` header and
+a live sitemap. That is an indexable interim host: the opposite of the decision,
+and a direct X-06 violation.
+
+**Steps**
+
+1. Separate *deployment state* from *indexability*. Keep `IS_PRODUCTION_DEPLOY`
+   for what it actually means, and add a second flag for whether this host may
+   be indexed.
+2. **Indexability defaults to the safe state — not indexable.** A host becomes
+   indexable only by explicit opt-in, so forgetting the variable can never
+   publish an indexable duplicate.
+3. Point the `X-Robots-Tag` header and `robots.ts` at the new flag. Leave the
+   https enforcement in `origin.ts` on `IS_PRODUCTION_DEPLOY`, which is the
+   question it is actually asking.
+4. Test both directions: the header and `robots.txt` present when indexing is
+   off, absent when it is on.
+
+**Done when:** a production-mode build can be published with indexing disabled,
+and the default with no variable set is disabled.
+
+**Watch out:** the failure is silent and asymmetric. A host wrongly `noindex`
+costs nothing but a delay; a host wrongly indexable is a full duplicate of the
+site competing with the canonical domain, and nothing reports it. Default to
+the cheap failure.
+
+---
+
+### T-322 · Interim Vercel deployment — M
+
+**Depends on:** T-321
+**Requirements:** the owner decision of 2026-09-27. **Not** X-07, **not** D1b.
+
+**New task.** It does **not** replace T-311 and does not satisfy any part of it.
+
+**Steps**
+
+1. Deploy the project to Vercel on the free `*.vercel.app` host.
+2. Set `NEXT_PUBLIC_SITE_URL` to that exact origin — `lib/seo/origin.ts` throws
+   on a trailing slash, an `http` scheme, a path or a loopback host.
+3. Leave indexing **off** (T-321 default).
+4. Verify all 12 routes resolve over HTTPS.
+5. Verify `X-Robots-Tag: noindex` is served and `robots.txt` disallows.
+6. Re-run `verify:metadata`, `verify:links` and `verify:axe` against the live
+   origin.
+7. Exercise the contact flow as far as the interim host allows.
+
+**Done when:** 12 routes are publicly reachable over HTTPS, confirmed
+non-indexable by response header, and the three scripts pass against the live
+origin.
+
+**Watch out:** this host is **not** canonical production. Its canonicals,
+`hreflang` set and OG URLs will all name the `.vercel.app` origin, and every one
+of them changes when the real domain lands. That is safe **only** because the
+host is `noindex` — if indexing were ever enabled here, the site would publish a
+full set of canonicals pointing at a URL it is about to abandon.
+
+---
+
 ### T-320 · Localised 404 — M
 
 **Depends on:** nothing
@@ -1834,18 +1983,33 @@ Open, and some of it gates Sprint 3.
 
 ## Sequencing
 
-**Start with T-320.** It depends on nothing, needs no decision, and closes the
-two loose ends the last two tasks left open — T-218's missing link and T-219's
-unreviewable screen.
+**Phase 1, in dependency order.** T-320 first: it depends on nothing, needs no
+decision, and closes the two loose ends the last two Sprint 2 tasks left open —
+T-218's missing 404 → Home link and T-219's unreviewable 404 screen.
 
-Then **T-301 → T-306** and **T-309, T-310**: all of the performance and
-accessibility work needs neither the domain nor a reviewer.
+```
+T-320                                   (independent — start here)
+T-321 ──► T-322 ──► T-307 ──► T-308, T-309, T-310
+                      └─────► Rich Results Test (Sprint 2 check 3)
+                      └─────► T-213 delivery verification (candidate)
+T-301 ──► T-302, T-303, T-304, T-305
+T-306                                   (independent)
+```
 
-**D1 gates the second half entirely** — T-311 and everything after it. It has
-been open since Sprint 1 and is now the single largest risk to the sprint.
-**D4 caps G2** regardless of anything done here.
+**Phase 2 begins only when D1b resolves.**
 
----
+```
+D1b ──► T-311 ──► T-312, T-313, T-317
+                    T-314 ──► T-315 ──► T-316
+                    all ─────────────► T-319
+```
+
+**What is still deferred when Phase 1 finishes:** the canonical production host,
+custom-domain HTTPS, apex/`www` canonicalisation (X-07), the production half of
+preview isolation (X-06), `lighthouse` as a blocking gate, Search Console,
+sitemap submission, indexing requests, `hreflang` validation, **G1**, **G2**, and
+T-317. **D4 is untouched by any of this** — Turkish stays `noindex` regardless,
+so G2 is capped at 8/12 even after the domain lands.
 
 ## Risks specific to this sprint
 
