@@ -153,7 +153,14 @@ export function ContactForm() {
         type="submit"
         disabled={status === 'sending'}
         aria-busy={status === 'sending'}
-        className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-6 rounded-md px-4 py-2 font-medium text-accent-fg disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2"
+        // Not dimmed while submitting. disabled:opacity-60 composited the whole
+        // button over the page and dropped the label to 2.57:1 in light and
+        // 2.93:1 in dark, against A-03's 4.5 (T-308). Only 95% opacity or more
+        // stays legible, which is indistinguishable from none — so the state is
+        // signalled by the label changing to "Sending…", aria-busy, the cursor,
+        // and the control genuinely being disabled, rather than by dimming the
+        // one word the user needs to read.
+        className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-6 rounded-md px-4 py-2 font-medium text-accent-fg disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {status === 'sending' ? t('sending') : t('send')}
       </button>

@@ -1583,6 +1583,35 @@ dark-mode failures, and `tests/contrast.test.ts` now guards all of them.
 **Watch out:** axe skips elements it considers non-text or indeterminate, and
 reports nothing rather than a failure. Silence from axe is not a pass for these.
 
+#### Status 2026-09-27: **one real defect found and fixed.**
+
+**The disabled submit button failed A-03, and axe never said a word.**
+`disabled:opacity-60` composites the *whole button* over the page, so both the
+label and its background shift:
+
+| Theme | Effective ratio | A-03 |
+|---|---|---|
+| light | `#ffffff` on `#6ba5e9` = **2.57:1** | 4.5 ❌ |
+| dark | `#0d1117` on `#2e5f9e` = **2.93:1** | 4.5 ❌ |
+
+Opacity is the wrong mechanism here. Only **95% or more** keeps the label above
+4.5:1, and 95% is indistinguishable from no dimming — so there is no opacity
+that both dims visibly and stays legible.
+
+**Fixed by not dimming.** `disabled:opacity-60` → `disabled:cursor-not-allowed`.
+The state is still communicated four ways: the label changes to "Sending…",
+`aria-busy` is set, the cursor changes, and the control is genuinely disabled.
+Contrast returns to the token ratio, 5.19:1 light and 6.11:1 dark, and
+`tests/contrast.test.ts` now pins it.
+
+This matters more than a disabled control usually would: the button is disabled
+precisely while it reads "Sending…", which is the one word the user needs.
+
+**The other two states are clean.** There are **no placeholders** in the form —
+every field has a real `<label>`. The focus ring on `--surface` is already
+covered by `tests/contrast.test.ts` at 4.88:1 light and 5.58:1 dark, against a
+3:1 requirement.
+
 ---
 
 ### T-309 · Keyboard walkthrough — M
@@ -1608,6 +1637,27 @@ the eye moves right-to-left while focus moves in source order. Nothing reports
 this; it has to be watched. Check the header especially, where the nav is
 `ms-auto` and the switcher and toggle sit beside it.
 
+#### Status 2026-09-27: **passes. No problems found.**
+
+Tabbed through all four routes in `en` and `ar`, 13–18 stops each.
+
+- **The skip link is the first stop on every route**, in both locales.
+- **Every stop has a visible focus indicator.** Checked computed
+  `outline-style` and `outline-width` at each stop, not by eye.
+- **The mobile menu opens by keyboard and focus returns to the toggle on
+  close.**
+
+**The RTL concern in the watch-out is resolved by measurement.** Focus
+x-coordinates across the Arabic header decrease monotonically:
+
+```
+تخطَّ إلى المحتوى 1179 → Zeyad Alnahdi 900 → الرئيسية 699 → نبذة عني 631
+→ المشاريع 561 → تواصل معي 475 → EN 433 → TR 400 → AR 366
+```
+
+Focus moves right to left, in step with the eye. The DOM order and the visual
+order agree, so the failure the watch-out describes is not present.
+
 ---
 
 ### T-310 · Screen reader pass on the form — M
@@ -1631,6 +1681,32 @@ so the announcement depends on a **text change inside an existing node**, not on
 a node being inserted. Those behave differently across screen readers, and the
 CLS fix is what makes this the harder case. Do not assume `aria-live` works
 because the markup looks right.
+
+#### Status 2026-09-27: **NOT VERIFIED. No screen reader available.**
+
+`orca`, `nvda`, `espeak-ng`, `speech-dispatcher` and `spd-say` are all absent
+from this machine. **The task's Done-when — "every error and status change is
+announced, in at least `en`" — has not been tested, and is not claimed.**
+
+**What was verified instead, and what it is worth.** The accessibility contract
+the reader consumes is correct, inspected from the live accessibility tree after
+submitting an empty form:
+
+| Field | `aria-invalid` | `aria-describedby` resolves | Announced text | Real `<label>` |
+|---|---|---|---|---|
+| name | `true` | ✅ | "This field is required." | ✅ |
+| email | `true` | ✅ | "This field is required." | ✅ |
+| message | `true` | ✅ | "This field is required." | ✅ |
+| company *(honeypot)* | — | — | — | ✅ |
+
+The `aria-live="polite"` status region is present in the DOM at all times, which
+is what makes this the harder case the watch-out describes: the announcement
+depends on **text changing inside an existing node**, not on a node appearing.
+
+**That is A-07 evidence, not A-08 evidence.** Correct markup is a precondition
+for the announcement, never proof of it — which is exactly what the watch-out
+says. **A-08 stays unverified** and needs a real screen reader on a machine that
+has one.
 
 ---
 
