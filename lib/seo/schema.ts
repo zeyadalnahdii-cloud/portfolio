@@ -50,13 +50,32 @@ const PROJECTS = {
  *   Projects page (S-04, T-216) and depends on D3 — pointing at a repository
  *   nobody can open is exactly the contradiction S-07 forbids.
  */
+/**
+ * The canonical professional identity (docs/02-keyword-plan.md §3, T-205).
+ *
+ * Locale-aware rather than one English string. `Full Stack Developer` is the
+ * canonical title in every locale — it is how the role is written in all three
+ * markets — and each locale adds the term its own readers actually search for:
+ * `software developer` in English (27,100/mo US), `yazılımcı` in Turkish
+ * (14,800/mo TR) and `مبرمج` in Arabic (2,400/mo SA). schema.org accepts a list
+ * for jobTitle, so this states both rather than choosing.
+ *
+ * Emitting one English string on all twelve routes described the Arabic and
+ * Turkish pages in a language their readers do not search in.
+ */
+const JOB_TITLE: Record<Locale, readonly string[]> = {
+  en: ['Full Stack Developer', 'Software Developer'],
+  tr: ['Full Stack Developer', 'Yazılımcı'],
+  ar: ['Full Stack Developer', 'مبرمج'],
+}
+
 const PERSON = {
   name: 'Zeyad Alnahdi',
   // Transliteration variants, so one entity resolves from any spelling
   // (docs/02-keyword-plan.md §2). The doubled-i handle spelling is not here:
   // it appears in the email address, not as a name.
   alternateName: ['زياد النهدي', 'Ziyad Alnahdi', 'Zeyad Al-Nahdi', 'Zeyad Al Nahdi'],
-  jobTitle: 'Backend & Desktop Application Developer',
+
   email: 'mailto:zeyadalnahdii@gmail.com',
   sameAs: ['https://github.com/zeyadalnahdii-cloud'],
   knowsAbout: [
@@ -72,6 +91,7 @@ const PERSON = {
     'FastAPI',
     'Docker',
     'Retrieval-Augmented Generation',
+    'Artificial Intelligence',
   ],
   addressLocality: 'Aksaray',
   addressCountry: 'TR',
@@ -170,7 +190,7 @@ export function buildSchema(locale: Locale, page: SchemaPage = ''): SchemaGraph 
         '@id': PERSON_ID,
         name: PERSON.name,
         alternateName: [...PERSON.alternateName],
-        jobTitle: PERSON.jobTitle,
+        jobTitle: [...JOB_TITLE[locale]],
         url: localeUrl(locale, ''),
         email: PERSON.email,
         sameAs: [...PERSON.sameAs],

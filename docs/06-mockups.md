@@ -169,16 +169,18 @@ h1   About me
      Positioning paragraph.
 
 h2   How I learned
-     Self-taught path: C++ → C# → SQL Server → ASP.NET Core.
+     The ProgrammingAdvices track, in order: fundamentals and problem
+     solving → C++ → OOP → data structures → databases → C# / SQL Server
+     → ASP.NET Core and full-stack. One paragraph in EN, two in AR.
 
-h2   Psychology, applied
-     One concrete example of the degree changing a technical decision.
-     Not a career-change story (see 01 §2).
+h2   What I've built since
+     From exercises to complete systems. Named projects, no comparison
+     against everything ever built.
 
 h2   What I'm looking for
      Freelance · remote · Aksaray-based, open to Ankara roles.
 
-     [ Download CV (PDF) ]                             ← F-34, per locale
+     [ Download CV (PDF) · 69 KB ]                     ← F-34, one English PDF
 ```
 
 ### 2.5 Contact

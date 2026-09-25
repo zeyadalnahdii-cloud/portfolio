@@ -587,7 +587,8 @@ RTL check. A half-finished page in `ROUTES` is worse than no page.
    (SRS I-10).
 3. Keep titles ≤ 60 characters and descriptions ≤ 155. `buildMetadata` throws in
    development if either is over, so this is checked as you write.
-4. Follow the content rules already recorded: the psychology background as an
+4. Follow the content rules already recorded. **Psychology is removed from the
+   site entirely (2026-09-26); `03` F-31 is withdrawn.**
    added capability with one concrete example, never a career-change story
    (`01` §2, F-31); the AI Autonomous Workspace described as built and verified
    with deployment pending, never "in development" (`03` §1.3).
@@ -684,21 +685,100 @@ rather than reasoned.
 **Watch out:** every term in `02` is explicitly a hypothesis. Some will be
 wrong. Changing them is the point of this task, not a sign the plan failed.
 
+
+**Status — CLOSED 2026-09-26. Not open for further keyword research.**
+
+**Step 1** measured the identity and head terms across three markets. Seven
+terms carry a figure, a market and a source, recorded in `02` §1. Two findings
+changed the plan rather than confirming it: the literal translation is the wrong
+term in two of three languages (`مبرمج` beats `مطور برمجيات` 48×; `yazılımcı`
+beats `yazılım geliştirici` 7.8×), and volume is not the selector — the largest
+number in the table, `software engineer` at 90,500, is deliberately not
+targeted because it describes a role this portfolio does not claim.
+
+**Step 2 was deliberately not pursued.** Autocomplete and "People also ask" were
+judged unnecessary once the measured set settled the decisions. `02` §1 says so
+explicitly; nothing in the document is presented as validated by them.
+
+**Step 3** rewrote `02` §3 and §4 and the shipped copy. The canonical identity is
+now `Full Stack Developer` in all three locales, with each locale's measured term
+alongside it.
+
+**The original completion criterion was intentionally narrowed, by owner
+decision.** As written it said the `02` §1 caveat could be *removed*, because
+every term would be measured. It is not removed; it is scoped.
+
+The owner's decision, recorded verbatim in substance: sufficient measured
+head, identity and AI data was collected to make the site-level decisions, and
+**the remaining long-tail hypotheses are not claimed as validated**. Autocomplete
+and "People also ask" were intentionally not pursued. **Post-launch Search
+Console query data is the next validation source** — which `02` §1 always called
+the only real data.
+
+This is recorded as a narrowing of the criterion, not as the criterion having
+been met, and not as the criterion having been reworded to fit. The distinction
+matters: a future reader must be able to see that the long-tail tier in `02` §3
+carries no measurement behind it.
+
+**T-205 is closed.** It does not reopen for more keyword work. The next keyword
+input to this project arrives from Search Console after launch (`08`,
+post-launch verification window, +30 days).
+
+Withdrawn as SEO targets (all reasoned, never measured): the psychology
+differentiator terms, the Aksaray geo terms, and the claim that Arabic RAG was
+"the single strongest Arabic opportunity". Psychology stays in the About
+narrative; Aksaray stays as factual location; RAG stays as project evidence.
+
+`yazılımcı` is settled as a keyword. **D4 still gates publication of `/tr`** —
+native review of the Turkish prose — but no longer gates this keyword choice.
+
 ---
 
-### T-206 · CV, three locales — M
+### T-206 · CV download — M
 
 **Depends on:** T-201
 **Requirements:** F-34
 
-**Steps**
+**Steps** *(step 1 revised by owner decision, 2026-09-26)*
 
-1. One PDF per locale in `public/`.
-2. Filenames carry the canonical name spelling — `Zeyad-Alnahdi-CV-en.pdf` —
+1. ~~One PDF per locale in `public/`.~~ **One English PDF, served on all three
+   locales.** The CV is deliberately not translated and there are not three
+   files. The UI around the download stays localised; the document is English.
+2. Filenames carry the canonical name spelling — `Zeyad-Alnahdi-CV.pdf` —
    because the filename is visible in the URL and in the reader's downloads.
+   (No `-en` / `-tr` / `-ar` suffix, since there is one file.)
 3. Link from About with the file size and format in the link text.
 
-**Done when:** each locale's About page offers its own CV and the links resolve.
+**Done when:** every locale's About page offers the CV and the link resolves.
+
+**Status — complete, 2026-09-26.**
+
+`public/cv/Zeyad-Alnahdi-CV.pdf` (71,148 bytes). `lib/cv.ts` serves one path
+for every locale and measures the size from the file rather than hardcoding
+it — a written-down number is wrong the first time the CV is replaced, and
+nothing would report it. The link carries `hreflang="en"` and
+`type="application/pdf"`, so the document's language is stated to a machine
+even though the label is localised. Size renders in Western numerals in
+Arabic (`06` §3).
+
+`tests/cv.test.ts` pins the single-file decision, so a later change back to
+one-per-locale is deliberate rather than drift, and asserts the file really
+is a PDF rather than a placeholder.
+
+> **Open, and the owner's to resolve: the name on the CV does not match the
+> name on the site.** The document reads *Zeyad Saeed Sulaiman Bin Huwail*;
+> the site, `schema.ts` `name`, the `alternateName` list and **G1** are all
+> built on *Zeyad Alnahdi* / *زياد النهدي*. The filename follows step 2 and
+> uses the site's canonical spelling, which means the filename and the
+> document's own heading disagree. This is exactly the entity-consolidation
+> problem `02` §2 exists to prevent, and no code change fixes it — see the
+> watch-out below, which anticipated it.
+
+> Two smaller consistency notes: the CV publishes a phone number
+> (+90 534 293 28 92) that `01` §6 deliberately keeps off the site, and it
+> states *English: Elementary (A2)* while `01` §3 makes English-language
+> recruiters the priority-1 audience. Both are facts about the document, not
+> defects in the implementation.
 
 **Watch out:** the canonical spelling matters here as much as on the page. A CV
 filed as `cv-final-2.pdf` in someone's downloads folder is not findable later
@@ -741,7 +821,7 @@ cost and LCP is a gate (P-01). The LCP element on this page should be text.
 1. `app/[locale]/about/page.tsx`, `generateStaticParams` and `setRequestLocale`
    as the other routes do.
 2. `buildMetadata` with the About copy.
-3. Sections: how I learned, psychology applied, what I am looking for, CV
+3. Sections: how I learned, what I have built since, what I am looking for, CV
    download.
 4. **Then** add `'/about'` to `ROUTES` and its label to `ROUTE_LABEL`.
 
@@ -1210,6 +1290,20 @@ sprint may close, but that locale does not ship indexed.
 **Also re-run T-126.** Its check 1 is satisfiable once twelve routes exist, and
 the exception recorded in `12-sprint-1-gate.md` ends when it passes, not when
 this gate does.
+
+#### Status 2026-09-27: **run. Sprint 2 closes with two checks not passed.**
+
+Recorded in `13-sprint-2-gate.md`. Nine of eleven green. Check 8 (Turkish
+reviewed) fails on **D4** and the exit condition explicitly permits closure with
+an unreviewed locale held `noindex`. Check 3 could not be run — the Rich Results
+Test needs a publicly reachable URL and there is no deployment yet; it carries to
+Sprint 3 Phase 1.
+
+T-126's check 1 now reads 12 routes and its exception is discharged.
+
+Closing does **not** mean 12 routes are indexed, that Turkish is ready, that the
+contact form has delivered a message, or that a 404 page exists. Each is recorded
+in the gate document with its blocker.
 
 ---
 

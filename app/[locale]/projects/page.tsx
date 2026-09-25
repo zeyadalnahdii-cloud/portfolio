@@ -61,11 +61,13 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
   const entries = [
     {
       ...projects.aiWorkspace,
+      // Result second, not fourth: the measured 32.6s is the strongest fact on
+      // the page and should not sit below the architecture prose.
       rows: [
         ['problem', projects.aiWorkspace.problem],
+        ['result', projects.aiWorkspace.result],
         ['architecture', projects.aiWorkspace.architecture],
         ['scale', projects.aiWorkspace.scale],
-        ['result', projects.aiWorkspace.result],
         ['scope', projects.aiWorkspace.scope],
       ] as const,
     },
@@ -107,7 +109,19 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
               {project.rows.map(([label, value]) => (
                 <div key={label} className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
                   <dt className="text-muted text-sm font-medium">{t(`labels.${label}`)}</dt>
-                  <dd className="mt-1 text-sm leading-relaxed sm:mt-0">{value}</dd>
+                  {/* A row is one paragraph or several; the Arabic architecture
+                    copy runs to two where the English runs to one. */}
+                  <dd className="mt-1 text-sm leading-relaxed sm:mt-0">
+                    {Array.isArray(value) ? (
+                      value.map((paragraph, index) => (
+                        <p key={paragraph} className={index > 0 ? 'mt-3' : undefined}>
+                          {paragraph}
+                        </p>
+                      ))
+                    ) : (
+                      <p>{value}</p>
+                    )}
+                  </dd>
                 </div>
               ))}
 
