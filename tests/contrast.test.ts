@@ -83,6 +83,9 @@ const PAIRS: ReadonlyArray<readonly [string, string, string, number]> = [
   ['focus ring on page', '--accent', '--bg', 3],
   ['focus ring on card', '--accent', '--surface', 3],
   ['invalid field border', '--danger', '--bg', 3],
+  // T-308: the submit button while sending. It is no longer dimmed, so the
+  // ratio is the token ratio — this pins that it stays that way.
+  ['submit label while disabled', '--accent-fg', '--accent', 4.5],
 ]
 
 describe.each(Object.entries(THEMES))('%s theme', (themeName, tokens) => {
