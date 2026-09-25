@@ -1425,15 +1425,21 @@ every `@id` reference resolving inside its graph, and sequential
 Test and does not substitute for it** — it checks the shape, not what Google
 makes of it.
 
-**T-213 — Resend accepted the send; arrival is unconfirmed.** A real submission
-to the live endpoint returned `200 {"ok":true}`. That is meaningful rather than
-cosmetic: the route returns `502` when Resend rejects a send, so a `200` means
-Resend took the message. The boundary still holds — an empty payload is `400`,
-and the honeypot returns `200` without sending.
+**T-213 — verified. The message arrived.** A real submission to the live
+endpoint returned `200 {"ok":true}`, and **the owner confirmed on 2026-09-27
+that it reached the inbox.** The boundary still holds — an empty payload is
+`400`, and the honeypot returns `200` without sending.
 
-**It is still not a pass.** T-213's Done-when is "a submission arrives", and
-whether it landed in the inbox is something only the owner can see. **T-213
-remains not fully complete** pending that confirmation.
+**T-213's Done-when — "twelve routes prerender, a submission arrives, and the
+form is usable by keyboard with errors announced" — is now met on its first two
+clauses by measurement and its third by T-309.** The task is complete.
+
+Worth correcting in the record: T-213 was carried as blocked on **D1**, on the
+assumption that delivery needed a verified custom domain. It did not. Resend's
+`onboarding@resend.dev` sender delivers to the account owner's own address,
+which is exactly the case here — `.env.example` had said so since T-213 was
+written, and the dependency was never re-examined until the interim host made it
+cheap to test. **D1 was never the blocker; nobody had tried.**
 
 ## Days 1–5 — Performance & accessibility
 
@@ -2366,7 +2372,7 @@ Open, and some of it gates Sprint 3.
 | **T-204** Turkish native review | **G2**, T-315 | Blocked on **D4** — no reviewer found |
 | **T-205** keyword validation | — | Pending |
 | **T-206** CVs per locale | F-20 | Pending — the About CV section renders only once the files exist |
-| **T-213** real email delivery | C-04 | Unverified — needs a domain, so effectively **D1** |
+| ~~**T-213** real email delivery~~ | C-04 | **Verified 2026-09-27.** Delivery confirmed by the owner from the interim host. It never needed a domain — Resend's `onboarding@resend.dev` sender was enough, so the earlier D1 attribution was wrong |
 | **T-221** Sprint 2 gate | T-301 | Not yet run |
 
 ---

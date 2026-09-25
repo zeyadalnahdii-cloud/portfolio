@@ -97,7 +97,7 @@ dependency with its own latency. Start it on day 1.
 - [x] Home (F-10..F-14) — T-210, expanded in the 2026-09-26 content pass
 - [x] About (F-30..F-34) — T-211; **F-31 withdrawn**, psychology removed from the site
 - [x] Projects (F-20..F-23) — T-212
-- [x] Contact (F-40..F-45) + form handler (C-01..C-08) — T-213; **real delivery still unverified (D1)**
+- [x] Contact (F-40..F-45) + form handler (C-01..C-08) — T-213, **complete**; real delivery confirmed by the owner 2026-09-27
 - [ ] 404 (F-08) — **not built**; blocked by a Next.js constraint, deferred to **T-320**
 - [x] Per-route metadata from `02` §4 — T-215, revised by T-205
 - [x] `BreadcrumbList`, `SoftwareSourceCode`, `ContactPage` schema (S-03..S-05) — T-216
