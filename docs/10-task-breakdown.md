@@ -587,7 +587,8 @@ RTL check. A half-finished page in `ROUTES` is worse than no page.
    (SRS I-10).
 3. Keep titles ≤ 60 characters and descriptions ≤ 155. `buildMetadata` throws in
    development if either is over, so this is checked as you write.
-4. Follow the content rules already recorded: the psychology background as an
+4. Follow the content rules already recorded. **Psychology is removed from the
+   site entirely (2026-09-26); `03` F-31 is withdrawn.**
    added capability with one concrete example, never a career-change story
    (`01` §2, F-31); the AI Autonomous Workspace described as built and verified
    with deployment pending, never "in development" (`03` §1.3).
@@ -820,7 +821,7 @@ cost and LCP is a gate (P-01). The LCP element on this page should be text.
 1. `app/[locale]/about/page.tsx`, `generateStaticParams` and `setRequestLocale`
    as the other routes do.
 2. `buildMetadata` with the About copy.
-3. Sections: how I learned, psychology applied, what I am looking for, CV
+3. Sections: how I learned, what I have built since, what I am looking for, CV
    download.
 4. **Then** add `'/about'` to `ROUTES` and its label to `ROUTE_LABEL`.
 

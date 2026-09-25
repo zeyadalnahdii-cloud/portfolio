@@ -68,11 +68,18 @@ describe('the review flag against untranslated copy', () => {
    * Some strings are correctly identical across locales, so matching English
    * is not evidence of anything. Two narrow allowances, by key and by value.
    *
-   * By key: technology names, which stay Latin in Arabic and Turkish technical
-   * prose; repository names, which are what the linked repository is actually
-   * called; and the locale block, which carries each language's own name.
+   * By key: technology names — both the per-project `stack` lists and the
+   * grouped `stackGroups` items on Home — which stay Latin in Arabic and
+   * Turkish technical prose; repository names, which are what the linked
+   * repository is actually called; and the locale block, which carries each
+   * language's own name.
+   *
+   * Only the `items` of a stack group are allowed by key, not the group
+   * `label`. A label could hold real prose, so the three that are genuinely
+   * shared are listed by value below and the rest stay guarded.
    */
-  const ALLOWED_KEYS = /(\.stack\.|^locale\.|^projects\.[a-zA-Z]+\.name$)/
+  const ALLOWED_KEYS =
+    /(\.stack\.|^home\.stackGroups\.\d+\.items\.|^locale\.|^projects\.[a-zA-Z]+\.name$)/
 
   /**
    * By value: proper nouns, and words a target language genuinely shares with
@@ -91,6 +98,14 @@ describe('the review flag against untranslated copy', () => {
     // reviewed: false, which would de-index all four Arabic routes over a
     // string that is correct.
     'Full Stack Developer',
+    // Stack group labels deliberately shared across locales: they are technical
+    // category names, and the Arabic and Turkish copy uses the English terms
+    // (docs/02-keyword-plan.md §3.3 — Latin technical terms are retained where
+    // the prose uses them). Listed one by one rather than allowed by key, so a
+    // label that ever holds real prose is still caught.
+    'Frontend',
+    'Backend & APIs',
+    'Data & AI',
   ])
 
   const isAllowed = (key: string, value: string) =>

@@ -188,7 +188,8 @@ Constraints: title ≤ 60 chars · description ≤ 155 chars · exactly one H1 p
 - `/en/projects`, `/tr/projects` and `/ar/projects` carry `AI developer`.
   **AI is a positioning dimension, not a job title** — the site does not claim
   AI Engineer or ML Engineer anywhere.
-- Psychology no longer appears in any title or description. It remains in the
+- Psychology appears nowhere on the site at all (content rewrite, 2026-09-26). It
+  remains in the
   About narrative as story (`01` §2).
 
 ## 5. Content outlines
@@ -199,8 +200,8 @@ Per page, per locale — same structure across locales, independently written co
 not images · two project cards · a single clear call to action. No carousel, no hero
 video: both cost LCP, which is a gate.
 
-**About** — how he learned (self-taught, C++ → C# → SQL Server) · the psychology
-degree as added capability, stated concretely with one real example, not as a career
+**About** — how he learned (the ProgrammingAdvices track, in order) · what he has
+built since · what he is looking for · CV download.
 story · what he is looking for · CV download.
 
 **Projects** — one card per project: problem, stack, one architecture decision worth

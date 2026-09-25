@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { CV_LANGUAGE, cvPath, cvSizeKb, hasCv } from '@/lib/cv'
 import { LOCALES, isLocale } from '@/lib/i18n/config'
+import { getMessages } from '@/lib/i18n/messages'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildMetadata } from '@/lib/seo/metadata'
 import { hasRoute } from '@/lib/seo/routes'
@@ -35,10 +36,9 @@ export async function generateMetadata({
 /**
  * About (F-30 … F-34, docs/06-mockups.md §2.4).
  *
- * The psychology section is one concrete example, not a career-change story
- * (docs/01-project-proposal.md §2). The headline of this site is the
- * engineering; the degree is an added capability and reads as one only if it
- * is tied to something specific.
+ * The page is the engineering path and nothing else: how the work was learned,
+ * what has been built since, and what is being looked for. Sections take their
+ * paragraphs from arrays, so a locale writes as many as its copy needs.
  */
 export default async function AboutPage({ params }: PageProps<'/[locale]/about'>) {
   const { locale } = await params
@@ -49,6 +49,12 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
 
   setRequestLocale(locale)
   const t = await getTranslations('about')
+
+  // Paragraph arrays come from the typed registry rather than t.raw(), which
+  // returns unknown. Each locale sets its own paragraph count: the Arabic copy
+  // runs to two where the English runs to one, and neither is padded to match
+  // the other.
+  const { learning, since } = getMessages(locale).about
 
   return (
     <>
@@ -61,14 +67,22 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
           <h2 id="learning-heading" className="text-lg font-semibold">
             {t('learningHeading')}
           </h2>
-          <p className="mt-3 leading-relaxed">{t('learning')}</p>
+          {learning.map((paragraph) => (
+            <p key={paragraph} className="mt-3 leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
         </section>
 
-        <section aria-labelledby="psychology-heading" className="mt-10">
-          <h2 id="psychology-heading" className="text-lg font-semibold">
-            {t('psychologyHeading')}
+        <section aria-labelledby="since-heading" className="mt-10">
+          <h2 id="since-heading" className="text-lg font-semibold">
+            {t('sinceHeading')}
           </h2>
-          <p className="mt-3 leading-relaxed">{t('psychology')}</p>
+          {since.map((paragraph) => (
+            <p key={paragraph} className="mt-3 leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
         </section>
 
         <section aria-labelledby="looking-heading" className="mt-10">

@@ -49,7 +49,7 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   // Arrays come from the typed registry rather than t.raw(), which returns
   // unknown and would need a cast at every call site.
   const messages = getMessages(locale)
-  const { stack } = messages.home
+  const { build, stackGroups, process } = messages.home
   const projects = [messages.projects.aiWorkspace, messages.projects.restaurant]
 
   return (
@@ -62,19 +62,64 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
         <p className="mt-6 leading-relaxed">{t('intro')}</p>
         <p className="text-muted mt-3 text-sm">{t('location')}</p>
 
+        <section aria-labelledby="build-heading" className="mt-12">
+          <h2 id="build-heading" className="text-lg font-semibold">
+            {t('buildHeading')}
+          </h2>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+            {build.map((item) => (
+              <div key={item.title} className="border-subtle bg-surface rounded-lg border p-4">
+                <dt className="font-medium">{item.title}</dt>
+                <dd className="text-muted mt-1 text-sm leading-relaxed">{item.body}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
         <section aria-labelledby="stack-heading" className="mt-12">
           <h2 id="stack-heading" className="text-lg font-semibold">
             {t('stackHeading')}
           </h2>
           {/* F-12: plain text, never logo images. Text is indexable and costs
-            nothing to load; a row of logos is neither. */}
-          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
-            {stack.map((item) => (
-              <li key={item} className="border-subtle bg-surface rounded-md border px-2 py-1">
-                <span dir="ltr">{item}</span>
-              </li>
+            nothing to load; a row of logos is neither. Grouped rather than one
+            flat run, so the list reads as four capabilities instead of eleven
+            unsorted words (T-205 content pass). */}
+          <dl className="mt-4 space-y-4">
+            {stackGroups.map((group) => (
+              <div key={group.label} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
+                <dt className="text-muted text-sm font-medium" dir="ltr">
+                  {group.label}
+                </dt>
+                <dd className="mt-2 sm:mt-0">
+                  <ul className="flex flex-wrap gap-x-2 gap-y-2 text-sm">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="border-subtle bg-surface rounded-md border px-2 py-1"
+                        dir="ltr"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
             ))}
-          </ul>
+          </dl>
+        </section>
+
+        <section aria-labelledby="process-heading" className="mt-12">
+          <h2 id="process-heading" className="text-lg font-semibold">
+            {t('processHeading')}
+          </h2>
+          <dl className="mt-4 space-y-4">
+            {process.map((item) => (
+              <div key={item.title}>
+                <dt className="font-medium">{item.title}</dt>
+                <dd className="text-muted mt-1 text-sm leading-relaxed">{item.body}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         <section aria-labelledby="work-heading" className="mt-12">
@@ -108,7 +153,8 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
                   )}
                 </h3>
                 <p className="text-muted mt-1 text-xs">{project.status}</p>
-                <p className="mt-3 text-sm leading-relaxed">{project.problem}</p>
+                <p className="mt-3 text-sm leading-relaxed">{project.summary}</p>
+                <p className="text-accent mt-3 text-sm font-medium">{project.highlight}</p>
                 <ul className="text-muted mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-4 text-xs">
                   {project.stack.slice(0, 4).map((item) => (
                     <li key={item} dir="ltr">
