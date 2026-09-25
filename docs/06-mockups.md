@@ -39,6 +39,20 @@ Defined as CSS custom properties on `:root`, redefined for dark mode. Both theme
 | `--accent` | `#0969da` | `#4493f8` | Links, CTA |
 | `--accent-hover` | `#0550ae` | `#6cb6ff` | Hover |
 | `--focus` | `#0969da` | `#4493f8` | Focus ring (A-05) |
+| `--accent-fg` | `#ffffff` | `#0d1117` | Text **on** an accent fill (buttons) |
+| `--danger` | `#cf222e` | `#ff7b72` | Error text, invalid field border |
+| `--border-control` | `#818b98` | `#6e7681` | Form control boundaries |
+
+> The last three were added in **T-219**. The table originally had no token for
+> text drawn *on* the accent, so both buttons hardcoded `text-white` — correct
+> in light, **3.10:1 in dark**. There was likewise no error colour, so the form
+> hardcoded Tailwind `red-600`, which is **3.96:1** on the dark background.
+> A missing token is how a palette fails a theme: nothing is wrong with any
+> value in the table, and the site still fails A-03.
+>
+> `--border-subtle` is unchanged and remains decorative (card edges, dividers),
+> which WCAG 1.4.11 exempts. `--border-control` exists because an *empty* input
+> is identifiable only by its border, so that one must reach 3:1.
 
 > These are placeholder values chosen for guaranteed contrast, not a brand palette.
 > Replace with a deliberate palette — but re-run contrast checks in **both** themes
@@ -155,16 +169,18 @@ h1   About me
      Positioning paragraph.
 
 h2   How I learned
-     Self-taught path: C++ → C# → SQL Server → ASP.NET Core.
+     The ProgrammingAdvices track, in order: fundamentals and problem
+     solving → C++ → OOP → data structures → databases → C# / SQL Server
+     → ASP.NET Core and full-stack. One paragraph in EN, two in AR.
 
-h2   Psychology, applied
-     One concrete example of the degree changing a technical decision.
-     Not a career-change story (see 01 §2).
+h2   What I've built since
+     From exercises to complete systems. Named projects, no comparison
+     against everything ever built.
 
 h2   What I'm looking for
      Freelance · remote · Aksaray-based, open to Ankara roles.
 
-     [ Download CV (PDF) ]                             ← F-34, per locale
+     [ Download CV (PDF) · 69 KB ]                     ← F-34, one English PDF
 ```
 
 ### 2.5 Contact
@@ -223,6 +239,16 @@ Arabic is **not** the LTR layout mirrored by CSS. These are design decisions, ta
   to the start of the line.
 - Test with real Arabic content, never Lorem Ipsum. Latin placeholder text in an RTL
   layout hides every bidi bug the real content will expose.
+- Put `dir="ltr"` on an **inline** element, never on a block one. On a block it sets
+  the alignment too, so a Latin heading inside an Arabic page left-aligns and detaches
+  from its own right-aligned section. For a run of Latin text inside RTL content use
+  `<bdi>`, which isolates the run's direction and leaves the block following the page.
+  (T-219 found exactly this on the `/projects` headings.)
+- A logical-sounding class name is not automatically a real one. `inset-inline-0` is
+  not a Tailwind utility; it compiled to nothing, and the mobile menu shipped as a
+  shrink-wrapped panel floating over the page in all three locales. Tailwind's logical
+  inset utilities are `start-*` / `end-*` (and `inset-x-*`). An unknown class produces
+  no CSS and no warning — check the generated stylesheet, not the class name.
 
 ### 3.2 Screens requiring separate RTL review
 

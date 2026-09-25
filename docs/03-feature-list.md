@@ -69,10 +69,10 @@ outcome (see `01` §7.1).
 | ID | Feature | Notes |
 |---|---|---|
 | F-30 | Learning path | Self-taught: C++ → C# → SQL Server → ASP.NET Core |
-| F-31 | Psychology background | One concrete example of it affecting a technical decision. **Not** framed as a career change |
+| ~~F-31~~ | ~~Psychology background~~ | **Withdrawn 2026-09-26.** Psychology is removed from the site entirely by owner decision. It remains in the downloadable CV only |
 | F-32 | What he is looking for | Freelance, remote, or local roles |
 | F-33 | Location | Aksaray, Turkey — available remotely and for Ankara roles |
-| F-34 | CV download | One PDF per locale. Filenames carry the canonical name spelling |
+| F-34 | CV download | **One English PDF, served on all three locales** (owner decision, T-206 — not translated). Filename carries the canonical name spelling; the link states format, size and `hreflang="en"` |
 
 ### 1.5 Contact
 
@@ -122,6 +122,6 @@ Listed so that exclusion is a recorded decision rather than an oversight.
 | Feature | Blocked by |
 |---|---|
 | F-22 | D2 / D3 — repository visibility |
-| F-34 | CV content written in three locales |
+| ~~F-34~~ | ~~CV content written in three locales~~ — **withdrawn (T-206):** one English CV serves all three |
 | F-40 | Form handling choice — see `04-srs.md` §7 |
 | All metadata | D1 — domain, needed for absolute canonical URLs |

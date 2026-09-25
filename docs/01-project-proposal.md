@@ -20,7 +20,15 @@ the site is itself a work sample.
 
 ## 2. Positioning
 
-**Primary identity:** Backend & Desktop Application Developer
+**Primary identity:** Full Stack Developer
+
+> **Revised by T-205, 2026-09-25.** Previously "Backend & Desktop Application
+> Developer". `full stack developer` measures 12,100/mo in the US and matches what
+> the portfolio actually evidences — a four-layer ASP.NET Core system with a
+> Next.js frontend, and a desktop application over SQL Server. **AI is a secondary
+> positioning dimension**: the site says Zeyad builds AI-powered applications, and
+> never claims AI Engineer or ML Engineer. RAG, Qdrant, FastAPI and Ollama stay
+> inside the project case study as evidence, not as the search identity.
 **Core stack:** C# · ASP.NET Core · .NET · SQL Server / PostgreSQL · Clean Architecture ·
 Python/FastAPI · TypeScript/Next.js · Docker
 
@@ -29,15 +37,15 @@ ASP.NET Core system with a verified RAG pipeline (§7.1) and a three-tier deskto
 application over 37 stored procedures (§7.2). The site's job is to make that legible
 quickly, not to claim more than it.
 
-**Differentiator:** A psychology degree used as an *added capability*, not a career
-change narrative. Positioned as:
+**Differentiator:** measured engineering practice rather than a personal narrative
+— layered architecture, tests and CI on every change, and results recorded from real
+runs rather than estimated (`docs/runtime-verification.md`). The site shows the work,
+not a story about the work.
 
-> Builds software with a trained understanding of how people actually behave —
-> applied to interface clarity, error handling, and data modelling that matches
-> how users think rather than how databases are shaped.
-
-This is stated once, concretely, on About. It is not the headline on Home, and it
-is never framed as "I switched careers". The headline is the engineering.
+> **Revised 2026-09-26.** The previous differentiator was a psychology degree framed
+> as an added capability. **Psychology is now removed from the site entirely** — the
+> About section, the intro framing and this positioning. It remains in the
+> downloadable CV. `03` F-31 is withdrawn accordingly.
 
 ## 3. Audiences and language strategy
 
@@ -72,7 +80,7 @@ G1–G4 are gates. G5 is observed, not targeted, until there is baseline data.
 **In scope**
 - Four pages — Home, About, Projects, Contact — in three locales = 12 routes.
 - Two project entries presented as cards on the Projects page (no per-project routes in v1; see §7).
-- Contact form, downloadable CV per locale, dark mode, full RTL for Arabic.
+- Contact form, downloadable CV (one English PDF on all three locales — T-206), dark mode, full RTL for Arabic.
 - Complete technical SEO layer, implemented from Sprint 1 (not retrofitted).
 
 **Out of scope for v1** — requires explicit scope change
@@ -163,7 +171,18 @@ gap between "I built a working RAG pipeline" and a reader confirming it is the e
 distance between a claim and evidence. The measured numbers in `runtime-verification.md`
 lose most of their force when nobody can open the file they came from.
 
-**Recommendation:** make the repository public permanently. If specific material must
+> **Resolved 2026-09-23: both repositories stay private.** The owner does not
+> want them public for the portfolio. The Projects page therefore carries no
+> repository links at all — not a disabled or conditional one — and the
+> recommendation below is recorded as advice that was considered and declined,
+> not as an open question. The documented fallback applies: repository evidence
+> is replaced by screenshots and demo evidence (F-52), scoped to what each task
+> requires and no further.
+>
+> The consequence to keep in view is S-04: structured data must not claim a
+> `codeRepository` nobody can open, so T-216 emits none.
+
+**Recommendation as originally written:** make the repository public permanently. If specific material must
 stay private, the narrower options in descending preference are:
 
 1. **Public repo, `main` branch curated** — merge a presentable state to `main`, keep

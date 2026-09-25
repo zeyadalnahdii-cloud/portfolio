@@ -1,0 +1,51 @@
+/**
+ * Every page route the site serves, without its locale prefix.
+ *
+ * This is the list the sitemap enumerates and the navigation renders, so it
+ * has to stay truthful. A sitemap advertising a URL that 404s is worse than a
+ * short one, and a header linking to a page that does not exist wastes crawl
+ * budget and dead-ends visitors. It is therefore the pages that *exist*, not
+ * the pages that are planned.
+ *
+ * Adding a route here without building it is the one way to break both
+ * quietly.
+ */
+export const ROUTES = ['', '/about', '/projects', '/contact'] as const
+
+export type Route = (typeof ROUTES)[number]
+
+/**
+ * The message key under `nav` that labels each route.
+ *
+ * Typed against `Route`, so adding a route without giving it a label fails to
+ * compile — the navigation cannot end up with an unlabelled entry.
+ */
+export const ROUTE_LABEL: Record<Route, 'home' | 'about' | 'projects' | 'contact'> = {
+  '': 'home',
+  '/about': 'about',
+  '/projects': 'projects',
+  '/contact': 'contact',
+}
+
+/**
+ * Whether a page exists yet.
+ *
+ * Lets a component link to a route only once it is real. The alternative is a
+ * call to action that 404s until the page it points at is built, which is
+ * worse than no call to action: it costs the visitor a click and the crawler a
+ * dead end. The links appear on their own as T-212 and T-213 land.
+ */
+export function hasRoute(route: string): boolean {
+  return (ROUTES as readonly string[]).includes(route)
+}
+
+/**
+ * The fragment id of one project's section on /projects.
+ *
+ * Home links to these anchors and /projects renders them; deriving both from
+ * this function is what keeps the two from drifting into dead fragments
+ * (docs/05-ia-url-map.md §4.2).
+ */
+export function projectAnchor(name: string): string {
+  return `${name.replace(/\s+/g, '-').toLowerCase()}-heading`
+}

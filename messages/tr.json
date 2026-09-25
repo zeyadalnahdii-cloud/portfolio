@@ -1,4 +1,207 @@
 {
-  "_meta": { "reviewed": false },
-  "locale": { "name": "Turkish", "nativeName": "Türkçe" }
+  "_meta": {
+    "reviewed": false
+  },
+  "locale": {
+    "name": "Turkish",
+    "nativeName": "Türkçe"
+  },
+  "nav": {
+    "home": "Ana sayfa",
+    "about": "Hakkımda",
+    "projects": "Projeler",
+    "contact": "İletişim",
+    "skipToContent": "İçeriğe geç",
+    "menu": "Menü",
+    "closeMenu": "Menüyü kapat",
+    "primary": "Ana",
+    "language": "Dil"
+  },
+  "theme": {
+    "darkMode": "Karanlık mod"
+  },
+  "footer": {
+    "email": "E-posta",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
+  "meta": {
+    "home": {
+      "title": "Zeyad Alnahdi — Full Stack Developer",
+      "description": "C#, ASP.NET Core ve Next.js ile web ve masaüstü uygulamaları ve yapay zekâ destekli sistemler geliştiriyorum. Aksaray'da yaşıyorum."
+    },
+    "about": {
+      "title": "Hakkımda — Zeyad Alnahdi, Full Stack Developer",
+      "description": "Aksaray’da yaşayan bir yazılımcı; C#, ASP.NET Core, SQL Server ve Next.js ile çalışıyor. Aldığım yapılandırılmış eğitim ve sonrasında kurduklarım."
+    },
+    "projects": {
+      "title": "Projeler — AI ve Full Stack Geliştirme | Zeyad Alnahdi",
+      "description": "ASP.NET Core, FastAPI ve Qdrant ile kendi sunucusunda çalışan yapay zekâ altyapısı; C# ve SQL Server ile katmanlı bir masaüstü sistemi."
+    },
+    "contact": {
+      "title": "İletişim — Zeyad Alnahdi, Full Stack Developer",
+      "description": "Freelance projeler, uzaktan pozisyonlar veya iş birliği için iletişime geçin. E-posta ve GitHub üzerinden, iki iş günü içinde yanıt."
+    }
+  },
+  "home": {
+    "name": "Zeyad Alnahdi",
+    "role": "Full Stack Developer",
+    "intro": "Uçtan uca full stack uygulamalar geliştiriyorum: arayüz, arkasındaki API, altındaki veritabanı ve en üstte yapay zekâ katmanı. Bu sistemlerden ikisi burada: ASP.NET Core ve Python ile kendi sunucusunda çalışan bir yapay zekâ çalışma alanı ve bir restoranın satın alma ve stok işlerini yürüten bir masaüstü sistemi.",
+    "location": "Aksaray'da yaşıyorum. Freelance işlere ve uzaktan pozisyonlara açığım.",
+    "buildHeading": "Neler geliştiriyorum",
+    "build": [
+      {
+        "title": "Web uygulamaları",
+        "body": "Tarayıcıda Next.js ve TypeScript, arkasında ASP.NET Core. Hız ve arama için gerektiği yerde sunucuda render ediliyor."
+      },
+      {
+        "title": "Backend ve API’ler",
+        "body": "ASP.NET Core ile REST API’ler; katmanlı kurulur, böylece iş kuralları controller’ın içinde kalmaz."
+      },
+      {
+        "title": "Masaüstü uygulamaları",
+        "body": "Tek bir binada yürüyen işler için C# masaüstü yazılımı — stok, satın alma, raporlama."
+      },
+      {
+        "title": "Yapay zekâ destekli özellikler",
+        "body": "Kendi belgeleriniz üzerinde, kendi donanımınızda çalışan erişim. Yanıtlar geldikleri sayfayla birlikte döner."
+      }
+    ],
+    "stackHeading": "Kullandığım teknolojiler",
+    "stackGroups": [
+      {
+        "label": "Frontend",
+        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"]
+      },
+      {
+        "label": "Backend ve API’ler",
+        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"]
+      },
+      {
+        "label": "Veri ve yapay zekâ",
+        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"]
+      },
+      {
+        "label": "Geliştirme pratikleri",
+        "items": ["Git", "CI", "Otomatik test", "Clean Architecture", "Docker"]
+      }
+    ],
+    "processHeading": "Nasıl çalışıyorum",
+    "process": [
+      {
+        "title": "Ayrı kalan katmanlar",
+        "body": "Yapay zekâ çalışma alanında dört, restoran sisteminde üç katman. İkisinde de bir katmandaki değişiklik diğerlerine yayılmıyor."
+      },
+      {
+        "title": "Birleştirmeden önce test ve CI",
+        "body": "Yapay zekâ çalışma alanında 85 test dosyası var ve CI her pull request’te çalışıyor."
+      },
+      {
+        "title": "Her dal için tek özellik",
+        "body": "74 birleştirilmiş pull request’inin her biri main’e girmeden önce gözden geçirildi."
+      },
+      {
+        "title": "Tahmin değil, ölçüm",
+        "body": "Erişim hattı gerçek bir çalışmadan alınan sürelerle belgelendi — gurur verici olmayan sayılar da dahil."
+      }
+    ],
+    "workHeading": "Seçilmiş çalışmalar",
+    "seeProjects": "Tüm projeler",
+    "cta": "İletişime geçin"
+  },
+  "about": {
+    "heading": "Hakkımda",
+    "intro": "Aksaray’da yaşayan bir yazılımcıyım. Full stack çalışıyorum — sunucuda C#, ASP.NET Core ve SQL Server, tarayıcıda Next.js ve TypeScript — ve bu işe yapılandırılmış bir programlama eğitimiyle, ardından sistemler kurarak geldim.",
+    "learningHeading": "Nasıl öğrendim",
+    "learning": [
+      "ProgrammingAdvices üzerinden çalıştım; alanları sırayla ele alan yapılandırılmış bir program: programlama temelleri ve problem çözme, C++, nesne yönelimli programlama, veri yapıları, veritabanları ve SQL Server, ardından C# ve ASP.NET Core ile full-stack geliştirme."
+    ],
+    "sinceHeading": "Sonrasında neler kurdum",
+    "since": [
+      "Ondan sonrası projeler oldu. Bunlardan biri bir yapay zekâ çalışma alanı — dört katmanlı ASP.NET Core, erişim işleri için bir Python servisi, PostgreSQL ve Qdrant ve yerelde çalışan bir dil modeli — 598 dosya ve 74 birleştirilmiş pull request; özellikleri tamamlandı, yayına alınmayı bekliyor. Bir diğeri, bir restoranın satın alma ve stok işlerini SQL Server üzerinde yürüten üç katmanlı bir masaüstü sistemi; her veritabanı çağrısı bir saklı yordamdan geçiyor."
+    ],
+    "lookingHeading": "Ne arıyorum",
+    "looking": "Freelance projeler, uzaktan pozisyonlar veya yerel işler. Aksaray'da yaşıyorum ve Ankara'daki pozisyonlara açığım.",
+    "cvHeading": "Özgeçmiş",
+    "cvDownload": "Özgeçmişi indir (PDF)",
+    "seeProjects": "Neler yaptığıma bakın"
+  },
+  "projects": {
+    "heading": "Projeler",
+    "intro": "İki sistem, ikisi de baştan sona kuruldu. Birincisi, erişim hattı tamamen kendi donanımında çalışan bir yapay zekâ çalışma alanı; ikincisi, bir restoranın satın alma ve stok işlerini SQL Server üzerinde yürüten bir masaüstü uygulaması.",
+    "ctaLead": "Birlikte çalışmak ister misiniz?",
+    "cta": "İletişime geçin",
+    "labels": {
+      "problem": "Problem",
+      "architecture": "Mimari",
+      "scale": "Ölçek",
+      "result": "Sonuç",
+      "scope": "Kapsam",
+      "notable": "Dikkate değer",
+      "stack": "Teknolojiler"
+    },
+    "aiWorkspace": {
+      "name": "AI Autonomous Workspace",
+      "status": "Kuruldu ve doğrulandı · yayına alma bekliyor",
+      "summary": "Belgeler kimsenin okuyabileceğinden hızlı birikiyor. Bu çalışma alanı onları alıyor, içindekileri indeksliyor ve sorulara kaynağıyla birlikte yanıt veriyor.",
+      "highlight": "35 sayfalık bir PDF, yüklemeden aranabilir olmaya 32,6 saniyede.",
+      "problem": "Belgeler kimsenin okuyabileceğinden hızlı birikiyor. Bu çalışma alanı onları saklıyor, içindekileri indeksliyor ve sorulara kaynağıyla birlikte yanıt veriyor.",
+      "result": "Tahmin değil, çalışan bir sistem üzerinde ölçüldü: 35 sayfalık bir PDF, yüklemeden aranabilir olmaya 32,6 saniyede geçiyor ve her yanıt alındığı sayfayla birlikte dönüyor.",
+      "architecture": [
+        "Dört katmanlı ASP.NET Core — Domain, Application, Infrastructure ve Api — erişim işleri için bir Python FastAPI servisi, Docker içinde PostgreSQL ve Qdrant, ve yerelde çalışan bir dil modeli. Üçüncü taraf bir yapay zekâ sağlayıcısı yok: tüm hat kendi donanımında çalışıyor."
+      ],
+      "scale": "598 dosya · 189 C# · 80 Python · 41 TypeScript · 85 test dosyası · 74 birleştirilmiş pull request",
+      "scope": "Dokuzuncu sprintine kadar özellikleri tamamlandı. Onuncu sprint yayına hazırlık, yani sistem kurulu ve doğrulanmış durumda ama henüz yayına alınmadı.",
+      "stack": [
+        "ASP.NET Core",
+        "C#",
+        "PostgreSQL",
+        "Python",
+        "FastAPI",
+        "Qdrant",
+        "Docker",
+        "Next.js",
+        "RAG"
+      ]
+    },
+    "restaurant": {
+      "name": "Restaurant Management",
+      "status": "Tamamlandı",
+      "summary": "Bir restoran için satın alma ve stok yönetimi; Arapça ve sağdan sola arayüze sahip bir Windows masaüstü uygulaması.",
+      "highlight": "9 form, 10 tablo, 37 saklı yordam — ve hiçbir yerde gömülü SQL yok.",
+      "problem": "Bir restoran için satın alma ve stok yönetimi; Windows masaüstü uygulaması olarak kuruldu.",
+      "architecture": [
+        "Üç katman — formlar, iş mantığı ve veri erişimi — her veritabanı çağrısı bir saklı yordamdan geçiyor, hiçbiri gömülü SQL'den değil."
+      ],
+      "scale": "9 form · 10 tablo · 37 saklı yordam · RDLC raporları",
+      "notable": "Arayüz baştan sona Arapça ve sağdan sola; bir yerleşimin ne kadarının yön bağımlı olduğunu ilk orada öğrendim.",
+      "stack": ["C#", "Windows Forms", ".NET Framework", "SQL Server", "T-SQL", "RDLC"]
+    }
+  },
+  "contact": {
+    "heading": "İletişime geçin",
+    "intro": "Freelance projeler, uzaktan pozisyonlar veya kurmak istediğiniz bir şey için — veritabanından arayüze kadar. Gelen her mesajı okuyorum.",
+    "responseTime": "İki iş günü içinde yanıt veriyorum.",
+    "form": {
+      "name": "Ad",
+      "email": "E-posta",
+      "message": "Mesaj",
+      "send": "Gönder",
+      "sending": "Gönderiliyor…",
+      "success": "Teşekkürler — mesajınız ulaştı. İki iş günü içinde yanıt vereceğim.",
+      "error": "Bir sorun oluştu ve mesaj gönderilemedi. Bunun yerine doğrudan e-posta gönderebilirsiniz.",
+      "required": "Bu alan zorunludur.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "tooLong": "Bu, formun kabul ettiğinden uzun.",
+      "rateLimited": "Şu anda çok fazla mesaj var. Lütfen biraz sonra tekrar deneyin ya da doğrudan e-posta gönderin.",
+      "errorSummary": "Form gönderilemedi."
+    },
+    "elsewhereHeading": "Diğer bağlantılar",
+    "emailLabel": "E-posta"
+  },
+  "notFound": {
+    "heading": "Sayfa bulunamadı",
+    "body": "Bu sayfa yok ya da taşınmış. Aşağıdaki bağlantılar hâlâ çalışıyor.",
+    "backHome": "Ana sayfaya dön"
+  }
 }

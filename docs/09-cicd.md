@@ -145,7 +145,19 @@ project's gate).
 | Environment | Trigger | Domain | Indexable |
 |---|---|---|---|
 | Preview | Every PR | `*.vercel.app` | **No** — `X-Robots-Tag: noindex` |
-| Production | Merge to `main` | `{ORIGIN}` | Yes |
+| **Interim** (T-322) | Merge to `main`, until D1b | `*.vercel.app` | **No** — opted out via `SITE_INDEXABLE` |
+| Canonical production | Merge to `main`, after D1b | `{ORIGIN}` | Yes — `SITE_INDEXABLE=true` |
+
+> **A third environment exists from 2026-09-27.** The owner deferred the custom
+> domain (D1b) and the site is published on a free `*.vercel.app` host in the
+> meantime. That host is a **public but non-canonical** deployment: it is not
+> `{ORIGIN}`, it does not satisfy X-07, and it stays `noindex`.
+>
+> Indexability is therefore **no longer inferable from `VERCEL_ENV`** — Vercel
+> marks the interim deployment `production`. `SITE_INDEXABLE` decides it
+> instead, opt-in and defaulting to off (T-321). `VERCEL_ENV` still answers the
+> question it actually asks, and `origin.ts` still reads it for https
+> enforcement.
 
 **X-06 verification is a CI assertion, not a config review.** The pipeline issues a
 request against the preview URL and asserts the header is present. A `noindex` that
@@ -153,8 +165,9 @@ was configured but is not actually being served is indistinguishable from a work
 one until the previews appear in search results — as a full duplicate of the site,
 competing with the canonical domain.
 
-`robots.ts` branches on `VERCEL_ENV === 'production'`, never `NODE_ENV`: preview
-builds are production builds.
+`robots.ts` and the `X-Robots-Tag` header branch on `SITE_INDEXABLE`, never
+`NODE_ENV` and — since T-321 — no longer on `VERCEL_ENV` either: preview builds
+are production builds, and so is the interim host.
 
 ---
 
@@ -195,10 +208,47 @@ are a proxy for them, not the goal.
 | Sprint | State |
 |---|---|
 | S1 | `validate`, `build`, `test` enforcing. `lighthouse`, `axe`, `metadata` running in report-only mode |
-| S2 | `metadata` and `axe` promoted to blocking |
+| S2 | `metadata` and `axe` promoted to blocking — **done, T-220** |
 | S3 | `lighthouse` promoted to blocking; preview `noindex` assertion added; full pipeline enforcing |
 
 Gates start report-only and are promoted once the codebase can actually pass them.
 A gate introduced as blocking before the code can satisfy it gets disabled within a
 week — and a disabled gate is worse than no gate, because everyone assumes it is
 still running.
+
+**T-220 note.** Promotion needs two things, not one. The jobs must be in the
+workflow *and* be required status checks — a job that merely runs is advisory,
+and a red advisory check is something people learn to merge past.
+
+Both halves are done. `validate`, `build`, `metadata` and `axe` are required
+status checks on **`main` and `dev`**, with `strict` on so a branch must be up
+to date before it merges.
+
+`dev` previously had no protection at all, which meant even `validate` and
+`build` were unenforced on the branch every pull request in this project
+actually targets. Requiring the gates only on `main` would have left that gap
+open.
+
+The protection was applied with, for `BR` in `main` and `dev`:
+
+```sh
+gh api -X PUT repos/:owner/:repo/branches/$BR/protection --input - <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["validate", "build", "metadata", "axe"]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": null,
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+JSON
+```
+
+The `metadata` and `axe` jobs build with `VERCEL_ENV=production`. Without it the
+deployment is treated as a preview and served with a blanket
+`X-Robots-Tag: noindex`, so the jobs would be inspecting a page nobody will be
+served. The Sprint 3 preview-`noindex` assertion in §6 is the other half of
+this and is deliberately not implemented here.

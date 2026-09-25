@@ -1,4 +1,207 @@
 {
-  "_meta": { "reviewed": false },
-  "locale": { "name": "English", "nativeName": "English" }
+  "_meta": {
+    "reviewed": true
+  },
+  "locale": {
+    "name": "English",
+    "nativeName": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact",
+    "skipToContent": "Skip to content",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "primary": "Primary",
+    "language": "Language"
+  },
+  "theme": {
+    "darkMode": "Dark mode"
+  },
+  "footer": {
+    "email": "Email",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
+  "meta": {
+    "home": {
+      "title": "Zeyad Alnahdi — Full Stack Developer",
+      "description": "Full stack developer building web and desktop applications in C#, ASP.NET Core and Next.js, including AI-powered systems. Based in Aksaray, Turkey."
+    },
+    "about": {
+      "title": "About Zeyad Alnahdi — Full Stack Developer",
+      "description": "Software developer in Aksaray, Turkey, working in C#, ASP.NET Core, SQL Server and Next.js. The structured track I learned through, and what came after."
+    },
+    "projects": {
+      "title": "Projects — AI and Full Stack Development | Zeyad Alnahdi",
+      "description": "An AI-powered workspace built on ASP.NET Core, FastAPI and Qdrant, and a three-tier C# desktop system over SQL Server."
+    },
+    "contact": {
+      "title": "Contact Zeyad Alnahdi — Full Stack Developer",
+      "description": "Get in touch about freelance projects, remote roles or collaboration. Email and GitHub, with a reply within two business days."
+    }
+  },
+  "home": {
+    "name": "Zeyad Alnahdi",
+    "role": "Full Stack Developer",
+    "intro": "I build full stack applications end to end — the interface, the API behind it, the database under that, and the AI layer on top. Two of those systems are shown here: a self-hosted AI workspace in ASP.NET Core and Python, and a desktop system handling a restaurant's purchasing and inventory.",
+    "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
+    "buildHeading": "What I build",
+    "build": [
+      {
+        "title": "Web applications",
+        "body": "Next.js and TypeScript in the browser, ASP.NET Core behind it. Rendered on the server where that matters for speed and for search."
+      },
+      {
+        "title": "Backend and APIs",
+        "body": "REST APIs in ASP.NET Core, built in layers so the business rules do not end up living in the controller."
+      },
+      {
+        "title": "Desktop applications",
+        "body": "C# desktop software for the work that happens in one building — inventory, purchasing, reporting."
+      },
+      {
+        "title": "AI-powered features",
+        "body": "Retrieval over your own documents, on your own hardware. Answers that arrive with the page they came from."
+      }
+    ],
+    "stackHeading": "What I work with",
+    "stackGroups": [
+      {
+        "label": "Frontend",
+        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"]
+      },
+      {
+        "label": "Backend & APIs",
+        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"]
+      },
+      {
+        "label": "Data & AI",
+        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"]
+      },
+      {
+        "label": "Engineering",
+        "items": ["Git", "CI", "Automated testing", "Clean Architecture", "Docker"]
+      }
+    ],
+    "processHeading": "How I work",
+    "process": [
+      {
+        "title": "Layers that stay separate",
+        "body": "Four in the AI workspace, three in the restaurant system. In both, a change inside one layer does not travel through the rest."
+      },
+      {
+        "title": "Tests and CI before merge",
+        "body": "The AI workspace carries 85 test files, with CI running on every pull request."
+      },
+      {
+        "title": "One feature per branch",
+        "body": "Its 74 merged pull requests were each reviewed before landing on main."
+      },
+      {
+        "title": "Measured, not estimated",
+        "body": "Its retrieval pipeline is documented with timings from a real run — including the numbers that were not flattering."
+      }
+    ],
+    "workHeading": "Selected work",
+    "seeProjects": "See all projects",
+    "cta": "Get in touch"
+  },
+  "about": {
+    "heading": "About me",
+    "intro": "I'm a software developer in Aksaray, Turkey. I work across the full stack — C#, ASP.NET Core and SQL Server on the server, Next.js and TypeScript in the browser — and I came to it through a structured programming track, then through building systems.",
+    "learningHeading": "How I learned",
+    "learning": [
+      "I studied through ProgrammingAdvices, a structured track covering the areas in sequence: programming fundamentals and problem solving, C++, object-oriented programming, data structures, databases and SQL Server, then C# and ASP.NET Core and full-stack development."
+    ],
+    "sinceHeading": "What I've built since",
+    "since": [
+      "Since then the work has been projects. One of them is an AI workspace — ASP.NET Core in four layers, a Python retrieval service, PostgreSQL and Qdrant, and a language model running locally — 598 files and 74 merged pull requests, feature-complete and waiting on deployment. Another is a three-tier desktop system that runs a restaurant’s purchasing and inventory on SQL Server, where every database call goes through a stored procedure."
+    ],
+    "lookingHeading": "What I'm looking for",
+    "looking": "Freelance projects, remote roles, or local work. I live in Aksaray and I am open to positions in Ankara.",
+    "cvHeading": "Curriculum vitae",
+    "cvDownload": "Download CV (PDF)",
+    "seeProjects": "See what I've built"
+  },
+  "projects": {
+    "heading": "Projects",
+    "intro": "Two systems, both built end to end. The first is an AI workspace whose retrieval pipeline runs entirely on its own hardware; the second is a desktop application that handles a restaurant's purchasing and inventory on SQL Server.",
+    "ctaLead": "Interested in working together?",
+    "cta": "Get in touch",
+    "labels": {
+      "problem": "Problem",
+      "architecture": "Architecture",
+      "scale": "Scale",
+      "result": "Result",
+      "scope": "Scope",
+      "notable": "Notable",
+      "stack": "Stack"
+    },
+    "aiWorkspace": {
+      "name": "AI Autonomous Workspace",
+      "status": "Built and verified · deployment pending",
+      "summary": "Documents pile up faster than anyone reads them. This workspace ingests them, indexes what is inside, and answers questions with the source attached.",
+      "highlight": "A 35-page PDF, from upload to searchable in 32.6 seconds.",
+      "problem": "Documents pile up faster than anyone reads them. This workspace ingests them, indexes what is inside, and answers questions about them with the source page attached.",
+      "result": "Measured on a running system rather than estimated: a 35-page PDF goes from upload to searchable in 32.6 seconds, and every answer returns with the page it was drawn from.",
+      "architecture": [
+        "ASP.NET Core in four layers — Domain, Application, Infrastructure and Api — with a Python FastAPI service doing the retrieval, PostgreSQL and Qdrant in Docker, and the language model running locally. No third-party AI provider: extraction, embeddings, retrieval and generation all run on the project's own hardware."
+      ],
+      "scale": "598 files · 189 C# · 80 Python · 41 TypeScript · 85 test files · 74 merged pull requests",
+      "scope": "Feature-complete through its ninth sprint. The tenth is release preparation, so the system is built and verified but not yet deployed.",
+      "stack": [
+        "ASP.NET Core",
+        "C#",
+        "PostgreSQL",
+        "Python",
+        "FastAPI",
+        "Qdrant",
+        "Docker",
+        "Next.js",
+        "RAG"
+      ]
+    },
+    "restaurant": {
+      "name": "Restaurant Management",
+      "status": "Complete",
+      "summary": "Purchasing and inventory for a restaurant, built as a Windows desktop application with an Arabic, right-to-left interface.",
+      "highlight": "9 forms, 10 tables, 37 stored procedures — and no inline SQL anywhere.",
+      "problem": "Purchasing and inventory for a restaurant, built as a Windows desktop application.",
+      "architecture": [
+        "Three tiers — forms, business logic, data access — with every database call going through a stored procedure and none through inline SQL."
+      ],
+      "scale": "9 forms · 10 tables · 37 stored procedures · RDLC reports",
+      "notable": "The interface is Arabic and right-to-left throughout, which is where I first learned how much of a layout is direction-dependent.",
+      "stack": ["C#", "Windows Forms", ".NET Framework", "SQL Server", "T-SQL", "RDLC"]
+    }
+  },
+  "contact": {
+    "heading": "Get in touch",
+    "intro": "Freelance projects, remote roles, or something you want built — from the database up to the interface. I read everything that arrives.",
+    "responseTime": "I reply within two business days.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send",
+      "sending": "Sending…",
+      "success": "Thank you — your message has arrived. I will reply within two business days.",
+      "error": "Something went wrong and the message was not sent. You can email me directly instead.",
+      "required": "This field is required.",
+      "invalidEmail": "Please enter a valid email address.",
+      "tooLong": "This is longer than the form accepts.",
+      "rateLimited": "Too many messages just now. Please try again shortly, or email me directly.",
+      "errorSummary": "The form could not be sent."
+    },
+    "elsewhereHeading": "Elsewhere",
+    "emailLabel": "Email"
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "body": "This page does not exist, or it moved. The links below still work.",
+    "backHome": "Back to the home page"
+  }
 }

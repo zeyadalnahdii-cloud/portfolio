@@ -1,0 +1,15 @@
+# Staged files only — this is what keeps the hook fast enough that nobody
+# reaches for --no-verify. See docs/10-task-breakdown.md T-110.
+npx lint-staged
+
+# Secret scan (docs/07-repo-standards.md §6). Same tool as CI (09 §2.1), so
+# a scan that passes locally passes there too.
+#
+# `gitleaks git --staged` is the documented form as of 8.30. The older
+# `gitleaks protect --staged` still runs but is no longer listed in --help.
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks is not installed, so staged changes were NOT scanned for secrets."
+  echo "  Install it:  sudo pacman -S gitleaks     (or see https://github.com/gitleaks/gitleaks)"
+  exit 1
+fi
+gitleaks git --staged --redact --no-banner
