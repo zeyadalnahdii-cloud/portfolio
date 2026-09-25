@@ -1424,6 +1424,60 @@ that fails. And building without `VERCEL_ENV=production` has already produced
 false SEO readings of 66 on this project **twice**; the noindex is invisible in
 the page and shows only in the response header.
 
+#### Status 2026-09-27: **complete. Baseline recorded; nothing fixed.**
+
+Lighthouse 13.5.0, mobile preset, simulated throttling, against a **local
+production build with `SITE_INDEXABLE=true`** — the measurement constraint the
+owner approved, so the SEO category is read from an indexable artifact.
+
+| Route | Perf | A11y | BP | SEO | LCP s | CLS | TBT ms |
+|---|---|---|---|---|---|---|---|
+| `/en` | 93 | 100 | 100 | 100 | 2.00 | 0.000 | 289 |
+| `/en/about` | 93 | 100 | 100 | 100 | 2.66 | 0.000 | 200 |
+| `/en/projects` | 95 | 100 | 100 | 100 | 2.62 | 0.000 | 159 |
+| `/en/contact` | 97 | 100 | 100 | 100 | 1.86 | 0.000 | 183 |
+| `/tr` | 93 | 100 | 100 | **66** | 2.26 | 0.000 | 253 |
+| `/tr/about` | 97 | 100 | 100 | **66** | 2.26 | 0.000 | 119 |
+| `/tr/projects` | **80** | 100 | 100 | **66** | 3.43 | 0.000 | 388 |
+| `/tr/contact` | 96 | 100 | 100 | **66** | 2.41 | 0.000 | 143 |
+| `/ar` | 91 | 100 | 100 | 100 | 3.03 | 0.089 | 60 |
+| `/ar/about` | 93 | 100 | 100 | 100 | 3.04 | 0.036 | 64 |
+| `/ar/projects` | **86** | 100 | 100 | 100 | 3.25 | 0.091 | 188 |
+| `/ar/contact` | **83** | 100 | 100 | 100 | 3.42 | 0.065 | 293 |
+
+**Accessibility is 100 on all twelve** — A-02 asks for ≥ 95.
+
+**CLS is 0.000 on every Latin route and ≤ 0.091 on every Arabic one** — P-02
+asks for < 0.1, so it passes, but the Arabic pages are not at zero and T-303
+should find out why before that margin erodes.
+
+**Three routes miss the performance floor of 90:** `/tr/projects` 80,
+`/ar/contact` 83, `/ar/projects` 86. The failing audits on the worst route are
+render-blocking requests, unused and legacy JavaScript, and main-thread work —
+not images, of which the site has none.
+
+**Seven of twelve miss LCP < 2.5s (P-01).** The pattern is unmistakable: every
+Arabic route is 3.0–3.4s while the English routes are 1.9–2.7s. That is T-302's
+Arabic-font hypothesis showing up in the numbers on the first run.
+
+#### The SEO 66 on `/tr` is not a defect, and it changes what T-319 can claim
+
+All four Turkish routes score **66 on SEO because they are `noindex`** — the
+indexing gate working exactly as designed while **D4** is open. The build was
+indexable; the pages are not.
+
+**Consequence: `08`'s Sprint 3 gate row "SEO — Lighthouse 100 on all 12 routes"
+cannot pass until D4 resolves**, no matter what happens to the code. It is
+capped at 8 of 12 for the same reason G2 is. T-319 must record that as a blocked
+row, not as a failure of this sprint's work.
+
+#### Caveat on where this was measured
+
+Localhost, so network latency is synthetic rather than real. These numbers are
+the **baseline T-302…T-305 work against**, not a verdict on the deployed site.
+The deployed figures come from the interim host in T-322 and from the canonical
+host in Phase 2.
+
 ---
 
 ### T-302 · LCP — M
