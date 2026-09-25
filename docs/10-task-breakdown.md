@@ -1291,6 +1291,20 @@ sprint may close, but that locale does not ship indexed.
 the exception recorded in `12-sprint-1-gate.md` ends when it passes, not when
 this gate does.
 
+#### Status 2026-09-27: **run. Sprint 2 closes with two checks not passed.**
+
+Recorded in `13-sprint-2-gate.md`. Nine of eleven green. Check 8 (Turkish
+reviewed) fails on **D4** and the exit condition explicitly permits closure with
+an unreviewed locale held `noindex`. Check 3 could not be run — the Rich Results
+Test needs a publicly reachable URL and there is no deployment yet; it carries to
+Sprint 3 Phase 1.
+
+T-126's check 1 now reads 12 routes and its exception is discharged.
+
+Closing does **not** mean 12 routes are indexed, that Turkish is ready, that the
+contact form has delivered a message, or that a 404 page exists. Each is recorded
+in the gate document with its blocker.
+
 ---
 
 ## Risks specific to this sprint
