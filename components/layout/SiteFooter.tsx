@@ -21,11 +21,11 @@ export function SiteFooter() {
 
   return (
     <footer className="border-subtle mt-auto border-t">
-      <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-6 text-sm">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-8 text-sm sm:px-6">
         <a
           href={`mailto:${EMAIL}`}
           dir="ltr"
-          className="hover:text-accent focus-visible:outline-accent rounded-xs focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="hover:text-accent focus-visible:outline-accent rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <span className="sr-only">{t('email')}: </span>
           {EMAIL}
@@ -35,7 +35,7 @@ export function SiteFooter() {
           href={GITHUB}
           rel="me noopener"
           target="_blank"
-          className="hover:text-accent focus-visible:outline-accent rounded-xs focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="hover:text-accent focus-visible:outline-accent rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           {t('github')}
         </a>

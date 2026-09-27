@@ -64,13 +64,13 @@ export function SiteNav({ locale }: SiteNavProps) {
   return (
     <nav aria-label={t('primary')} className="ms-auto">
       {/* Wide screens: the list itself. */}
-      <ul className="hidden gap-6 text-sm sm:flex">
+      <ul className="hidden items-center gap-1 text-sm sm:flex">
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
               aria-current={item.current ? 'page' : undefined}
-              className="hover:text-accent focus-visible:outline-accent rounded-xs focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=page]:font-semibold"
+              className="hover:text-accent hover:bg-surface focus-visible:outline-accent aria-[current=page]:bg-surface aria-[current=page]:text-accent rounded-md px-2.5 py-1.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=page]:font-semibold"
             >
               {item.label}
             </Link>
@@ -87,7 +87,7 @@ export function SiteNav({ locale }: SiteNavProps) {
         }}
         aria-expanded={open}
         aria-controls={menuId}
-        className="focus-visible:outline-accent rounded-xs px-2 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 sm:hidden"
+        className="border-subtle hover:border-accent hover:text-accent focus-visible:outline-accent rounded-md border px-2.5 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:hidden"
       >
         {open ? t('closeMenu') : t('menu')}
       </button>
@@ -95,7 +95,7 @@ export function SiteNav({ locale }: SiteNavProps) {
       <ul
         id={menuId}
         hidden={!open}
-        className="border-subtle bg-surface absolute start-0 end-0 z-10 mt-2 flex flex-col gap-1 border-b p-4 text-sm sm:hidden"
+        className="border-subtle bg-raised shadow-lift absolute start-0 end-0 z-10 mt-3.5 flex flex-col gap-0.5 border-y p-3 text-sm sm:hidden"
       >
         {items.map((item) => (
           <li key={item.href}>
@@ -105,7 +105,7 @@ export function SiteNav({ locale }: SiteNavProps) {
               onClick={() => {
                 setOpen(false)
               }}
-              className="hover:text-accent focus-visible:outline-accent block rounded-xs py-1 focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=page]:font-semibold"
+              className="hover:text-accent hover:bg-surface focus-visible:outline-accent aria-[current=page]:text-accent block rounded-md px-3 py-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=page]:font-semibold"
             >
               {item.label}
             </Link>

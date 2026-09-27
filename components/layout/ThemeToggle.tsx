@@ -62,7 +62,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-pressed={theme === 'dark'}
-      className="focus-visible:outline-accent hover:text-accent rounded-xs px-2 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="border-subtle hover:border-accent hover:text-accent focus-visible:outline-accent rounded-md border px-2.5 py-1.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       {t('darkMode')}
     </button>
