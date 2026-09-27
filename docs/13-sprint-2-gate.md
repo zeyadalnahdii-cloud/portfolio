@@ -78,7 +78,7 @@ check should not be read as having covered it.
 |---|---|
 | **D4** — Turkish native reviewer | **Open.** No reviewer found. `/tr` ships `noindex`; 4 of 12 routes are not indexable |
 | **T-204** — Turkish native review | **Blocked** on D4 |
-| **T-213** — real email delivery | **Unverified.** The form, handler, validation, rate limiting and Resend wiring are complete and tested; **no real submission has been observed arriving.** The task's "Done when" includes "a submission arrives", so T-213 is **not fully complete** |
+| ~~**T-213** — real email delivery~~ | **Resolved 2026-09-27.** A real submission sent from the interim deployment arrived in the owner's inbox, confirmed by the owner. The Done-when's "a submission arrives" is met and **T-213 is complete.** Recorded here after the gate ran, not folded into it |
 | **G2** — 12/12 routes indexed | **Not met and not claimable.** 8 of 12 are indexable at all, and none is indexed — there is no public deployment and no Search Console property |
 | **G1** — name-query ranking | **Not measurable.** 60-day horizon, post-launch |
 | **F-08 / T-320** — localised 404 | **Not built.** Blocked by a Next.js constraint (T-214); deferred to Sprint 3 |
@@ -97,7 +97,7 @@ check should not be read as having covered it.
 | **T-205** Keyword validation | Complete — closed with a deliberately narrowed criterion |
 | T-206 CV download | Complete |
 | T-210 Home · T-211 About · T-212 Projects | Complete |
-| **T-213** Contact page and form | **Not fully complete** — delivery unverified |
+| **T-213** Contact page and form | **Complete** — delivery confirmed by the owner 2026-09-27, after this gate ran |
 | **T-214** 404 page | **Not complete** — X-04 met, F-08 deferred to T-320 |
 | T-215 … T-220 | Complete |
 | **T-221** Sprint 2 gate | This document |

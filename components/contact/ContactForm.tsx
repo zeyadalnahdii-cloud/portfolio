@@ -160,7 +160,7 @@ export function ContactForm() {
         // signalled by the label changing to "Sending…", aria-busy, the cursor,
         // and the control genuinely being disabled, rather than by dimming the
         // one word the user needs to read.
-        className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-6 rounded-md px-4 py-2 font-medium text-accent-fg disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="bg-accent hover:bg-accent-hover text-accent-fg focus-visible:outline-accent shadow-card mt-7 rounded-lg px-5 py-2.5 font-semibold transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {status === 'sending' ? t('sending') : t('send')}
       </button>
@@ -222,7 +222,7 @@ function Field({
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? errorId : undefined,
     className:
-      'border-control bg-bg focus-visible:outline-accent mt-1 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 aria-[invalid=true]:border-danger',
+      'border-control bg-raised focus-visible:outline-accent focus-visible:border-accent aria-[invalid=true]:border-danger mt-1.5 w-full rounded-lg border px-3.5 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-1',
   }
 
   return (
@@ -232,7 +232,7 @@ function Field({
       </label>
       {multiline ? <textarea {...shared} rows={6} /> : <input {...shared} type={type} />}
       {/* Reserved so an error appearing does not push the next field down. */}
-      <p id={errorId} className="text-danger min-h-5 text-sm">
+      <p id={errorId} className="text-danger mt-1.5 min-h-5 text-sm">
         {error}
       </p>
     </div>

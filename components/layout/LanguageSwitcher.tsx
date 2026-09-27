@@ -45,7 +45,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       // subtree and treats a cross-locale href anywhere else as a leak.
       data-locale-switcher=""
     >
-      <ul className="flex items-center gap-2 text-sm">
+      <ul className="border-subtle bg-surface flex items-center gap-0.5 rounded-md border p-0.5 text-xs">
         {LOCALES.map((candidate) => {
           const current = candidate === locale
 
@@ -56,7 +56,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
                 hrefLang={candidate}
                 lang={candidate}
                 aria-current={current ? 'true' : undefined}
-                className="hover:text-accent focus-visible:outline-accent rounded-xs px-1 uppercase focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=true]:font-semibold aria-[current=true]:underline"
+                className="hover:text-accent focus-visible:outline-accent aria-[current=true]:bg-raised aria-[current=true]:text-accent aria-[current=true]:shadow-card block rounded px-2 py-1 uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 aria-[current=true]:font-semibold"
               >
                 <span aria-hidden="true">{candidate}</span>
                 <span className="sr-only">{LOCALE_NATIVE_NAME[candidate]}</span>

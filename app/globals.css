@@ -5,62 +5,80 @@
  *
  * Both themes must independently satisfy SRS A-03 (4.5:1 for body text, 3:1
  * for large text). Dark-mode contrast is the usual regression, so re-check
- * both after changing any value here.
+ * both after changing any value here — tests/contrast.test.ts parses this file
+ * and asserts every pair, so a value that breaks one fails the suite.
  *
- * The manual override in T-122 will set data-theme on the root; the media
- * query below is written so an explicit light choice wins over the system
- * preference.
+ * The media query below is written so an explicit light choice wins over the
+ * system preference.
  */
 :root {
   --bg: #ffffff;
-  --surface: #f6f8fa;
-  --border-subtle: #d8dee4;
-  --fg: #1f2328;
-  --fg-muted: #59636e;
-  --accent: #0969da;
-  --accent-hover: #0550ae;
+  --surface: #f5f8fb;
+  /* A second elevation, for cards that sit on --surface rather than on --bg. */
+  --raised: #ffffff;
+  --border-subtle: #e2e8f0;
+  --fg: #0f151d;
+  --fg-muted: #54606f;
+  --accent: #0a5fc4;
+  --accent-hover: #084a9c;
   /* Text drawn ON an accent fill. White works here but not in dark, where the
      accent is light — T-219 measured white-on-accent at 3.10:1. */
   --accent-fg: #ffffff;
   /* Error text and invalid field borders. */
-  --danger: #cf222e;
+  --danger: #c81e2b;
   /* Form control boundaries. --border-subtle is decorative (card edges,
      dividers) and exempt from 1.4.11; an empty input is identifiable only by
      its border, so that one must reach 3:1. */
-  --border-control: #818b98;
+  --border-control: #7c8797;
+
+  /* Presentation-only, never a contrast pair. */
+  --shadow-sm: 0 1px 2px rgb(15 21 29 / 0.04), 0 1px 3px rgb(15 21 29 / 0.06);
+  --shadow-md: 0 2px 4px rgb(15 21 29 / 0.04), 0 8px 24px rgb(15 21 29 / 0.08);
+  --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(10 95 196 / 0.07), transparent 70%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --border-subtle: #30363d;
-    --fg: #e6edf3;
-    --fg-muted: #9198a1;
-    --accent: #4493f8;
-    --accent-hover: #6cb6ff;
-    --accent-fg: #0d1117;
-    --danger: #ff7b72;
-    --border-control: #6e7681;
+    --bg: #0a0e14;
+    --surface: #121923;
+    --raised: #18202b;
+    --border-subtle: #232d3b;
+    --fg: #e9eff7;
+    --fg-muted: #98a3b3;
+    --accent: #5aa2ff;
+    --accent-hover: #8cc0ff;
+    --accent-fg: #071019;
+    --danger: #ff7d74;
+    --border-control: #6c7889;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.45);
+    --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(90 162 255 / 0.1), transparent 70%);
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border-subtle: #30363d;
-  --fg: #e6edf3;
-  --fg-muted: #9198a1;
-  --accent: #4493f8;
-  --accent-hover: #6cb6ff;
-  --accent-fg: #0d1117;
-  --danger: #ff7b72;
-  --border-control: #6e7681;
+  --bg: #0a0e14;
+  --surface: #121923;
+  --raised: #18202b;
+  --border-subtle: #232d3b;
+  --fg: #e9eff7;
+  --fg-muted: #98a3b3;
+  --accent: #5aa2ff;
+  --accent-hover: #8cc0ff;
+  --accent-fg: #071019;
+  --danger: #ff7d74;
+  --border-control: #6c7889;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.45);
+  --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(90 162 255 / 0.1), transparent 70%);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
+  --color-raised: var(--raised);
   --color-subtle: var(--border-subtle);
   --color-fg: var(--fg);
   --color-muted: var(--fg-muted);
@@ -69,6 +87,16 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-control: var(--border-control);
+
+  --shadow-card: var(--shadow-sm);
+  --shadow-lift: var(--shadow-md);
+
+  /* Fluid type. clamp() means no breakpoint jumps and no layout shift at any
+     width — the size is a function of the viewport, resolved before paint. */
+  --text-display: clamp(2.5rem, 1.6rem + 4.2vw, 4.25rem);
+  --text-lead: clamp(1.125rem, 1.02rem + 0.5vw, 1.375rem);
+  --text-title: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+
   /* Defined by whichever face the locale layout applied. The names differ
      from the tokens so the reference is not circular. */
   --font-sans: var(--font-app-sans);
@@ -82,10 +110,33 @@ body {
   /* Arabic script needs more leading than Latin at the same size
      (docs/06-mockups.md §1.2). */
   line-height: 1.6;
+  /* A single CSS gradient, no image: it costs no request and cannot affect
+     LCP, which is text on every route (T-302). */
+  background-image: var(--wash);
+  background-repeat: no-repeat;
+  text-rendering: optimizeLegibility;
 }
 
 :root[lang='ar'] body {
   line-height: 1.8;
+}
+
+/* Latin numerals and technical terms inside Arabic prose keep their own
+   rhythm; the paragraph direction is unaffected (docs/06 §3). */
+:root[lang='ar'] {
+  font-feature-settings: 'kern' 1;
+}
+
+/* Headings are tighter than body text at every size. */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 /* SRS A-10: nothing moves for anyone who asked for less motion. */

@@ -58,15 +58,25 @@ export default async function ContactPage({ params }: PageProps<'/[locale]/conta
   return (
     <>
       <JsonLd locale={locale} page={'/contact'} />
-      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
-        <p className="mt-6 leading-relaxed">{t('intro')}</p>
+      <main
+        id="content"
+        className="mx-auto w-full max-w-3xl px-4 py-16 text-start sm:px-6 sm:py-24"
+      >
+        <h1 className="text-[length:var(--text-title)] font-bold tracking-[-0.025em]">
+          {t('heading')}
+        </h1>
+        <p className="text-muted mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed">
+          {t('intro')}
+        </p>
         <p className="text-muted mt-2 text-sm">{t('responseTime')}</p>
 
         <ContactForm />
 
-        <section aria-labelledby="elsewhere-heading" className="mt-12">
-          <h2 id="elsewhere-heading" className="text-lg font-semibold">
+        <section aria-labelledby="elsewhere-heading" className="mt-16">
+          <h2
+            id="elsewhere-heading"
+            className="text-muted text-xs font-semibold tracking-[0.14em] uppercase"
+          >
             {t('elsewhereHeading')}
           </h2>
           <ul className="mt-3 space-y-2 text-sm">

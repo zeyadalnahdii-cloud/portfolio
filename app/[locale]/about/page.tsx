@@ -59,12 +59,22 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
   return (
     <>
       <JsonLd locale={locale} page={'/about'} />
-      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
-        <p className="mt-6 leading-relaxed">{t('intro')}</p>
+      <main
+        id="content"
+        className="mx-auto w-full max-w-3xl px-4 py-16 text-start sm:px-6 sm:py-24"
+      >
+        <h1 className="text-[length:var(--text-title)] font-bold tracking-[-0.025em]">
+          {t('heading')}
+        </h1>
+        <p className="text-muted mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed">
+          {t('intro')}
+        </p>
 
-        <section aria-labelledby="learning-heading" className="mt-12">
-          <h2 id="learning-heading" className="text-lg font-semibold">
+        <section aria-labelledby="learning-heading" className="mt-16">
+          <h2
+            id="learning-heading"
+            className="text-muted text-xs font-semibold tracking-[0.14em] uppercase"
+          >
             {t('learningHeading')}
           </h2>
           {learning.map((paragraph) => (
@@ -74,8 +84,11 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
           ))}
         </section>
 
-        <section aria-labelledby="since-heading" className="mt-10">
-          <h2 id="since-heading" className="text-lg font-semibold">
+        <section aria-labelledby="since-heading" className="mt-14">
+          <h2
+            id="since-heading"
+            className="text-muted text-xs font-semibold tracking-[0.14em] uppercase"
+          >
             {t('sinceHeading')}
           </h2>
           {since.map((paragraph) => (
@@ -85,8 +98,11 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
           ))}
         </section>
 
-        <section aria-labelledby="looking-heading" className="mt-10">
-          <h2 id="looking-heading" className="text-lg font-semibold">
+        <section aria-labelledby="looking-heading" className="mt-14">
+          <h2
+            id="looking-heading"
+            className="text-muted text-xs font-semibold tracking-[0.14em] uppercase"
+          >
             {t('lookingHeading')}
           </h2>
           <p className="mt-3 leading-relaxed">{t('looking')}</p>
@@ -96,10 +112,10 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
           whether to keep going; the only thing worth offering them next is
           the work itself. */}
         {hasRoute('/projects') && (
-          <p className="mt-10">
+          <p className="mt-14">
             <Link
               href={`/${locale}/projects`}
-              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-accent hover:text-accent-hover focus-visible:outline-accent decoration-accent/40 hover:decoration-accent rounded-xs font-medium underline underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               {t('seeProjects')}
             </Link>
@@ -108,8 +124,11 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
 
         {/* Rendered only once the file exists (T-206). */}
         {hasCv() && (
-          <section aria-labelledby="cv-heading" className="mt-10">
-            <h2 id="cv-heading" className="text-lg font-semibold">
+          <section aria-labelledby="cv-heading" className="mt-14">
+            <h2
+              id="cv-heading"
+              className="text-muted text-xs font-semibold tracking-[0.14em] uppercase"
+            >
               {t('cvHeading')}
             </h2>
             <p className="mt-3">
@@ -127,7 +146,7 @@ export default async function AboutPage({ params }: PageProps<'/[locale]/about'>
                 download
                 hrefLang={CV_LANGUAGE}
                 type="application/pdf"
-                className="border-subtle hover:border-accent hover:text-accent focus-visible:outline-accent inline-block rounded-md border px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="border-subtle bg-raised shadow-card hover:border-accent hover:text-accent hover:shadow-lift focus-visible:outline-accent inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-[box-shadow,border-color,color] focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 {t('cvDownload')} · <span dir="ltr">{cvSizeKb()} KB</span>
               </a>
