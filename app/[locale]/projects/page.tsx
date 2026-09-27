@@ -85,30 +85,42 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
   return (
     <>
       <JsonLd locale={locale} page={'/projects'} />
-      <main id="content" className="mx-auto w-full max-w-3xl px-4 py-16 text-start">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('heading')}</h1>
-        <p className="mt-6 leading-relaxed">{t('intro')}</p>
+      <main
+        id="content"
+        className="mx-auto w-full max-w-3xl px-4 py-16 text-start sm:px-6 sm:py-24"
+      >
+        <h1 className="text-[length:var(--text-title)] font-bold tracking-[-0.025em]">
+          {t('heading')}
+        </h1>
+        <p className="text-muted mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed">
+          {t('intro')}
+        </p>
 
         {entries.map((project) => (
           <article
             key={project.name}
             aria-labelledby={projectAnchor(project.name)}
-            className="border-subtle mt-12 border-t pt-8"
+            className="border-subtle bg-raised shadow-card mt-10 rounded-2xl border p-6 sm:p-8"
           >
             {/* dir="ltr" on the heading itself would left-align it on the
               Arabic page: on a block element the attribute sets alignment, not
               just character order, and the title would detach from its
               right-aligned section. <bdi> isolates the Latin run's direction
               and leaves the block following the page (docs/06-mockups.md §3). */}
-            <h2 id={projectAnchor(project.name)} className="text-xl font-semibold">
+            <h2
+              id={projectAnchor(project.name)}
+              className="text-xl font-bold tracking-tight sm:text-2xl"
+            >
               <bdi>{project.name}</bdi>
             </h2>
-            <p className="text-muted mt-1 text-sm">{project.status}</p>
+            <p className="text-accent mt-1.5 text-sm font-medium">{project.status}</p>
 
-            <dl className="mt-6 space-y-4">
+            <dl className="mt-7 space-y-5">
               {project.rows.map(([label, value]) => (
                 <div key={label} className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
-                  <dt className="text-muted text-sm font-medium">{t(`labels.${label}`)}</dt>
+                  <dt className="text-muted pt-0.5 text-xs font-semibold tracking-wider uppercase">
+                    {t(`labels.${label}`)}
+                  </dt>
                   {/* A row is one paragraph or several; the Arabic architecture
                     copy runs to two where the English runs to one. */}
                   <dd className="mt-1 text-sm leading-relaxed sm:mt-0">
@@ -126,13 +138,15 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
               ))}
 
               <div className="sm:grid sm:grid-cols-[8rem_1fr] sm:gap-4">
-                <dt className="text-muted text-sm font-medium">{t('labels.stack')}</dt>
+                <dt className="text-muted pt-1.5 text-xs font-semibold tracking-wider uppercase">
+                  {t('labels.stack')}
+                </dt>
                 <dd className="mt-1 sm:mt-0">
                   <ul className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
                     {project.stack.map((item) => (
                       <li
                         key={item}
-                        className="border-subtle bg-surface rounded-md border px-2 py-1"
+                        className="border-subtle bg-surface hover:border-accent/60 rounded-md border px-2.5 py-1 font-medium transition-colors"
                         dir="ltr"
                       >
                         {item}
@@ -152,7 +166,7 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
             {t('ctaLead')}{' '}
             <Link
               href={`/${locale}/contact`}
-              className="text-accent hover:text-accent-hover focus-visible:outline-accent rounded-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-accent hover:text-accent-hover focus-visible:outline-accent decoration-accent/40 hover:decoration-accent rounded-xs font-medium underline underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               {t('cta')}
             </Link>

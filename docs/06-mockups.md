@@ -31,17 +31,26 @@ Defined as CSS custom properties on `:root`, redefined for dark mode. Both theme
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `--bg` | `#ffffff` | `#0d1117` | Page background |
-| `--surface` | `#f6f8fa` | `#161b22` | Cards |
-| `--border` | `#d8dee4` | `#30363d` | Dividers, card edges |
-| `--text` | `#1f2328` | `#e6edf3` | Body |
-| `--text-muted` | `#59636e` | `#9198a1` | Secondary text |
-| `--accent` | `#0969da` | `#4493f8` | Links, CTA |
-| `--accent-hover` | `#0550ae` | `#6cb6ff` | Hover |
-| `--focus` | `#0969da` | `#4493f8` | Focus ring (A-05) |
-| `--accent-fg` | `#ffffff` | `#0d1117` | Text **on** an accent fill (buttons) |
-| `--danger` | `#cf222e` | `#ff7b72` | Error text, invalid field border |
-| `--border-control` | `#818b98` | `#6e7681` | Form control boundaries |
+| `--bg` | `#ffffff` | `#0a0e14` | Page background |
+| `--surface` | `#f5f8fb` | `#121923` | Recessed panels, chips, the closing band |
+| `--raised` | `#ffffff` | `#18202b` | Cards, the mobile menu, the skip link |
+| `--border-subtle` | `#e2e8f0` | `#232d3b` | Dividers, card edges |
+| `--fg` | `#0f151d` | `#e9eff7` | Body |
+| `--fg-muted` | `#54606f` | `#98a3b3` | Secondary text, section labels |
+| `--accent` | `#0a5fc4` | `#5aa2ff` | Links, CTA, focus ring (A-05) |
+| `--accent-hover` | `#084a9c` | `#8cc0ff` | Hover |
+| `--accent-fg` | `#ffffff` | `#071019` | Text **on** an accent fill (buttons) |
+| `--danger` | `#c81e2b` | `#ff7d74` | Error text, invalid field border |
+| `--border-control` | `#7c8797` | `#6c7889` | Form control boundaries |
+
+Presentation-only, never a contrast pair: `--shadow-sm`, `--shadow-md` and
+`--wash`, a single radial CSS gradient behind the hero. `--wash` is a gradient
+rather than an image on purpose — it costs no request and cannot touch LCP,
+which is text on every route (T-302).
+
+Fluid type, so there are no breakpoint jumps and no shift at any width:
+`--text-display` (the name), `--text-title` (page `h1`s) and `--text-lead`
+(intros), each a `clamp()` resolved before paint.
 
 > The last three were added in **T-219**. The table originally had no token for
 > text drawn *on* the accent, so both buttons hardcoded `text-white` — correct
@@ -54,8 +63,21 @@ Defined as CSS custom properties on `:root`, redefined for dark mode. Both theme
 > which WCAG 1.4.11 exempts. `--border-control` exists because an *empty* input
 > is identifiable only by its border, so that one must reach 3:1.
 
-> These are placeholder values chosen for guaranteed contrast, not a brand palette.
-> Replace with a deliberate palette — but re-run contrast checks in **both** themes
+> **Revised 2026-09-27 by the design pass.** The values above replaced the
+> original placeholder palette. Every pair was computed against A-03 *before*
+> the CSS was written, and `tests/contrast.test.ts` parses this stylesheet and
+> asserts all of them, so a value that breaks one fails the suite rather than
+> the launch. The design pass changed presentation only — no copy, no metadata,
+> no structured data, no heading levels.
+>
+> `--text` and `--border` are now `--fg` and `--border-subtle`, matching what
+> the code has always called them. `--focus` was never a separate value; it is
+> `--accent`, and the table now says so instead of implying a token that does
+> not exist.
+>
+> The superseded note: these were placeholder values chosen for guaranteed
+> contrast, not a brand palette. Replace with a deliberate palette — but re-run
+> contrast checks in **both** themes
 > after any change. Dark-mode contrast failures are the usual regression.
 
 ### 1.2 Typography
