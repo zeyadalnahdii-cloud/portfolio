@@ -46,68 +46,147 @@
   "home": {
     "name": "زياد النهدي",
     "role": "Full Stack Developer",
+    "eyebrow": "// مهندس أنظمة ومطوّر",
     "intro": "أطوّر تطبيقات Full Stack متكاملة، من الواجهة وقاعدة البيانات إلى الـAPI وميزات الذكاء الاصطناعي. أعرض هنا مشروعين يوضحان هذا النوع من العمل: منصة ذكاء اصطناعي تعمل محليًا وتعتمد على ASP.NET Core و Python، ونظام سطح مكتب لإدارة مشتريات ومخزون المطاعم.",
     "location": "مقيم في أكسراي، تركيا. متاح للعمل الحر والفرص الوظيفية عن بُعد.",
+    "viewWork": "شاهد المشاريع المختارة",
+    "cta": "تواصل معي",
+    "topologyTitle": "SYS_TOPOLOGY_4TIER.svg",
+    "topologyStatus": "SYNC_ACTIVE",
+    "topology": [
+      {
+        "tier": "الطبقة 01 // واجهة العميل",
+        "name": "Next.js & TypeScript",
+        "badge": "SSR · Hydrated",
+        "note": "واجهة مبنية بالمكوّنات، وتزامن في الحالة، وأول رسم من الخادم.",
+        "icon": "devices"
+      },
+      {
+        "tier": "الطبقة 02 // الخدمات والـAPI",
+        "name": "ASP.NET Core · FastAPI",
+        "badge": "Clean Arch",
+        "note": "فصل بالطبقات، وقنوات REST موثّقة الهوية.",
+        "icon": "hub"
+      },
+      {
+        "tier": "الطبقة 03 // العلائقية",
+        "name": "PostgreSQL · SQL Server",
+        "badge": "ACID · إجراءات مخزَّنة",
+        "note": "إجراءات مخزَّنة فقط، بلا SQL مضمَّن.",
+        "icon": "database"
+      },
+      {
+        "tier": "الطبقة 04 // المتجهات",
+        "name": "Qdrant RAG",
+        "badge": "Embeddings ذاتية الاستضافة",
+        "note": "استرجاع فوق متجهات محلية، بلا مزوّد خارجي.",
+        "icon": "memory"
+      }
+    ],
+    "topologyFootLeft": "4 طبقات منفصلة",
+    "topologyFootRight": "استضافة ذاتية 100%",
+    "buildEyebrow": "// نطاق العمل",
     "buildHeading": "ماذا أبني؟",
+    "buildIntro": "بنى برمجية عملية لا تعتمد على صناديق سوداء. مبنية لتكون قابلة للصيانة وموثوقة في التشغيل.",
     "build": [
       {
+        "index": "01 // BROWSER",
+        "icon": "language",
         "title": "تطبيقات الويب",
-        "body": "تطبيقات ويب باستخدام Next.js و TypeScript، مع ASP.NET Core لبناء الـBackend والـAPIs."
+        "body": "تطبيقات ويب باستخدام Next.js و TypeScript، مع ASP.NET Core لبناء الـBackend والـAPIs.",
+        "tags": ["NEXT.JS", "TYPESCRIPT", "SSR & ISR"]
       },
       {
+        "index": "02 // SERVICES",
+        "icon": "api",
         "title": "Backend و APIs",
-        "body": "واجهات REST باستخدام ASP.NET Core، مع فصل واضح بين منطق العمل وطبقات النظام لتسهيل تطويره وصيانته."
+        "body": "واجهات REST باستخدام ASP.NET Core، مع فصل واضح بين منطق العمل وطبقات النظام لتسهيل تطويره وصيانته.",
+        "tags": ["ASP.NET CORE", "CLEAN ARCH", "FASTAPI"]
       },
       {
+        "index": "03 // DESKTOP",
+        "icon": "desktop_windows",
         "title": "تطبيقات سطح المكتب",
-        "body": "تطبيقات C# لإدارة العمليات الداخلية مثل المخزون والمشتريات والتقارير وربطها بقواعد البيانات."
+        "body": "تطبيقات C# لإدارة العمليات الداخلية مثل المخزون والمشتريات والتقارير وربطها بقواعد البيانات.",
+        "tags": ["C# .NET", "WINFORMS", "SQL SERVER"]
       },
       {
+        "index": "04 // INTELLIGENCE",
+        "icon": "auto_awesome",
         "title": "حلول مدعومة بالذكاء الاصطناعي",
-        "body": "أنظمة تسترجع المعلومات من المستندات وتستخدمها لتوليد إجابات مرتبطة بمصادرها، مع إمكانية تشغيل مكونات الذكاء الاصطناعي محليًا."
+        "body": "أنظمة تسترجع المعلومات من المستندات وتستخدمها لتوليد إجابات مرتبطة بمصادرها، مع إمكانية تشغيل مكونات الذكاء الاصطناعي محليًا.",
+        "tags": ["QDRANT", "RAG VECTORS", "CITED ANSWERS"]
       }
     ],
+    "stackEyebrow": "// قدرات النظام",
     "stackHeading": "التقنيات التي أعمل بها",
+    "stackIntro": "أدوات مستخدمة في بيئات إنتاج فعلية، تغطي واجهة العرض ومنطق الخدمات وطبقات البيانات وبنية الذكاء الاصطناعي المعزولة.",
     "stackGroups": [
       {
+        "icon": "web",
         "label": "Frontend",
-        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"]
+        "desc": "مكوّنات آمنة الأنواع، وواجهات كثيفة، وتدفّق حالة تفاعلي.",
+        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"],
+        "foot": "DOM // REACT RECONCILER"
       },
       {
+        "icon": "dns",
         "label": "Backend & APIs",
-        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"]
+        "desc": "أزمنة تشغيل مترجمة، وحدود خدمات بالطبقات، ومسارات طلب غير متزامنة.",
+        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"],
+        "foot": "ASYNC // THREAD-SAFE"
       },
       {
+        "icon": "database",
         "label": "Data & AI",
-        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"]
+        "desc": "تخزين علائقي، وفهارس حتمية، وتضمينات متجهية بمسافة جيب التمام.",
+        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"],
+        "foot": "ACID // VECTOR CLUSTER"
       },
       {
+        "icon": "terminal",
         "label": "Development",
-        "items": ["Git", "CI", "Automated Testing", "Clean Architecture", "Docker"]
+        "desc": "مسارات حتمية، وتشغيل اختبارات آلي، وتنسيق حاويات.",
+        "items": ["Git", "CI", "Automated Testing", "Clean Architecture", "Docker"],
+        "foot": "STRICT GATES // REPRODUCIBLE"
       }
     ],
+    "processEyebrow": "// الانضباط والقياس",
     "processHeading": "كيف أعمل؟",
+    "processIntro": "إيقاع هندسي منضبط يقدّم الحدود الواضحة والاختبارات الموثّقة والقياسات غير المجمّلة.",
     "process": [
       {
+        "icon": "layers",
+        "rule": "RULE 01",
         "title": "فصل واضح بين طبقات النظام",
-        "body": "استخدمت بنية من أربع طبقات في AI Autonomous Workspace، وثلاث طبقات في Restaurant Management، بهدف فصل المسؤوليات وتقليل الترابط بين أجزاء النظام."
+        "body": "استخدمت بنية من أربع طبقات في AI Autonomous Workspace، وثلاث طبقات في Restaurant Management، بهدف فصل المسؤوليات وتقليل الترابط بين أجزاء النظام.",
+        "metric": "Clean Architecture"
       },
       {
+        "icon": "verified",
+        "rule": "RULE 02",
         "title": "الاختبارات و CI",
-        "body": "يحتوي AI Autonomous Workspace على 85 ملف اختبار، مع تشغيل فحوصات CI على كل Pull Request قبل الدمج."
+        "body": "يحتوي AI Autonomous Workspace على 85 ملف اختبار، مع تشغيل فحوصات CI على كل Pull Request قبل الدمج.",
+        "metric": "85 ملف اختبار · CI على كل PR"
       },
       {
+        "icon": "fork_right",
+        "rule": "RULE 03",
         "title": "تطوير منظم عبر الفروع",
-        "body": "تم تطوير AI Autonomous Workspace عبر 74 Pull Request مدمجًا، مع فصل التغييرات ومراجعتها قبل وصولها إلى main."
+        "body": "تم تطوير AI Autonomous Workspace عبر 74 Pull Request مدمجًا، مع فصل التغييرات ومراجعتها قبل وصولها إلى main.",
+        "metric": "74 طلب دمج مُراجَع"
       },
       {
+        "icon": "speed",
+        "rule": "RULE 04",
         "title": "القياس قبل الافتراض",
-        "body": "أختبر أداء المكونات على النظام الفعلي وأسجّل النتائج بدل الاعتماد على التقديرات؛ ومن ذلك قياس مراحل معالجة المستندات والاسترجاع في AI Autonomous Workspace."
+        "body": "أختبر أداء المكونات على النظام الفعلي وأسجّل النتائج بدل الاعتماد على التقديرات؛ ومن ذلك قياس مراحل معالجة المستندات والاسترجاع في AI Autonomous Workspace.",
+        "metric": "مقيس على نظام يعمل"
       }
     ],
+    "workEyebrow": "// أنظمة في الإنتاج",
     "workHeading": "مشاريع مختارة",
-    "seeProjects": "كل المشاريع",
-    "cta": "تواصل معي"
+    "seeProjects": "كل المشاريع"
   },
   "about": {
     "heading": "نبذة عني",
@@ -147,6 +226,16 @@
       "status": "مكتمل ومختبَر · النشر قيد الانتظار",
       "summary": "منصة تستقبل المستندات وتفهرس محتواها، ثم تتيح البحث فيها وطرح الأسئلة عليها مع إرفاق مصدر الإجابة.",
       "highlight": "35 صفحة PDF ← من رفع الملف إلى جاهزيته للبحث خلال 32.6 ثانية.",
+      "metricLabel": "قياس موثَّق",
+      "consoleFile": "workspace-ingest.run",
+      "consoleStatus": "SUCCESS",
+      "console": [
+        "> pages_parsed:    35",
+        "> upload_to_indexed: 32.6s",
+        "> answer_sources:  page-cited",
+        "> ai_provider:     none (self-hosted)",
+        "> status:          [OK]"
+      ],
       "problem": "مع زيادة عدد المستندات يصبح الوصول إلى المعلومة المطلوبة داخلها أبطأ وأكثر صعوبة. بُني AI Autonomous Workspace لاستقبال المستندات ومعالجتها وفهرستها، ثم تمكين المستخدم من البحث فيها وطرح الأسئلة عليها والحصول على إجابات مرتبطة بصفحات المصدر.",
       "result": "في اختبار فعلي على النظام، استغرق ملف PDF من 35 صفحة 32.6 ثانية من لحظة الرفع حتى أصبح جاهزًا للبحث والاسترجاع، مع إرفاق صفحة المصدر بالإجابات.",
       "architecture": [
@@ -172,6 +261,16 @@
       "status": "مكتمل",
       "summary": "تطبيق سطح مكتب على Windows لإدارة المشتريات والمخزون في المطاعم، بواجهة عربية تدعم الاتجاه من اليمين إلى اليسار.",
       "highlight": "9 نماذج · 10 جداول · 37 Stored Procedures · بدون Inline SQL",
+      "metricLabel": "مقياس معماري",
+      "consoleFile": "schema-integrity.sql",
+      "consoleStatus": "VERIFIED",
+      "console": [
+        "> forms:            9",
+        "> tables:           10",
+        "> stored_procedures: 37",
+        "> inline_sql:       0",
+        "> interface:        ar-RTL"
+      ],
       "problem": "نظام لإدارة عمليات الشراء والمخزون في المطاعم، بُني كتطبيق سطح مكتب على Windows، ويعتمد على SQL Server كقاعدة بيانات و C# في تطوير التطبيق.",
       "architecture": [
         "يعتمد على بنية من ثلاث طبقات تفصل الواجهة عن منطق العمل والوصول إلى البيانات. تمر عمليات قاعدة البيانات عبر Stored Procedures بدل كتابة استعلامات SQL مباشرة داخل التطبيق."

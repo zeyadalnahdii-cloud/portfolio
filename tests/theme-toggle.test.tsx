@@ -42,17 +42,21 @@ afterEach(() => {
 
 describe('ThemeToggle', () => {
   describe('aria-pressed', () => {
-    it('reports the system preference when nothing has been chosen', () => {
+    /**
+     * Dark is the default and the system preference does not override it, so
+     * the toggle reports "pressed" until the visitor chooses light.
+     */
+    it('reports dark when nothing has been chosen, whatever the system prefers', () => {
       mockMatchMedia(true)
       renderToggle()
 
       expect(button()).toHaveAttribute('aria-pressed', 'true')
     })
 
-    it('reports light when the system prefers light', () => {
+    it('reports dark when the system prefers light', () => {
       renderToggle()
 
-      expect(button()).toHaveAttribute('aria-pressed', 'false')
+      expect(button()).toHaveAttribute('aria-pressed', 'true')
     })
 
     it('reports the explicit choice over the system preference', () => {
@@ -71,13 +75,13 @@ describe('ThemeToggle', () => {
 
       await user.click(button())
 
-      expect(document.documentElement.dataset.theme).toBe('dark')
-      expect(button()).toHaveAttribute('aria-pressed', 'true')
+      expect(document.documentElement.dataset.theme).toBe('light')
+      expect(button()).toHaveAttribute('aria-pressed', 'false')
 
       await user.click(button())
 
-      expect(document.documentElement.dataset.theme).toBe('light')
-      expect(button()).toHaveAttribute('aria-pressed', 'false')
+      expect(document.documentElement.dataset.theme).toBe('dark')
+      expect(button()).toHaveAttribute('aria-pressed', 'true')
     })
 
     it('persists the choice so it survives a reload', async () => {
@@ -86,7 +90,7 @@ describe('ThemeToggle', () => {
 
       await user.click(button())
 
-      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark')
+      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('light')
     })
 
     it('still applies the choice when storage is unavailable', async () => {
@@ -104,7 +108,7 @@ describe('ThemeToggle', () => {
 
       await user.click(button())
 
-      expect(document.documentElement.dataset.theme).toBe('dark')
+      expect(document.documentElement.dataset.theme).toBe('light')
     })
 
     it('is operable from the keyboard', async () => {
@@ -116,7 +120,7 @@ describe('ThemeToggle', () => {
 
       await user.keyboard('{Enter}')
 
-      expect(document.documentElement.dataset.theme).toBe('dark')
+      expect(document.documentElement.dataset.theme).toBe('light')
     })
   })
 

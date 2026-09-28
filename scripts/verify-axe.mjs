@@ -45,6 +45,22 @@ for (const theme of THEMES) {
         continue
       }
 
+      // Colour transitions off before the theme is switched.
+      //
+      // Every themed element carries `transition-colors`. Flipping data-theme
+      // and scanning in the same tick samples whatever colour the element is
+      // part-way through fading to, which is neither theme — the run failed
+      // on a different random handful of nav links and chips each time. A
+      // colour that exists for 150ms mid-fade is not a WCAG contrast failure,
+      // so measuring the settled state is the correct check, not a weaker one.
+      //
+      // Latent until light became the default: while the site followed
+      // prefers-color-scheme, Playwright's colorScheme rendered the page dark
+      // from first paint and this assignment changed nothing.
+      await page.addStyleTag({
+        content: '*,*::before,*::after{transition:none!important;animation:none!important}',
+      })
+
       // The toggle writes data-theme; setting it here covers the explicit
       // choice as well as the media query.
       await page.evaluate((value) => {

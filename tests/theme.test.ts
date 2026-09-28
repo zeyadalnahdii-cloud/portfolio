@@ -107,14 +107,19 @@ describe('resolveTheme', () => {
     expect(resolveTheme()).toBe('light')
   })
 
-  it('falls back to the system preference when there is no explicit choice', () => {
+  /**
+   * Dark is the default (owner decision) and the system preference does not
+   * override it either way — a visitor whose OS is set to light still opens
+   * the site dark until they choose otherwise.
+   */
+  it('falls back to dark, whatever the system prefers', () => {
     mockMatchMedia(true)
 
     expect(resolveTheme()).toBe('dark')
 
     mockMatchMedia(false)
 
-    expect(resolveTheme()).toBe('light')
+    expect(resolveTheme()).toBe('dark')
   })
 })
 
@@ -138,7 +143,7 @@ describe('THEME_SCRIPT', () => {
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
 
-  it('sets nothing when there is no stored choice, so the media query decides', () => {
+  it('sets nothing when there is no stored choice, so :root stays dark', () => {
     run()
 
     expect(document.documentElement.dataset.theme).toBeUndefined()

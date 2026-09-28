@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
-import { IBM_Plex_Sans_Arabic, Inter, JetBrains_Mono } from 'next/font/google'
+import { Epilogue, Hanken_Grotesk, IBM_Plex_Sans_Arabic, JetBrains_Mono } from 'next/font/google'
 
 import { LOCALES, LOCALE_DIRECTION, isLocale } from '@/lib/i18n/config'
 import { SiteFooter } from '@/components/layout/SiteFooter'
@@ -29,9 +29,23 @@ import '../globals.css'
  * the expensive mistake 06 §1.2 names. Without it the browser fetches a face
  * only when something on the page actually uses it.
  */
-const latinSans = Inter({
+const latinSans = Hanken_Grotesk({
   variable: '--font-app-sans',
   subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  preload: false,
+})
+
+/**
+ * Headings only. A separate display face is the one place the warm-earth
+ * design cannot be expressed with colour alone — the editorial voice is in the
+ * type. It is a third Latin family, so it is scoped to headings and loaded at
+ * the two weights the design actually uses rather than as a variable axis.
+ */
+const display = Epilogue({
+  variable: '--font-app-display',
+  subsets: ['latin', 'latin-ext'],
+  weight: ['600', '700'],
   display: 'swap',
   preload: false,
 })
@@ -77,7 +91,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
     <html
       lang={locale}
       dir={LOCALE_DIRECTION[locale]}
-      className={`${locale === 'ar' ? arabicSans.variable : latinSans.variable} ${mono.variable} h-full antialiased`}
+      className={`${locale === 'ar' ? arabicSans.variable : `${latinSans.variable} ${display.variable}`} ${mono.variable} h-full antialiased`}
       // The inline script below sets data-theme before React hydrates, so the
       // server markup and the live DOM legitimately differ on this element.
       suppressHydrationWarning

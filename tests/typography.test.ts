@@ -78,8 +78,32 @@ describe('the review flag against untranslated copy', () => {
    * `label`. A label could hold real prose, so the three that are genuinely
    * shared are listed by value below and the rest stay guarded.
    */
-  const ALLOWED_KEYS =
-    /(\.stack\.|^home\.stackGroups\.\d+\.items\.|^locale\.|^projects\.[a-zA-Z]+\.name$)/
+  const ALLOWED_KEYS = new RegExp(
+    [
+      // Technology names, per project and in the Home stack groups.
+      /\.stack\./,
+      /^home\.stackGroups\.\d+\.items\./,
+      // Icon identifiers. Never rendered as text — they select an SVG path.
+      /\.icon$/,
+      // Categorical marks the design sets in mono: tier and rule numbering,
+      // capability tags, and the small technical footers under each group.
+      /^home\.build\.\d+\.(index|tags\.\d+)$/,
+      /^home\.process\.\d+\.rule$/,
+      /^home\.stackGroups\.\d+\.foot$/,
+      /^home\.topology(Title|Status)$/,
+      /^home\.topology\.\d+\.(name|badge)$/,
+      // Console panels: file names, status words and the recorded output.
+      // These are machine output, and translating a log line would be a lie
+      // about what the system printed.
+      /^projects\.[a-zA-Z]+\.(consoleFile|consoleStatus)$/,
+      /^projects\.[a-zA-Z]+\.console\.\d+$/,
+      // The locale block carries each language's own name.
+      /^locale\./,
+      /^projects\.[a-zA-Z]+\.name$/,
+    ]
+      .map((r) => r.source)
+      .join('|'),
+  )
 
   /**
    * By value: proper nouns, and words a target language genuinely shares with
@@ -106,6 +130,7 @@ describe('the review flag against untranslated copy', () => {
     'Frontend',
     'Backend & APIs',
     'Data & AI',
+    'Clean Architecture',
   ])
 
   const isAllowed = (key: string, value: string) =>

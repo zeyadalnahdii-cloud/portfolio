@@ -13,7 +13,7 @@ export function SkipLink() {
   return (
     <a
       href="#content"
-      className="bg-raised text-fg border-subtle shadow-lift focus:outline-accent sr-only rounded-md border px-4 py-2 font-medium focus:not-sr-only focus:absolute focus:inset-block-start-2 focus:inset-inline-start-2 focus:z-50 focus:outline-2 focus:outline-offset-2"
+      className="bg-raised text-fg border-subtle shadow-lift focus:outline-accent sr-only rounded border px-4 py-2 font-medium focus:not-sr-only focus:absolute focus:inset-block-start-2 focus:inset-inline-start-2 focus:z-50 focus:outline-2 focus:outline-offset-2"
     >
       {t('skipToContent')}
     </a>

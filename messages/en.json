@@ -46,68 +46,147 @@
   "home": {
     "name": "Zeyad Alnahdi",
     "role": "Full Stack Developer",
+    "eyebrow": "// SYSTEM ARCHITECT & BUILDER",
     "intro": "I build full stack applications end to end — the interface, the API behind it, the database under that, and the AI layer on top. Two of those systems are shown here: a self-hosted AI workspace in ASP.NET Core and Python, and a desktop system handling a restaurant's purchasing and inventory.",
     "location": "Based in Aksaray, Turkey. Available for freelance work and remote roles.",
+    "viewWork": "View Selected Work",
+    "cta": "Get in touch",
+    "topologyTitle": "SYS_TOPOLOGY_4TIER.svg",
+    "topologyStatus": "SYNC_ACTIVE",
+    "topology": [
+      {
+        "tier": "TIER 01 // CLIENT INTERFACE",
+        "name": "Next.js & TypeScript",
+        "badge": "SSR · Hydrated",
+        "note": "Component-driven UI, state synchrony, server-rendered first paint.",
+        "icon": "devices"
+      },
+      {
+        "tier": "TIER 02 // DISPATCH & API",
+        "name": "ASP.NET Core · FastAPI",
+        "badge": "Clean Arch",
+        "note": "Layered separation, authenticated REST conduits.",
+        "icon": "hub"
+      },
+      {
+        "tier": "TIER 03 // RELATIONAL",
+        "name": "PostgreSQL · SQL Server",
+        "badge": "ACID · SP execution",
+        "note": "Stored procedures only, no inline SQL.",
+        "icon": "database"
+      },
+      {
+        "tier": "TIER 04 // VECTORS",
+        "name": "Qdrant RAG",
+        "badge": "Self-hosted embeddings",
+        "note": "Retrieval over local vectors, no third-party provider.",
+        "icon": "memory"
+      }
+    ],
+    "topologyFootLeft": "4 TIERS DECOUPLED",
+    "topologyFootRight": "100% SELF-HOSTED",
+    "buildEyebrow": "// SCOPE OF EXECUTION",
     "buildHeading": "What I build",
+    "buildIntro": "Pragmatic software architectures constructed with zero reliance on opaque magic. Built for maintainability and verified uptime.",
     "build": [
       {
+        "index": "01 // BROWSER",
+        "icon": "language",
         "title": "Web applications",
-        "body": "Next.js and TypeScript in the browser, ASP.NET Core behind it. Rendered on the server where that matters for speed and for search."
+        "body": "Next.js and TypeScript in the browser, ASP.NET Core behind it. Rendered on the server where that matters for speed and for search.",
+        "tags": ["NEXT.JS", "TYPESCRIPT", "SSR & ISR"]
       },
       {
+        "index": "02 // SERVICES",
+        "icon": "api",
         "title": "Backend and APIs",
-        "body": "REST APIs in ASP.NET Core, built in layers so the business rules do not end up living in the controller."
+        "body": "REST APIs in ASP.NET Core, built in layers so the business rules do not end up living in the controller.",
+        "tags": ["ASP.NET CORE", "CLEAN ARCH", "FASTAPI"]
       },
       {
+        "index": "03 // DESKTOP",
+        "icon": "desktop_windows",
         "title": "Desktop applications",
-        "body": "C# desktop software for the work that happens in one building — inventory, purchasing, reporting."
+        "body": "C# desktop software for the work that happens in one building — inventory, purchasing, reporting.",
+        "tags": ["C# .NET", "WINFORMS", "SQL SERVER"]
       },
       {
+        "index": "04 // INTELLIGENCE",
+        "icon": "auto_awesome",
         "title": "AI-powered features",
-        "body": "Retrieval over your own documents, on your own hardware. Answers that arrive with the page they came from."
+        "body": "Retrieval over your own documents, on your own hardware. Answers that arrive with the page they came from.",
+        "tags": ["QDRANT", "RAG VECTORS", "CITED ANSWERS"]
       }
     ],
+    "stackEyebrow": "// SYSTEM CAPABILITIES",
     "stackHeading": "What I work with",
+    "stackIntro": "Core toolchain applied in production environments across front-end rendering, core service logic, relational data tiers, and isolated AI infrastructure.",
     "stackGroups": [
       {
+        "icon": "web",
         "label": "Frontend",
-        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"]
+        "desc": "Type-safe components, high-density interfaces, reactive state flows.",
+        "items": ["Next.js", "TypeScript", "JavaScript", "HTML", "CSS"],
+        "foot": "DOM // REACT RECONCILER"
       },
       {
+        "icon": "dns",
         "label": "Backend & APIs",
-        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"]
+        "desc": "Compiled runtimes, layered service boundaries, asynchronous request pipelines.",
+        "items": ["C#", "ASP.NET Core", ".NET", "REST", "Python", "FastAPI"],
+        "foot": "ASYNC // THREAD-SAFE"
       },
       {
+        "icon": "database",
         "label": "Data & AI",
-        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"]
+        "desc": "Relational persistence, deterministic indices, cosine vector embeddings.",
+        "items": ["SQL Server", "PostgreSQL", "T-SQL", "Qdrant", "RAG"],
+        "foot": "ACID // VECTOR CLUSTER"
       },
       {
+        "icon": "terminal",
         "label": "Engineering",
-        "items": ["Git", "CI", "Automated testing", "Clean Architecture", "Docker"]
+        "desc": "Deterministic pipelines, automated test runs, container orchestration.",
+        "items": ["Git", "CI", "Automated testing", "Clean Architecture", "Docker"],
+        "foot": "STRICT GATES // REPRODUCIBLE"
       }
     ],
+    "processEyebrow": "// RIGOR & BENCHMARKS",
     "processHeading": "How I work",
+    "processIntro": "A disciplined engineering cadence prioritizing boundaries, verified tests, and unvarnished performance telemetry.",
     "process": [
       {
+        "icon": "layers",
+        "rule": "RULE 01",
         "title": "Layers that stay separate",
-        "body": "Four in the AI workspace, three in the restaurant system. In both, a change inside one layer does not travel through the rest."
+        "body": "Four in the AI workspace, three in the restaurant system. In both, a change inside one layer does not travel through the rest.",
+        "metric": "Clean Architecture"
       },
       {
+        "icon": "verified",
+        "rule": "RULE 02",
         "title": "Tests and CI before merge",
-        "body": "The AI workspace carries 85 test files, with CI running on every pull request."
+        "body": "The AI workspace carries 85 test files, with CI running on every pull request.",
+        "metric": "85 test files · CI on every PR"
       },
       {
+        "icon": "fork_right",
+        "rule": "RULE 03",
         "title": "One feature per branch",
-        "body": "Its 74 merged pull requests were each reviewed before landing on main."
+        "body": "Its 74 merged pull requests were each reviewed before landing on main.",
+        "metric": "74 reviewed PRs"
       },
       {
+        "icon": "speed",
+        "rule": "RULE 04",
         "title": "Measured, not estimated",
-        "body": "Its retrieval pipeline is documented with timings from a real run — including the numbers that were not flattering."
+        "body": "Its retrieval pipeline is documented with timings from a real run — including the numbers that were not flattering.",
+        "metric": "Measured on a running stack"
       }
     ],
+    "workEyebrow": "// PRODUCTION SYSTEMS",
     "workHeading": "Selected work",
-    "seeProjects": "See all projects",
-    "cta": "Get in touch"
+    "seeProjects": "See all projects"
   },
   "about": {
     "heading": "About me",
@@ -145,6 +224,16 @@
       "status": "Built and verified · deployment pending",
       "summary": "Documents pile up faster than anyone reads them. This workspace ingests them, indexes what is inside, and answers questions with the source attached.",
       "highlight": "A 35-page PDF, from upload to searchable in 32.6 seconds.",
+      "metricLabel": "VERIFIED INGESTION BENCHMARK",
+      "consoleFile": "workspace-ingest.run",
+      "consoleStatus": "SUCCESS",
+      "console": [
+        "> pages_parsed:    35",
+        "> upload_to_indexed: 32.6s",
+        "> answer_sources:  page-cited",
+        "> ai_provider:     none (self-hosted)",
+        "> status:          [OK]"
+      ],
       "problem": "Documents pile up faster than anyone reads them. This workspace ingests them, indexes what is inside, and answers questions about them with the source page attached.",
       "result": "Measured on a running system rather than estimated: a 35-page PDF goes from upload to searchable in 32.6 seconds, and every answer returns with the page it was drawn from.",
       "architecture": [
@@ -169,6 +258,16 @@
       "status": "Complete",
       "summary": "Purchasing and inventory for a restaurant, built as a Windows desktop application with an Arabic, right-to-left interface.",
       "highlight": "9 forms, 10 tables, 37 stored procedures — and no inline SQL anywhere.",
+      "metricLabel": "ARCHITECTURAL METRIC",
+      "consoleFile": "schema-integrity.sql",
+      "consoleStatus": "VERIFIED",
+      "console": [
+        "> forms:            9",
+        "> tables:           10",
+        "> stored_procedures: 37",
+        "> inline_sql:       0",
+        "> interface:        ar-RTL"
+      ],
       "problem": "Purchasing and inventory for a restaurant, built as a Windows desktop application.",
       "architecture": [
         "Three tiers — forms, business logic, data access — with every database call going through a stored procedure and none through inline SQL."
