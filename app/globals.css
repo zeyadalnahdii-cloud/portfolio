@@ -1,84 +1,109 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens from docs/06-mockups.md §1.1.
+ * Design tokens — "Warm Earth", docs/06-mockups.md §1.1.
  *
- * Both themes must independently satisfy SRS A-03 (4.5:1 for body text, 3:1
- * for large text). Dark-mode contrast is the usual regression, so re-check
- * both after changing any value here — tests/contrast.test.ts parses this file
- * and asserts every pair, so a value that breaks one fails the suite.
+ * Dark is the default the site ships with (owner decision, reversing the
+ * earlier light-first default): bare `:root` carries the dark palette, so a
+ * visitor who has never chosen gets it. Light is an explicit choice and lives
+ * behind `[data-theme='light']`, which outranks `:root` on specificity.
  *
- * The media query below is written so an explicit light choice wins over the
- * system preference.
+ * The system preference still does not decide anything, which is why there is
+ * no `prefers-color-scheme` block here.
+ *
+ * Both themes must independently satisfy A-03 (4.5:1 body text, 3:1 large).
+ * tests/contrast.test.ts parses this file and asserts every pair, so a value
+ * that breaks one fails the suite rather than the launch.
  */
-:root {
-  --bg: #ffffff;
-  --surface: #f5f8fb;
-  /* A second elevation, for cards that sit on --surface rather than on --bg. */
-  --raised: #ffffff;
-  --border-subtle: #e2e8f0;
-  --fg: #0f151d;
-  --fg-muted: #54606f;
-  --accent: #0a5fc4;
-  --accent-hover: #084a9c;
-  /* Text drawn ON an accent fill. White works here but not in dark, where the
-     accent is light — T-219 measured white-on-accent at 3.10:1. */
-  --accent-fg: #ffffff;
-  /* Error text and invalid field borders. */
-  --danger: #c81e2b;
-  /* Form control boundaries. --border-subtle is decorative (card edges,
-     dividers) and exempt from 1.4.11; an empty input is identifiable only by
-     its border, so that one must reach 3:1. */
-  --border-control: #7c8797;
+:root[data-theme='light'] {
+  --bg: #faf5ee;
+  --surface: #f5e6d3;
+  /* Sampled from the owner's reference frames: the panel reads near-white,
+     the boxes inside it sit one step down, and hover is one step below that.
+     Three light levels, one direction — card, tile, tile hovered. */
+  --raised: #fffbf5;
+  --raised-hover: #faf5ee;
+  --tile: #faf5ee;
+  --tile-hover: #f2e8dc;
+  --border-subtle: #e0d2c4;
+  --fg: #3e2522;
+  /* Darker than the brief's #8C6E63, which measures 3.79:1 on a card and
+     would fail A-03 as body text. The brief's value survives as a hairline. */
+  --fg-muted: #6f5249;
+  --accent: #8a4e18;
+  --accent-hover: #6d3c10;
+  --accent-fg: #faf5ee;
+  --danger: #a3121b;
+  --border-control: #7a6258;
 
-  /* Presentation-only, never a contrast pair. */
-  --shadow-sm: 0 1px 2px rgb(15 21 29 / 0.04), 0 1px 3px rgb(15 21 29 / 0.06);
-  --shadow-md: 0 2px 4px rgb(15 21 29 / 0.04), 0 8px 24px rgb(15 21 29 / 0.08);
-  --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(10 95 196 / 0.07), transparent 70%);
+  /* The filled button is dark brown, not accent orange (reference frame 2
+     measures #3e2522 on #faf5ee). The accent stays what it has always been:
+     links, labels and focus rings. */
+  --solid: #3e2522;
+  --solid-fg: #faf5ee;
+  --solid-hover: #2a1815;
+
+  /* The console panels. A genuinely dark surface in a light page, which is
+     what the reference shows and what the technical voice of the site was
+     already reaching for with a 4%-opacity wash. */
+  --terminal: #231917;
+  --terminal-fg: #cbb9ad;
+  /* The quieter half of a telemetry row. A real token, not an opacity:
+     text-terminal-fg/60 measured 4.11:1 here and 3.95:1 in dark, and an
+     alpha applied in a class is invisible to tests/contrast.test.ts. */
+  --terminal-dim: #a4948a;
+  --terminal-accent: #e0aa74;
+
+  --shadow-sm: 0 1px 2px rgb(62 37 34 / 0.04);
+  --shadow-md: 0 8px 24px -4px rgb(62 37 34 / 0.08);
+  --wash: radial-gradient(48rem 26rem at 50% -8rem, rgb(211 163 118 / 0.22), transparent 72%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0a0e14;
-    --surface: #121923;
-    --raised: #18202b;
-    --border-subtle: #232d3b;
-    --fg: #e9eff7;
-    --fg-muted: #98a3b3;
-    --accent: #5aa2ff;
-    --accent-hover: #8cc0ff;
-    --accent-fg: #071019;
-    --danger: #ff7d74;
-    --border-control: #6c7889;
-
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
-    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.45);
-    --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(90 162 255 / 0.1), transparent 70%);
-  }
-}
-
+:root,
 :root[data-theme='dark'] {
-  --bg: #0a0e14;
-  --surface: #121923;
-  --raised: #18202b;
-  --border-subtle: #232d3b;
-  --fg: #e9eff7;
-  --fg-muted: #98a3b3;
-  --accent: #5aa2ff;
-  --accent-hover: #8cc0ff;
-  --accent-fg: #071019;
-  --danger: #ff7d74;
-  --border-control: #6c7889;
+  --bg: #1c1311;
+  --surface: #241614;
+  /* Up a step, not down. Same reasoning as --tile-hover below: on a dark
+     page the responsive direction is toward more light, not less. */
+  --raised-hover: #4a3733;
+  --raised: #3e2522;
+  --tile: #241614;
+  /* Lighter, not darker. "One step darker" is the light-mode reading of the
+     same idea — on a dark page a box that darkens on hover recedes instead of
+     responding, so the step is taken in the direction that adds contrast. */
+  --tile-hover: #33231f;
+  --border-subtle: #4a3733;
+  --fg: #fff2df;
+  --fg-muted: #c4aea3;
+  --accent: #d3a376;
+  --accent-hover: #ffe0b2;
+  --accent-fg: #1c1311;
+  --danger: #ffb4ab;
+  --border-control: #9c8e83;
 
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.45);
-  --wash: radial-gradient(60rem 30rem at 50% -10rem, rgb(90 162 255 / 0.1), transparent 70%);
+  /* Inverted for the same reason: a dark-brown fill on a dark page is not a
+     button. The light fill keeps the emphasis the reference gives it. */
+  --solid: #fff2df;
+  --solid-fg: #1c1311;
+  --solid-hover: #ffe0b2;
+
+  --terminal: #140d0b;
+  --terminal-fg: #c4aea3;
+  --terminal-dim: #a39289;
+  --terminal-accent: #d3a376;
+
+  --shadow-sm: 0 1px 2px rgb(12 7 6 / 0.5);
+  --shadow-md: 0 16px 36px -8px rgb(12 7 6 / 0.75);
+  --wash: radial-gradient(48rem 26rem at 50% -8rem, rgb(211 163 118 / 0.1), transparent 72%);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-raised: var(--raised);
+  --color-raised-hover: var(--raised-hover);
+  --color-tile: var(--tile);
+  --color-tile-hover: var(--tile-hover);
   --color-subtle: var(--border-subtle);
   --color-fg: var(--fg);
   --color-muted: var(--fg-muted);
@@ -87,9 +112,27 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-control: var(--border-control);
+  --color-solid: var(--solid);
+  --color-solid-fg: var(--solid-fg);
+  --color-solid-hover: var(--solid-hover);
+  --color-terminal: var(--terminal);
+  --color-terminal-fg: var(--terminal-fg);
+  --color-terminal-dim: var(--terminal-dim);
+  --color-terminal-accent: var(--terminal-accent);
 
   --shadow-card: var(--shadow-sm);
   --shadow-lift: var(--shadow-md);
+
+  /* Motion tokens. One rhythm for the whole page: ui-ux-pro-max's
+     `motion-consistency` rule is that every animation shares a duration and
+     easing vocabulary rather than each component inventing its own.
+     --ease-out is the CSS equivalent of GSAP's power1.out, the easing its
+     Subtle scroll-reveal tier specifies. */
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-reveal: 350ms;
+  --reveal-stagger: 40ms;
 
   /* Fluid type. clamp() means no breakpoint jumps and no layout shift at any
      width — the size is a function of the viewport, resolved before paint. */
@@ -98,9 +141,24 @@
   --text-title: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
 
   /* Defined by whichever face the locale layout applied. The names differ
-     from the tokens so the reference is not circular. */
+     from the tokens so the reference is not circular.
+
+     Arabic has no --font-app-display: IBM Plex Sans Arabic covers the script
+     and Epilogue does not, so the Arabic pages set headings in the same face
+     as their body. The fallback in the chain is what makes that work without a
+     second rule. */
   --font-sans: var(--font-app-sans);
   --font-mono: var(--font-app-mono);
+  --font-display: var(--font-app-display, var(--font-app-sans));
+}
+
+/* In-page anchors. The hero's "View Selected Work" jumped instantly and landed
+   with the heading tucked under the 62px sticky header. scroll-padding-top is
+   also what keeps a keyboard-focused control from being covered by it, which
+   is WCAG 2.2 "Focus Not Obscured (Minimum)". */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -127,16 +185,86 @@ body {
   font-feature-settings: 'kern' 1;
 }
 
-/* Headings are tighter than body text at every size. */
+/* Headings carry the editorial face; body stays in the grotesque. */
 h1,
 h2,
 h3 {
-  letter-spacing: -0.018em;
+  font-family: var(--font-app-display, var(--font-app-sans)), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.022em;
   text-wrap: balance;
 }
 
 p {
   text-wrap: pretty;
+}
+
+/*
+ * Scroll reveals (ui-ux-pro-max motion.csv, "Scroll Reveal / Subtle" and
+ * "Stagger List / Subtle"): opacity plus an 8–12px rise over 350ms on
+ * power1.out, staggered 40ms. The offset stays small on purpose — the dataset's
+ * note is "keep the y offset small (8-16px) so it reads as a fade, not a
+ * slide".
+ *
+ * Nothing is hidden until components/home/ScrollReveal.tsx sets
+ * data-reveal-armed on <html>. That ordering is the point, not an accident:
+ * the same dataset warns against shipping below-the-fold content as
+ * invisible-by-default with no fallback, and on this site that content is the
+ * indexable copy. No JS, no IntersectionObserver, reduced motion, or a crawler
+ * that runs none of it — all get the finished page with every section visible.
+ */
+:root[data-reveal-armed] [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+:root[data-reveal-armed] [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+:root[data-reveal-armed] [data-reveal].is-revealed,
+:root[data-reveal-armed] [data-reveal-stagger].is-revealed > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+}
+
+/* Reading order, so RTL staggers right-to-left on its own. */
+:root[data-reveal-armed] [data-reveal-stagger].is-revealed > *:nth-child(2) {
+  transition-delay: var(--reveal-stagger);
+}
+:root[data-reveal-armed] [data-reveal-stagger].is-revealed > *:nth-child(3) {
+  transition-delay: calc(2 * var(--reveal-stagger));
+}
+:root[data-reveal-armed] [data-reveal-stagger].is-revealed > *:nth-child(4) {
+  transition-delay: calc(3 * var(--reveal-stagger));
+}
+:root[data-reveal-armed] [data-reveal-stagger].is-revealed > *:nth-child(n + 5) {
+  transition-delay: calc(4 * var(--reveal-stagger));
+}
+
+/*
+ * The theme toggle's glyphs.
+ *
+ * Both are in the DOM and CSS chooses, keyed on the attribute the inline
+ * script has already set in <head>. Doing it here rather than in React is
+ * what makes the button correct in the very first paint: a component that
+ * picked the glyph from its own state would render the default one on the
+ * server and swap it at hydration, which is a visible flicker in the header.
+ */
+.theme-icon-light {
+  display: none;
+}
+
+:root[data-theme='light'] .theme-icon-light {
+  display: block;
+}
+
+:root[data-theme='light'] .theme-icon-dark {
+  display: none;
 }
 
 /* SRS A-10: nothing moves for anyone who asked for less motion. */

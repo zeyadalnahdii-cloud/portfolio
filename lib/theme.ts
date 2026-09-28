@@ -37,13 +37,18 @@ export function writeStoredTheme(theme: Theme): void {
   }
 }
 
-/** The theme in effect right now, read from the document rather than state. */
+/**
+ * The theme in effect right now, read from the document rather than state.
+ *
+ * **Dark is the default, and the system preference does not override it.**
+ * Bare `:root` in globals.css carries the dark palette, so with no attribute
+ * the page is dark. Light is the alternative a visitor chooses, not one their
+ * operating system chooses for them.
+ */
 export function resolveTheme(): Theme {
   const explicit = document.documentElement.dataset.theme
 
-  if (isTheme(explicit)) return explicit
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return isTheme(explicit) ? explicit : 'dark'
 }
 
 export function applyTheme(theme: Theme): void {
@@ -58,9 +63,13 @@ export function applyTheme(theme: Theme): void {
  * first and repaints a moment later — a visible flash, and a repaint of the
  * whole page that costs both LCP and CLS (SRS P-02).
  *
- * It only sets the attribute when there is a stored choice. With no attribute,
- * the stylesheet falls through to the `prefers-color-scheme` media query, so
- * the system preference is honoured without any JavaScript at all.
+ * It only sets the attribute when there is a stored choice. With no attribute
+ * the stylesheet stays on bare `:root` — the dark palette — because dark is
+ * the default and the system preference does not override it.
+ *
+ * This is also what carries the theme across a language switch: the choice
+ * lives in localStorage on one origin, so /en -> /ar re-runs this before the
+ * first paint and the visitor keeps the mode they were reading in.
  *
  * Minified by hand: it is small, it blocks the parser, and a build step for
  * eight lines would hide what actually ships.

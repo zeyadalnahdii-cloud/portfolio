@@ -33,7 +33,7 @@ function block(selector: string): Record<string, string> {
 }
 
 const THEMES = {
-  light: block(':root {'),
+  light: block(":root[data-theme='light']"),
   dark: block(":root[data-theme='dark']"),
 }
 
@@ -71,10 +71,34 @@ const PAIRS: ReadonlyArray<readonly [string, string, string, number]> = [
   ['muted text on card', '--fg-muted', '--surface', 4.5],
   ['link on page', '--accent', '--bg', 4.5],
   ['link on card', '--accent', '--surface', 4.5],
+  // --raised and --tile are the two surfaces most of the site's boxes are
+  // actually painted with, and neither was covered here until now.
+  ['body text on raised', '--fg', '--raised', 4.5],
+  ['muted text on raised', '--fg-muted', '--raised', 4.5],
+  ['link on raised', '--accent', '--raised', 4.5],
+  ['body text on raised hover', '--fg', '--raised-hover', 4.5],
+  ['muted text on raised hover', '--fg-muted', '--raised-hover', 4.5],
+  ['link on raised hover', '--accent', '--raised-hover', 4.5],
+  ['error text on raised', '--danger', '--raised', 4.5],
+  ['body text on tile', '--fg', '--tile', 4.5],
+  ['muted text on tile', '--fg-muted', '--tile', 4.5],
+  ['link on tile', '--accent', '--tile', 4.5],
+  // Hover is a state a reader reads in, so it carries the same floor.
+  ['body text on tile hover', '--fg', '--tile-hover', 4.5],
+  ['muted text on tile hover', '--fg-muted', '--tile-hover', 4.5],
+  ['link on tile hover', '--accent', '--tile-hover', 4.5],
+  // The filled buttons, now dark-brown rather than accent-filled.
+  ['solid button label', '--solid-fg', '--solid', 4.5],
+  ['solid button label on hover', '--solid-fg', '--solid-hover', 4.5],
+  // The console panels invert the page, so they get checked on their own.
+  ['console text', '--terminal-fg', '--terminal', 4.5],
+  ['console accent', '--terminal-accent', '--terminal', 4.5],
+  ['console dim text', '--terminal-dim', '--terminal', 4.5],
   ['link hover on page', '--accent-hover', '--bg', 4.5],
-  // The two accent-filled buttons: the Home CTA and the form submit.
-  ['button label on accent', '--accent-fg', '--accent', 4.5],
-  ['button label on accent hover', '--accent-fg', '--accent-hover', 4.5],
+  // --accent no longer fills a button — it is links, labels and focus rings —
+  // but the pair is kept: anything later painted on the accent inherits it.
+  ['label on accent', '--accent-fg', '--accent', 4.5],
+  ['label on accent hover', '--accent-fg', '--accent-hover', 4.5],
   ['error text on page', '--danger', '--bg', 4.5],
   ['error text on card', '--danger', '--surface', 4.5],
   // WCAG 1.4.11: an empty input is identifiable only by its border.
@@ -82,10 +106,13 @@ const PAIRS: ReadonlyArray<readonly [string, string, string, number]> = [
   // A-05: the focus ring must be perceivable against what it sits on.
   ['focus ring on page', '--accent', '--bg', 3],
   ['focus ring on card', '--accent', '--surface', 3],
+  ['focus ring on raised', '--accent', '--raised', 3],
+  ['focus ring on tile', '--accent', '--tile', 3],
   ['invalid field border', '--danger', '--bg', 3],
   // T-308: the submit button while sending. It is no longer dimmed, so the
-  // ratio is the token ratio — this pins that it stays that way.
-  ['submit label while disabled', '--accent-fg', '--accent', 4.5],
+  // ratio is the token ratio — this pins that it stays that way. It follows
+  // the button's actual fill, which is now --solid, not --accent.
+  ['submit label while disabled', '--solid-fg', '--solid', 4.5],
 ]
 
 describe.each(Object.entries(THEMES))('%s theme', (themeName, tokens) => {
@@ -107,10 +134,19 @@ describe.each(Object.entries(THEMES))('%s theme', (themeName, tokens) => {
 })
 
 /**
- * The media-query dark block and the explicit [data-theme='dark'] block are
- * separate rules; a value fixed in one and not the other gives a site that is
- * accessible only to whoever toggled the theme by hand.
+ * The system preference must not override the chosen default.
+ *
+ * There used to be two dark blocks — one for `prefers-color-scheme` and one for
+ * the explicit choice — and this test kept them in step. The media query is
+ * gone by design, so the invariant is now the opposite one: no rule may quietly
+ * reintroduce automatic dark mode, because that would hand a visitor a theme
+ * the site was not designed to open in.
  */
-it('keeps both dark blocks identical', () => {
-  expect(block(":root:not([data-theme='light'])")).toEqual(block(":root[data-theme='dark']"))
+it('has no automatic dark mode', () => {
+  // The rule, not the words — the comment above the palette explains why the
+  // media query was removed, and that explanation should not fail the test.
+  const withoutComments = CSS.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  expect(withoutComments).not.toMatch(/@media[^{]*prefers-color-scheme/)
+  expect(withoutComments).toContain(":root[data-theme='dark']")
 })

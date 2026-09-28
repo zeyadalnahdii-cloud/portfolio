@@ -25,6 +25,9 @@ export function ContactForm() {
   const t = useTranslations('contact.form')
   const ids = useId()
   const [errors, setErrors] = useState<ContactErrors>({})
+  // Which fields the visitor has finished with. Nothing is marked wrong
+  // before they have had a go at it.
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [status, setStatus] = useState<Status>('idle')
   const statusRef = useRef<HTMLDivElement>(null)
 
@@ -39,6 +42,35 @@ export function ContactForm() {
   function field(data: FormData, name: string): string {
     const value = data.get(name)
     return typeof value === 'string' ? value : ''
+  }
+
+  /**
+   * ui-ux-pro-max `inline-validation`: validate on blur, not on keystroke,
+   * and only once the visitor has finished with the field.
+   *
+   * An untouched empty field stays silent — tabbing through a blank form
+   * should not paint it red — so a field speaks up on blur only if something
+   * was typed into it, or if a submit has already marked everything touched.
+   * The same rule clears an error the moment the value becomes valid.
+   */
+  function revalidate(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const target = event.currentTarget
+    const form = target.form
+    if (!form) return
+
+    const name = target.name
+    if (name !== 'name' && name !== 'email' && name !== 'message') return
+    if (!touched[name] && target.value === '') return
+
+    setTouched((previous) => ({ ...previous, [name]: true }))
+
+    const data = new FormData(form)
+    const found = validateContact({
+      name: field(data, 'name'),
+      email: field(data, 'email'),
+      message: field(data, 'message'),
+    })
+    setErrors((previous) => ({ ...previous, [name]: found[name] }))
   }
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,9 +90,19 @@ export function ContactForm() {
     // UX only. The server runs the same check and is the one that decides.
     const found = validateContact(input)
     setErrors(found)
+    setTouched({ name: true, email: true, message: true })
 
     if (!isValid(found)) {
       setStatus('idle')
+      // ui-ux-pro-max `focus-management`: after a failed submit, focus the
+      // error summary — or, where there is none, the first invalid field.
+      // There is no summary here because no reviewed copy exists for one
+      // (contact.form.errorSummary is the send-failure message, not a list
+      // of field problems), so this takes the second branch. Without it a
+      // keyboard or screen-reader user is left at the submit button with the
+      // errors somewhere above them.
+      const firstInvalid = (['name', 'email', 'message'] as const).find((key) => found[key])
+      if (firstInvalid) form.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus()
       return
     }
 
@@ -103,7 +145,7 @@ export function ContactForm() {
         void submit(event)
       }}
       noValidate
-      className="mt-6 max-w-lg"
+      className="w-full"
     >
       <div className="space-y-4">
         <Field
@@ -114,6 +156,7 @@ export function ContactForm() {
           error={errors.name && t(errors.name)}
           maxLength={NAME_MAX}
           autoComplete="name"
+          onBlur={revalidate}
         />
         <Field
           id={fieldId('email')}
@@ -124,6 +167,7 @@ export function ContactForm() {
           error={errors.email && t(errors.email)}
           autoComplete="email"
           dir="ltr"
+          onBlur={revalidate}
         />
         <Field
           id={fieldId('message')}
@@ -133,6 +177,7 @@ export function ContactForm() {
           error={errors.message && t(errors.message)}
           maxLength={MESSAGE_MAX}
           multiline
+          onBlur={revalidate}
         />
       </div>
 
@@ -154,13 +199,14 @@ export function ContactForm() {
         disabled={status === 'sending'}
         aria-busy={status === 'sending'}
         // Not dimmed while submitting. disabled:opacity-60 composited the whole
-        // button over the page and dropped the label to 2.57:1 in light and
-        // 2.93:1 in dark, against A-03's 4.5 (T-308). Only 95% opacity or more
+        // button over the page and dropped the label far under A-03's 4.5
+        // when the fill was the accent (2.57:1 light, 2.93:1 dark — T-308).
+        // The fill is darker now and the trap is the same: only 95% or more
         // stays legible, which is indistinguishable from none — so the state is
         // signalled by the label changing to "Sending…", aria-busy, the cursor,
         // and the control genuinely being disabled, rather than by dimming the
         // one word the user needs to read.
-        className="bg-accent hover:bg-accent-hover text-accent-fg focus-visible:outline-accent shadow-card mt-7 rounded-lg px-5 py-2.5 font-semibold transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="bg-solid hover:bg-solid-hover text-solid-fg focus-visible:outline-accent mt-7 w-full rounded-lg px-6 py-3 font-medium transition duration-[var(--dur-fast)] active:scale-[0.98] disabled:cursor-not-allowed sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {status === 'sending' ? t('sending') : t('send')}
       </button>
@@ -194,6 +240,7 @@ interface FieldProps {
   multiline?: boolean
   autoComplete?: string
   dir?: 'ltr'
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
 
 /**
@@ -211,6 +258,7 @@ function Field({
   multiline = false,
   autoComplete,
   dir,
+  onBlur,
 }: FieldProps) {
   const shared = {
     id,
@@ -218,11 +266,12 @@ function Field({
     dir,
     maxLength,
     autoComplete,
+    onBlur,
     required: true,
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? errorId : undefined,
     className:
-      'border-control bg-raised focus-visible:outline-accent focus-visible:border-accent aria-[invalid=true]:border-danger mt-1.5 w-full rounded-lg border px-3.5 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-1',
+      'border-control bg-raised focus-visible:outline-accent focus-visible:border-accent aria-[invalid=true]:border-danger mt-1.5 w-full rounded-lg border px-3.5 py-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-1',
   }
 
   return (

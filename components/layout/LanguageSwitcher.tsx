@@ -45,7 +45,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       // subtree and treats a cross-locale href anywhere else as a leak.
       data-locale-switcher=""
     >
-      <ul className="border-subtle bg-surface flex items-center gap-0.5 rounded-md border p-0.5 text-xs">
+      <ul className="border-subtle bg-surface flex items-center gap-0.5 rounded border p-0.5 font-mono text-[0.6875rem]">
         {LOCALES.map((candidate) => {
           const current = candidate === locale
 
